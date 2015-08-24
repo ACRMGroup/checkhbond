@@ -443,5 +443,34 @@ BOOL FindCACOAtoms(PDB *res1_start, PDB *stop, VEC3F *c_alpha, VEC3F *c, VEC3F *
 }
 
 
+/************************************************************************/
+/* Tests if two residues are bonded through C...N
+   The residues must be specified in the correct order!
+*/
+BOOL ResiduesBonded(PDB *pdb1, PDB *pdb2)
+{
+   PDB *c, *n, *next1, *next2;
+   
+   next1 = FindNextResidue(pdb1);
+   next2 = FindNextResidue(pdb2);
+   for(c=pdb1; c!=next1; NEXT(c))
+   {
+      if(!strncmp(c->atnam, "C   ", 4))
+         break;
+   }
+   for(n=pdb2; n!=next2; NEXT(n))
+   {
+      if(!strncmp(n->atnam, "N   ", 4))
+         break;
+   }
+   if((c==next1) || (n==next2))
+      return(FALSE);
+
+   if(DISTSQ(c,n) < CNBONDSQ)
+      return(TRUE);
+
+   return(FALSE);
+}
+
 
 
