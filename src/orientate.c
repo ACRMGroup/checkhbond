@@ -23,7 +23,7 @@ BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
    /* find co-ordinates of *key* residue */
    if(!FindNCACBAtoms(start, next, &c_alpha, &c_beta, &n))
    {
-      printf("1. Unable to find backbone atoms\n");
+      PrintError(NULL, "Error (checkhbond): 1. Unable to find backbone atoms\n");
       return(FALSE);
    }
    
@@ -38,7 +38,7 @@ BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
   
    if(!FindNCACBAtoms(start, next, &c_alpha, &c_beta, &n))
    {
-      printf("2. Unable to find backbone atoms\n");
+      PrintError(NULL,"2. Unable to find backbone atoms\n");
       return(FALSE);
    }
 
@@ -57,7 +57,7 @@ BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
    
    if(!FindNCACBAtoms(start, next, &c_alpha, &c_beta, &n))
    {
-      printf("3. Unable to find backbone atoms\n");
+      PrintError(NULL,"3. Unable to find backbone atoms\n");
       return(FALSE);
    }
    	 
@@ -65,15 +65,15 @@ BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
 
    if(!FindNCACBAtoms(start, next, &c_alpha, &c_beta, &n))
    {
-      printf("4. Unable to find backbone atoms\n");
+      PrintError(NULL,"4. Unable to find backbone atoms\n");
       return(FALSE);
    }
 
 #ifdef DEBUG
-   printf("%s %d\n",start->resnam, start->resnum);
-   printf("c_alpha atoms %f %f %f\n", c_alpha.x, c_alpha.y, c_alpha.z);
-   printf("c_beta atoms %f %f %f\n", c_beta.x, c_beta.y, c_beta.z);
-   printf("n atoms %f %f %f\n", n.x, n.y, n.z);
+   printf("DEBUG: residue %s %d\n",start->resnam, start->resnum);
+   printf("DEBUG: c_alpha atoms %f %f %f\n", c_alpha.x, c_alpha.y, c_alpha.z);
+   printf("DEBUG: c_beta atoms %f %f %f\n", c_beta.x, c_beta.y, c_beta.z);
+   printf("DEBUG: n atoms %f %f %f\n", n.x, n.y, n.z);
 #endif
   
    return(TRUE); 
@@ -91,7 +91,7 @@ BOOL OrientateN_PDB(PDB *pdb, PDB *prev, PDB *start, PDB *next)
    /* find co-ordinates of *key* residue */
    if(!FindCNCAAtoms(prev, start, next, &c, &n, &c_alpha))
    {
-      printf("5. Unable to find backbone atoms\n");
+      PrintError(NULL,"5. Unable to find backbone atoms\n");
       return(FALSE);
    }
    
@@ -106,7 +106,7 @@ BOOL OrientateN_PDB(PDB *pdb, PDB *prev, PDB *start, PDB *next)
   
    if(!FindCNCAAtoms(prev, start, next, &c, &n, &c_alpha))
    {
-      printf("6. Unable to find backbone atoms\n");
+      PrintError(NULL,"6. Unable to find backbone atoms\n");
       return(FALSE);
    }
 
@@ -125,7 +125,7 @@ BOOL OrientateN_PDB(PDB *pdb, PDB *prev, PDB *start, PDB *next)
    
    if(!FindCNCAAtoms(prev, start, next, &c, &n, &c_alpha))
    {
-      printf("7. Unable to find backbone atoms\n");
+      PrintError(NULL,"7. Unable to find backbone atoms\n");
       return(FALSE);
    }
    	 
@@ -133,15 +133,15 @@ BOOL OrientateN_PDB(PDB *pdb, PDB *prev, PDB *start, PDB *next)
 
    if(!FindCNCAAtoms(prev, start, next, &c, &n, &c_alpha))
    {
-      printf("8. Unable to find backbone atoms\n");
+      PrintError(NULL,"8. Unable to find backbone atoms\n");
       return(FALSE);
    }
 
 #ifdef DEBUG
-   printf("%s %d\n",start->resnam, start->resnum);
-   printf("c atoms %f %f %f\n", c.x, c.y, c.z);
-   printf("n atoms %f %f %f\n", n.x, n.y, n.z);
-   printf("c_alpha atoms %f %f %f\n", c_alpha.x, c_alpha.y, c_alpha.z);
+   printf("DEBUG: residue %s %d\n",start->resnam, start->resnum);
+   printf("DEBUG: c atoms %f %f %f\n", c.x, c.y, c.z);
+   printf("DEBUG: n atoms %f %f %f\n", n.x, n.y, n.z);
+   printf("DEBUG: c_alpha atoms %f %f %f\n", c_alpha.x, c_alpha.y, c_alpha.z);
 #endif
   
    return(TRUE); 
@@ -338,7 +338,7 @@ BOOL OrientateCO_PDB(PDB *pdb, PDB *start, PDB *next)
    /* find co-ordinates of *key* residue */
    if(!FindCACOAtoms(start, next, &c_alpha, &c, &o))
    {
-      printf("9. Unable to find backbone atoms\n");
+      PrintError(NULL,"9. Unable to find backbone atoms\n");
       return(FALSE);
    }
    
@@ -353,7 +353,7 @@ BOOL OrientateCO_PDB(PDB *pdb, PDB *start, PDB *next)
   
    if(!FindCACOAtoms(start, next, &c_alpha, &c, &o))
    {
-      printf("10. Unable to find backbone atoms\n");
+      PrintError(NULL,"10. Unable to find backbone atoms\n");
       return(FALSE);
    }
 
@@ -367,7 +367,7 @@ BOOL OrientateCO_PDB(PDB *pdb, PDB *start, PDB *next)
    
    if(!FindCACOAtoms(start, next, &c_alpha, &c, &o))
    {
-      printf("11. Unable to find backbone atoms\n");
+      PrintError(NULL,"11. Unable to find backbone atoms\n");
       return(FALSE);
    }
    	 
@@ -375,15 +375,15 @@ BOOL OrientateCO_PDB(PDB *pdb, PDB *start, PDB *next)
 
    if(!FindCACOAtoms(start, next, &c_alpha, &c, &o))
    {
-      printf("12. Unable to find backbone atoms\n");
+      PrintError(NULL,"12. Unable to find backbone atoms\n");
       return(FALSE);
    }
 
 #ifdef DEBUG
-   printf("%s %d\n",start->resnam, start->resnum);
-   printf("c_alpha atoms %f %f %f\n", c_alpha.x, c_alpha.y, c_alpha.z);
-   printf("c atoms %f %f %f\n", c.x, c.y, c.z);
-   printf("o atoms %f %f %f\n", o.x, o.y, o.z);
+   printf("DEBUG: residue %s %d\n",start->resnam, start->resnum);
+   printf("DEBUG: c_alpha atoms %f %f %f\n", c_alpha.x, c_alpha.y, c_alpha.z);
+   printf("DEBUG: c atoms %f %f %f\n", c.x, c.y, c.z);
+   printf("DEBUG: o atoms %f %f %f\n", o.x, o.y, o.z);
 #endif
   
    return(TRUE); 
@@ -472,4 +472,14 @@ BOOL ResiduesBonded(PDB *pdb1, PDB *pdb2)
 }
 
 
+
+/************************************************************************/
+void PrintError(FILE *out, char *error)
+{
+   fprintf(stderr,"Error (checkhbond) %s", error);
+   if(out != NULL)
+   {
+      fprintf(out,"Error (checkhbond) %s", error);
+   }
+}
 
