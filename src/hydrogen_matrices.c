@@ -701,10 +701,16 @@ NAMES *InitializeDomainList(FILE *fp)
          continue;
       
       TERMINATE(buffer);
-      /* ACRM 18.08.05 Corrected from +53 */
-      strcpy(resol, buffer+54);
+      /* ACRM 18.08.05 Changed to use sscanf as the field widths
+         in the CATH file have changed over time... (Also was
+         really 54 not 53!)
+      */
+/*
+      strcpy(resol, buffer+53);
       resolution = atof(resol);
-      
+*/
+      sscanf(buffer, "%*s %*s %*s %*s %*s %*s %*s %*s %*s %f", &resolution);
+    
       if(resolution <= RESOL)
       {
          if((p = strchr(buffer, ' '))!=NULL)
