@@ -290,12 +290,13 @@ BOOL FindCNCAAtoms(PDB *res0_start, PDB *res1_start, PDB *stop, VEC3F *c, VEC3F 
 
    for(q = res0_start; q != res1_start; NEXT(q))
    {
-      if(!strncmp(q->atnam, "C ", 2))
+      if(!strncmp(q->atnam, "C   ", 4))
       {
          c->x = q->x;
          c->y = q->y;
          c->z = q->z;
          c_found = TRUE;
+         break;
       }
    }
    
@@ -309,14 +310,12 @@ BOOL FindCNCAAtoms(PDB *res0_start, PDB *res1_start, PDB *stop, VEC3F *c, VEC3F 
          n_found = TRUE;
       }
 
-      if(!strncmp(q->atnam, "CA", 2))
+      if(!strncmp(q->atnam, "CA  ", 4))
       {
          c_alpha->x = q->x;
          c_alpha->y = q->y;
          c_alpha->z = q->z;
          c_alpha_found = TRUE;
-         
-         
       }
    }
    if(!c_alpha_found || !c_found || !n_found)
