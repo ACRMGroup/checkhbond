@@ -250,7 +250,7 @@ int main (int argc, char *argv[])
                if(Open_Std_Files(pdbfile, outputfile, &PDBFILE, &OUT))
                { 
                   /* create linked list of pdb file */ 
-                  if((pdb = ReadPDB(PDBFILE, &natoms)) !=NULL)
+                  if((pdb = ReadPDBAtoms(PDBFILE, &natoms)) !=NULL)
                   {
                      /* ACRM 08.09.05 Get only the residues of interest */
                      if((pdb = GetResidues(pdb, chain1, resnum1, insert1, 
