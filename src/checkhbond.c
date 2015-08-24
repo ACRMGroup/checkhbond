@@ -24,11 +24,11 @@ for each position:
     at same orientation now as res 1 grid points
     move the vector by the CatoCa vector so that both grids are with CA at the origin
     Convert real co-ordinates back to grid locations and match with locations in other grid
+*/
 
-
-
-    ***************************************************
- includes */
+/*******************************************************/
+ 
+/*includes */
 
 #include <stdio.h>
 #include <string.h>
@@ -61,7 +61,7 @@ for each position:
                        (a.z - b.z) * (a.z - b.z)
 
 /* for debugging purposes */
-/*#define DEBUG 1*/
+#define DEBUG 1
 /*#define DEBUG2 1*/
 
 /*************************************/
@@ -76,7 +76,6 @@ int gPartnertoAccept[MAXSIZE][MAXSIZE][MAXSIZE];
 int gPartnertoDonate[MAXSIZE][MAXSIZE][MAXSIZE];
 /* rotation matrix */
 REAL gRotation_matrix[3][3];
-
 
 /*************************************/
 
@@ -99,11 +98,11 @@ BOOL CheckValidHBond(VEC3F CAtoCAVector, REAL cutoff,
                      FILE *out,
                      int keyarray[MAXSIZE][MAXSIZE][MAXSIZE],
                      int partnerarray[MAXSIZE][MAXSIZE][MAXSIZE]);
-void ClearArrays(void);
+void ClearArrays();
 BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff,
                   BOOL *hbplus, char *hatom1,
                   char *hatom2, char *matrix_file, char *pdbfile,
-                  char *locres1, char *locres2, char *res2, char *outputfile);
+                  char *locres1, char *locres2, char *res1,char *res2, char *outputfile);
 BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
                           PDB *res2_start, PDB *res2_stop, VEC3F CAtoCAVector,
                           REAL cutoff,
@@ -122,6 +121,7 @@ REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector,
                   REAL cutoff, FILE *out);
 FILE *OpenMatrixFile(char *matrix_file);
 BOOL Open_Std_Files(char *infile, char *outfile, FILE **in, FILE **out);
+BOOL IsHBondCapable(char *residue);
 
 /*************************************/
 
@@ -142,9 +142,9 @@ int main (int argc, char *argv[])
    
    /* set array elements to 0 */
    ClearArrays();
-      
+   
    if(ParseCmdLine(argc, argv,  &cutoff, &hbplus,  hatom1, hatom2,
-                   matrix_file, pdbfile, locres1, locres2, res2, outputfile))
+                   matrix_file, pdbfile, locres1, locres2, res1, res2, outputfile))
    {
       if((matrix = OpenMatrixFile(matrix_file)))
       {
@@ -211,6 +211,17 @@ int main (int argc, char *argv[])
                         }
                      }
                      
+                     if(IsHBondCapable(res1) != 0)
+                     {
+                        fprintf(stderr, "No hydrogen bonds. %s not a hydrogen bond capable residue\n", res1);
+                        return(1);
+                     }
+                     
+                     if(IsHBondCapable(res2) !=0)
+                     {
+                        fprintf(stderr, "No hydrogen bonds. %s not a hydrogen bond capable residue\n", res2);
+                        return(1);
+                     }
                      
                      if(!ReadInMatrices(res1, res2, matrix))
                      {
@@ -240,7 +251,7 @@ int main (int argc, char *argv[])
                                                  res2_stop, CAtoCAVector, cutoff,
                                                  hatom1, hatom2, OUT))
                         {
-                           printf("Not a valid hydrogen bond\n");
+                           printf("No hydrogen bonds\n");
                         }
                         
                         
@@ -254,7 +265,7 @@ int main (int argc, char *argv[])
                            if(!CheckValidHBond(CAtoCAVector, cutoff, OUT,
                                                gAccept, gPartnertoDonate))
                            {
-                              printf("No valid hydrogen bonds\n");
+                              printf("No hydrogen bonds\n");
                            }
                            
                         }
@@ -349,16 +360,6 @@ BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
          COORD_2_GRID(x_coord1,p->x);
          COORD_2_GRID(y_coord1,p->y);
          COORD_2_GRID(z_coord1,p->z);
-
-
-#ifdef DEBUG
-         fprintf(stdout, "ATOM  %5d  CA  THR  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
-                 atnum++, resnum++,  p->x , p->y,
-                 p->z,  1.00, 1.00);
-#endif
-
-         printf("coords of hydrogen-capable atom for key residue: %8.3f%8.3f%8.3f\n", p->x , p->y,
-                p->z);
          
          OK = TRUE;
          break;
@@ -388,7 +389,7 @@ BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
    }
    else
    {
-      fprintf(out, "Not a valid hydrogen bond: 0\n");
+      fprintf(out, "No hydrogen bonds\n");
       return(FALSE);
    }
    
@@ -707,8 +708,6 @@ REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector, int totalcount1,
          { 
             final_penergy = CalcEnergy(count1, totalcount1,
                                       count2, totalcount2);
-
-            printf("%d %d %d %f\n", x_coord, y_coord, z_coord, final_penergy);
  
          }
          
@@ -728,16 +727,9 @@ REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector, int totalcount1,
                         {
                            dist_squared = Distance_squared(i, j, k, x_coord, y_coord, z_coord);
                            
-                           printf("dist squared: %f\n", dist_squared);
-                           
                            if(dist_squared <=cutoff_squared)     
                            {
-                              pseudoenergy = CalcEnergy(count1, totalcount1,
-                                                        count2, totalcount2);
-
-                              printf("%d %d %d %f\n", i, j, k, pseudoenergy);
-                            
-                               
+                              
                               if(pseudoenergy < final_penergy)
                               {
                                  final_penergy = pseudoenergy;
@@ -812,10 +804,10 @@ REAL CalcEnergy(int count1, int totalcount1, int count2, int totalcount2)
    REAL potential1, potential2, log_potential;
    
    potential1 = ((REAL)count1/(REAL)totalcount1);
-   printf("potential 1: %f\n", potential1);
+
    
    potential2 = ((REAL)count2/(REAL)totalcount2);  
-   printf("potential 2: %f\n", potential2);  
+ 
              
    log_potential = -log(potential1)-log(potential2);
    
@@ -830,6 +822,9 @@ void OrientateMatrix(VEC3F CAtoCAVector,int x, int y, int z,
 {
       
    VEC3F partner_real_coord, partner_real_coord_rotated;
+
+   int atnum = 0, resnum = 0;
+
 
    /* convert location of hydrogen atoms in *partner* residue
       matrix to real coordinates */
@@ -880,7 +875,6 @@ REAL Distance_squared (int i, int j, int k, int x_coord,
 
    VEC3F test_value, c_value;
    
-
    GRID_2_COORD(i, test_value.x);
    GRID_2_COORD(j, test_value.y);
    GRID_2_COORD(k, test_value.z);
@@ -890,10 +884,7 @@ REAL Distance_squared (int i, int j, int k, int x_coord,
    GRID_2_COORD(z_coord, c_value.z);
 
    squared_dist = DISTSQ_HATOMS(test_value, c_value);
-   
-   printf("squared_dist: %f\n", squared_dist);
-   
-   
+      
    return(squared_dist);   
 }
 
@@ -1062,13 +1053,25 @@ BOOL ReadInMatrices(char *res1, char *res2, FILE *matrix)
 
 /********************************************************/
 /* function that sets array elements to 0 */
-void ClearArrays()
+void ClearArrays(int array)
 {
-   memset((void*)gDonate, 0, (size_t) MAXSIZE*MAXSIZE*MAXSIZE * sizeof(int));
-   memset((void*)gAccept, 0, (size_t) MAXSIZE*MAXSIZE*MAXSIZE * sizeof(int));
-   memset((void*)gPartnertoDonate, 0, (size_t) MAXSIZE*MAXSIZE*MAXSIZE * sizeof(int));
-   memset((void*)gPartnertoAccept, 0, (size_t) MAXSIZE*MAXSIZE*MAXSIZE* sizeof(int));
-  
+   int i, j, k;
+   
+   for(i = 0; i < MAXSIZE; i++)
+   {
+      for(j = 0; j < MAXSIZE; j++)
+      {
+         for(k = 0; k < MAXSIZE; k++)
+         {
+            gDonate[i][j][k] = 0;
+            gAccept[i][j][k] = 0;
+            gPartnertoDonate[i][j][k] = 0;
+            gPartnertoAccept[i][j][k] = 0;
+         }
+         
+      }
+      
+   }  
 }
 /**********************************************************/
 
@@ -1107,7 +1110,7 @@ FILE *OpenMatrixFile(char *matrix_file)
 
 BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff, BOOL *hbplus,
                   char *hatom1, char *hatom2,char *matrix_file,char *pdbfile,
-                  char *locres1, char *locres2, char *res2, char *outputfile)
+                  char *locres1, char *locres2, char *res1, char *res2, char *outputfile)
 {
    argc--;
    argv++;
@@ -1155,8 +1158,8 @@ BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff, BOOL *hbplus,
       }
       else
       {
-         /* check there are 4 or 5 arguments remaining */
-         if((argc > 5) || (argc < 4))
+         /* check there are 5 or 6 arguments remaining */
+         if((argc > 6) || (argc < 5))
             return(FALSE);
          
          strcpy(pdbfile, argv[0]);
@@ -1166,6 +1169,9 @@ BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff, BOOL *hbplus,
          argc--;
          argv++;
          strcpy(locres2, argv[0]);
+         argc--;
+         argv++;
+         strcpy(res1, argv[0]);
          argc--;
          argv++;
          strcpy(res2, argv[0]);
@@ -1194,7 +1200,7 @@ void Usage(void)
    
    fprintf(stderr, "\nCheckHBond v1.0 (c) 2002, Alison Cuff,University of Reading\n\n");
    fprintf(stderr, "USAGE: checkhbond [-c cutoff] [-p hatom1 hatom2][-m matrix file]\n");
-   fprintf(stderr, "   pdbfile residue1 residue2 nameres2/sub [output file]\n\n");
+   fprintf(stderr, "   pdbfile residue1 residue2 nameres1 nameres2/sub [output file]\n\n");
    fprintf(stderr, "  -c [cutoff]: cutoff distance between hydrogen-capable atoms(default: 0.5A)\n");
    fprintf(stderr, "  -p: Parse HBplus data.\n");
    fprintf(stderr, "  Hydrogen donating atom (hatom1) and hydrogen accepting atom (hatom2) required \n");
@@ -1202,7 +1208,8 @@ void Usage(void)
    fprintf(stderr, "  pdbfile:  pdb file of protein structure\n");
    fprintf(stderr, "  residue1:  First residue (chain, residue number, insert)\n");
    fprintf(stderr, "  residue2: Second residue (chain, residue number, insert)\n");
-   fprintf(stderr, "  nameres2/sub:  Replacement amino acid (mutation of residue 2),\n");
+   fprintf(stderr, "  nameres1: Name of first residue\n");
+   fprintf(stderr, "  nameres2/sub:  Name of replacement amino acid (mutation of residue 2),\n");
    fprintf(stderr, "      or native residue 1 if creating 'pseudo-energy distribution'\n");
    fprintf(stderr, "  [output file]: for saving hydrogen-capable atoms (in pdb format)\n");
    fprintf(stderr, "      I/O is through stdout if file not specified\n\n");   
@@ -1214,6 +1221,8 @@ void Usage(void)
    fprintf(stderr, "assessed for their quality\n\n");
    
 }
+
+/****************************************************/
       
 BOOL Open_Std_Files(char *infile, char *outfile, FILE **in, FILE **out)
 {
@@ -1237,3 +1246,47 @@ BOOL Open_Std_Files(char *infile, char *outfile, FILE **in, FILE **out)
    
    return(TRUE);
 }
+
+/******************************************************/
+
+
+BOOL IsHBondCapable(char *residue)
+{   
+   int i;
+   
+   char *NotHBondRes[10];
+   
+   BOOL flag = FALSE;
+   
+   NotHBondRes[0] = "VAL";
+   NotHBondRes[1] = "LEU";
+   NotHBondRes[2] = "ILE";
+   NotHBondRes[3] = "MET";
+   NotHBondRes[4] = "PHE";
+   NotHBondRes[5] = "PRO";
+   NotHBondRes[6] = "ALA";
+   NotHBondRes[7] = "CYS";
+   NotHBondRes[8] = "HIS";
+   NotHBondRes[9] = "GLY";
+
+   for(i = 0; i < 10; i++)
+   {
+      
+      if(!strcmp(residue, NotHBondRes[i]))
+      {
+         flag = TRUE;
+         break;
+         
+      } 
+   
+      else
+      {
+         flag = FALSE;
+      }
+      
+   }
+   
+   return(flag);
+   
+}
+
