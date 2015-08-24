@@ -127,6 +127,7 @@ PDB *SelectAtomsResidue(PDB *start, PDB *stop, int nsel, char **sel, int *natom)
             if(q==NULL)
             {
                if(pdbout != NULL) FREELIST(pdbout,PDB);
+               pdbout = NULL;
                *natom = 0;
                return(NULL);
             }
