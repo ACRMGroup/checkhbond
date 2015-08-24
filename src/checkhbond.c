@@ -1382,7 +1382,7 @@ BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff, BOOL *hbplus,
 void Usage(void)
 {
    fprintf(stderr, "\nCheckHBond V2.0 (c) 2002-6, Alison Cuff, University of Reading\n\n");
-   fprintf(stderr, "V2.0 changes by Andrew Martin, UCL\n\n")
+   fprintf(stderr, "V2.0 changes by Andrew Martin, UCL\n\n");
    fprintf(stderr, "Usage: checkhbond [-c cutoff] [-p hatom1 hatom2][-m matrix file]\n");
    fprintf(stderr, "   pdbfile residue1 residue2 nameres2 [output file]\n\n");
    fprintf(stderr, "  -c [cutoff]: cutoff distance between hydrogen-capable atoms(default: 0.5A)\n");
