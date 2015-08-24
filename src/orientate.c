@@ -13,7 +13,6 @@
 #include "orientate.h"
 
 /************************************************************************/
-
 BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
 {
    VEC3F c_alpha,
@@ -22,9 +21,9 @@ BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
       TempVec;
 
    /* find co-ordinates of *key* residue */
-   if(!FindNCACAtoms(start, next, &c_alpha, &c_beta, &n))
+   if(!FindNCACBAtoms(start, next, &c_alpha, &c_beta, &n))
    {
-      printf("Unable to find backbone atoms\n");
+      printf("1. Unable to find backbone atoms\n");
       return(FALSE);
    }
    
@@ -37,9 +36,9 @@ BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
    
    /* find co-ordinates of *key* residue after the translation */
   
-   if(!FindNCACAtoms(start, next, &c_alpha, &c_beta, &n))
+   if(!FindNCACBAtoms(start, next, &c_alpha, &c_beta, &n))
    {
-      printf("Unable to find backbone atoms\n");
+      printf("2. Unable to find backbone atoms\n");
       return(FALSE);
    }
 
@@ -56,17 +55,17 @@ BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
        Add this line!
    **/
    
-   if(!FindNCACAtoms(start, next, &c_alpha, &c_beta, &n))
+   if(!FindNCACBAtoms(start, next, &c_alpha, &c_beta, &n))
    {
-      printf("Unable to find backbone atoms");
+      printf("3. Unable to find backbone atoms\n");
       return(FALSE);
    }
    	 
     RotateToXY(pdb, &c_beta);
 
-   if(!FindNCACAtoms(start, next, &c_alpha, &c_beta, &n))
+   if(!FindNCACBAtoms(start, next, &c_alpha, &c_beta, &n))
    {
-      printf("Unable to find backbone atoms");
+      printf("4. Unable to find backbone atoms\n");
       return(FALSE);
    }
 
@@ -75,6 +74,74 @@ BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
    printf("c_alpha atoms %f %f %f\n", c_alpha.x, c_alpha.y, c_alpha.z);
    printf("c_beta atoms %f %f %f\n", c_beta.x, c_beta.y, c_beta.z);
    printf("n atoms %f %f %f\n", n.x, n.y, n.z);
+#endif
+  
+   return(TRUE); 
+
+}
+
+/************************************************************************/
+BOOL OrientateN_PDB(PDB *pdb, PDB *prev, PDB *start, PDB *next)
+{
+   VEC3F c_alpha,
+      c,
+      n,
+      TempVec;
+
+   /* find co-ordinates of *key* residue */
+   if(!FindCNCAAtoms(prev, start, next, &c, &n, &c_alpha))
+   {
+      printf("5. Unable to find backbone atoms\n");
+      return(FALSE);
+   }
+   
+   /* move protein structure file so that N is at the origin */
+   TempVec.x = -n.x;
+   TempVec.y = -n.y;
+   TempVec.z = -n.z;
+
+   TranslatePDB(pdb, TempVec);
+   
+   /* find co-ordinates of *key* residue after the translation */
+  
+   if(!FindCNCAAtoms(prev, start, next, &c, &n, &c_alpha))
+   {
+      printf("6. Unable to find backbone atoms\n");
+      return(FALSE);
+   }
+
+   /* rotate c so that it is on the xz plane */
+            
+   RotateToXZ(pdb, &c);
+   
+   /* rotate c onto the x axis */
+
+   RotateToX(pdb, &c);
+
+   /** ACRM c_beta has moved now!!! because of the rotations in the 2 previous steps
+       c-beta has to be refound!
+       Add this line!
+   **/
+   
+   if(!FindCNCAAtoms(prev, start, next, &c, &n, &c_alpha))
+   {
+      printf("7. Unable to find backbone atoms\n");
+      return(FALSE);
+   }
+   	 
+    RotateToXY(pdb, &c_alpha);
+
+   if(!FindCNCAAtoms(prev, start, next, &c, &n, &c_alpha))
+   {
+      printf("8. Unable to find backbone atoms\n");
+      return(FALSE);
+   }
+
+#ifdef DEBUG
+   printf("%s %d\n",start->resnam, start->resnum);
+   printf("c atoms %f %f %f\n", c.x, c.y, c.z);
+   printf("n atoms %f %f %f\n", n.x, n.y, n.z);
+   printf("c_alpha atoms %f %f %f\n", c_alpha.x, c_alpha.y, c_alpha.z);
 #endif
   
    return(TRUE); 
@@ -157,11 +224,9 @@ REAL TrueAngle(REAL opp, REAL adj)
  
 
 /*********************************************************/
-
 /* function to find and return co-ordinates of c_alpha, c_beta 
    and n atoms of *key* residue */
-
-BOOL FindNCACAtoms(PDB *res1_start, PDB *stop, VEC3F *c_alpha, VEC3F *c_beta, VEC3F *n)
+BOOL FindNCACBAtoms(PDB *res1_start, PDB *stop, VEC3F *c_alpha, VEC3F *c_beta, VEC3F *n)
 {
    PDB *q;
 
@@ -200,6 +265,176 @@ BOOL FindNCACAtoms(PDB *res1_start, PDB *stop, VEC3F *c_alpha, VEC3F *c_beta, VE
       
    }
    if(!c_alpha_found || !c_beta_found || !n_found)
+   {
+      return(FALSE);
+   }
+   return(TRUE);
+   
+}
+
+
+
+
+/*********************************************************/
+
+/* function to find and return co-ordinates of c, n and c_alpha
+   atoms of *key* residue */
+
+BOOL FindCNCAAtoms(PDB *res0_start, PDB *res1_start, PDB *stop, VEC3F *c, VEC3F *n, VEC3F *c_alpha)
+{
+   PDB *q;
+
+   BOOL c_alpha_found = FALSE, 
+        c_found = FALSE,
+        n_found = FALSE;
+
+   for(q = res0_start; q != res1_start; NEXT(q))
+   {
+      if(!strncmp(q->atnam, "C ", 2))
+      {
+         c->x = q->x;
+         c->y = q->y;
+         c->z = q->z;
+         c_found = TRUE;
+      }
+   }
+   
+   for(q = res1_start; q != stop; NEXT(q))
+   {
+      if(!strncmp(q->atnam, "N   ", 4))
+      {
+         n->x = q->x;
+         n->y = q->y;
+         n->z = q->z;  
+         n_found = TRUE;
+      }
+
+      if(!strncmp(q->atnam, "CA", 2))
+      {
+         c_alpha->x = q->x;
+         c_alpha->y = q->y;
+         c_alpha->z = q->z;
+         c_alpha_found = TRUE;
+         
+         
+      }
+   }
+   if(!c_alpha_found || !c_found || !n_found)
+   {
+      return(FALSE);
+   }
+   return(TRUE);
+   
+}
+
+
+/************************************************************************/
+BOOL OrientateCO_PDB(PDB *pdb, PDB *start, PDB *next)
+{
+   VEC3F c_alpha,
+      c,
+      o,
+      TempVec;
+
+   /* find co-ordinates of *key* residue */
+   if(!FindCACOAtoms(start, next, &c_alpha, &c, &o))
+   {
+      printf("9. Unable to find backbone atoms\n");
+      return(FALSE);
+   }
+   
+   /* move protein structure file so that c is at the origin */
+   TempVec.x = -c.x;
+   TempVec.y = -c.y;
+   TempVec.z = -c.z;
+
+   TranslatePDB(pdb, TempVec);
+   
+   /* find co-ordinates of *key* residue after the translation */
+  
+   if(!FindCACOAtoms(start, next, &c_alpha, &c, &o))
+   {
+      printf("10. Unable to find backbone atoms\n");
+      return(FALSE);
+   }
+
+   /* rotate ca so that it is on the xz plane */
+            
+   RotateToXZ(pdb, &c_alpha);
+   
+   /* rotate ca onto the x axis */
+
+   RotateToX(pdb, &c_alpha);
+   
+   if(!FindCACOAtoms(start, next, &c_alpha, &c, &o))
+   {
+      printf("11. Unable to find backbone atoms\n");
+      return(FALSE);
+   }
+   	 
+    RotateToXY(pdb, &o);
+
+   if(!FindCACOAtoms(start, next, &c_alpha, &c, &o))
+   {
+      printf("12. Unable to find backbone atoms\n");
+      return(FALSE);
+   }
+
+#ifdef DEBUG
+   printf("%s %d\n",start->resnam, start->resnum);
+   printf("c_alpha atoms %f %f %f\n", c_alpha.x, c_alpha.y, c_alpha.z);
+   printf("c atoms %f %f %f\n", c.x, c.y, c.z);
+   printf("o atoms %f %f %f\n", o.x, o.y, o.z);
+#endif
+  
+   return(TRUE); 
+
+}
+
+
+
+/*********************************************************/
+/* function to find and return co-ordinates of c_alpha, c
+   and o atoms of *key* residue */
+BOOL FindCACOAtoms(PDB *res1_start, PDB *stop, VEC3F *c_alpha, VEC3F *c, VEC3F *o)
+{
+   PDB *q;
+
+   BOOL c_alpha_found = FALSE, 
+        c_found = FALSE,
+        o_found = FALSE;
+   
+   for(q = res1_start; q != stop; NEXT(q))
+   {
+      if(!strncmp(q->atnam, "CA", 2))
+      {
+         c_alpha->x = q->x;
+         c_alpha->y = q->y;
+         c_alpha->z = q->z;
+         c_alpha_found = TRUE;
+      }
+      
+      if(!strncmp(q->atnam, "C ", 2))
+      {
+         c->x = q->x;
+         c->y = q->y;
+         c->z = q->z;
+         c_found = TRUE;
+        
+      }
+      
+      if(!strncmp(q->atnam, "O   ", 4) ||
+         !strncmp(q->atnam, "O1  ", 4) ||
+         !strncmp(q->atnam, "OT1 ", 4))
+      {
+         o->x = q->x;
+         o->y = q->y;
+         o->z = q->z;  
+         o_found = TRUE;
+      }
+      
+   }
+   if(!c_alpha_found || !c_found || !o_found)
    {
       return(FALSE);
    }
