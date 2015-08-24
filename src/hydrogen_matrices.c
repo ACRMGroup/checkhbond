@@ -697,6 +697,9 @@ NAMES *InitializeDomainList(FILE *fp)
    
    while(fgets(buffer, MAXBUFF, fn))
    {
+      if(buffer[0] == '#')
+         continue;
+      
       TERMINATE(buffer);
       /* ACRM 18.08.05 Corrected from +53 */
       strcpy(resol, buffer+54);
