@@ -60,7 +60,7 @@ for each position:
                        (a.z - b.z) * (a.z - b.z)
 
 /* for debugging purposes */
-/*#define DEBUG */
+/*#define DEBUG */ 
 
 /*************************************/
 
@@ -74,6 +74,7 @@ int gPartnertoAccept[MAXSIZE][MAXSIZE][MAXSIZE];
 int gPartnertoDonate[MAXSIZE][MAXSIZE][MAXSIZE];
 /* rotation matrix */
 REAL gRotation_matrix[3][3];
+
 
 /*************************************/
 
@@ -119,7 +120,12 @@ REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector, VEC3F *partner_coord,
                   REAL cutoff, FILE *out);
 FILE *OpenMatrixFile(char *matrix_file);
 BOOL Open_Std_Files(char *infile, char *outfile, FILE **in, FILE **out);
-/*BOOL IsHBondCapable(char *residue);*/
+/*BOOL IsHBondvoid */
+BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix, char *chain1, 
+                         char *chain2, char *insert1, char *insert2, BOOL *hbplus,
+                         char *hatom1, char *hatom2, REAL cutoff, char *res1, char *res2,
+                         FILE *OUT);
+
 
 /*************************************/
 
@@ -132,10 +138,9 @@ int main (int argc, char *argv[])
       pdbfile[MAXBUFF], outputfile[MAXBUFF];
    char chain1[6], insert1[6], chain2[6], insert2[6], hatom1[6], hatom2[6];
    char matrix_file[MAXBUFF];
-   PDB *pdb, *res1_start, *res1_stop, *res2_start, *res2_stop;
+   PDB *pdb;
    int natoms, resnum1, resnum2;
    REAL cutoff;
-   VEC3F CAtoCAVector;
    BOOL hbplus = FALSE;
    
    /* set array elements to 0 */
@@ -158,105 +163,23 @@ int main (int argc, char *argv[])
                   /* create linked list of pdb file */ 
                   if((pdb = ReadPDB(PDBFILE, &natoms)) !=NULL)
                   {
-                     /*step though each residue in list
-                       is it *key* residue? */
-                     for(res1_start = pdb; res1_start !=NULL;
-                         res1_start=res1_stop)
-                     {
-                        
-                        res1_stop = FindNextResidue(res1_start);
-                        
-                        /* if *key* residue of choice */
-                        if((resnum1 == res1_start->resnum)
-                           && (chain1[0]==res1_start->chain[0])
-                           && (insert1[0] == res1_start->insert[0]))
+                     
+                     if(!PrepareHBondingPair(resnum1, resnum2, pdb, matrix, chain1, chain2, 
+                                             insert1, insert2, &hbplus, hatom1, hatom2,
+                                             cutoff, res1, res2, OUT))
                         {
-                           strcpy(res1, res1_start->resnam);
-                           break;
-                        }
-                        else
-                        {
-                           if(res1_start==NULL)
-                           {
-                              fprintf(stderr, "Error: Can't find residue 1  in PDB file\n");
-                           }
                            
-                        }
-                     }
-                     
-                     /*step though each residue in list
-                       is it *partner* residue? */
-                     for(res2_start = pdb; res2_start !=NULL;
-                         res2_start=res2_stop)
-                     {
-                        res2_stop = FindNextResidue(res2_start);
-                        
-                        /* if *partner* residue of choice */
-                        if((resnum2 == res2_start->resnum)
-                           && (chain1[0]==res1_start->chain[0])
-                           && (insert1[0] == res1_start->insert[0]))
-                        {
-                           break;
-                        }
-                        else
-                        {
-                           if(res2_start==NULL)
+
+                           if(!PrepareHBondingPair(resnum2, resnum1, pdb, matrix, chain1, chain2, 
+                                             insert1, insert2, &hbplus, hatom1, hatom2,
+                                             cutoff, res2, res1, OUT))
                            {
-                              fprintf(stderr, "Error: Can't find residue 2 in PDB file\n");
-                           }
-                        }
-                     }
- 
-                     if(!ReadInMatrices(res1, res2, matrix))
-                     {
-                        fprintf(OUT, "No hydrogen bonds\n");
-                        return(1);
-                     }
-                     
-                     OrientatePDB(pdb, res2_start, res2_stop);
-                     CullArrays(pdb, res1_start, res2_start, gPartnertoDonate,
-                                gPartnertoAccept);
-                     
-                     OrientatePDB(pdb, res1_start, res1_stop);
-                     CullArrays(pdb, res1_start, res2_start,
-                                gDonate, gAccept);
-                     
-                     CalculateCaToCaVector(res1_start, res1_stop, res2_start,
-                                           res2_stop, &CAtoCAVector);
-                     CreateRotationMatrix(pdb, res1_start, res1_stop, res2_start,
-                                          res2_stop, CAtoCAVector );
-                     
-                     if(hbplus)
-                     {
                         
-                        OrientatePDB(pdb, res2_start, res2_stop);
-                        if(!CalculateHBondEnergy(pdb, res1_start, res1_stop,
-                                                 res2_start,
-                                                 res2_stop, CAtoCAVector, cutoff,
-                                                 hatom1, hatom2, OUT))
-                        {
-                           fprintf(OUT, "No hydrogen bonds\n");
-                        }
-                        
-                        
-                     }
-                     
-                     else
-                     {
-                        if(!CheckValidHBond(CAtoCAVector, cutoff, OUT,
-                                            gDonate, gPartnertoAccept))
-                        {
-                           if(!CheckValidHBond(CAtoCAVector, cutoff, OUT,
-                                               gAccept, gPartnertoDonate))
-                           {
                               fprintf(OUT, "No hydrogen bonds\n");
                            }
-                           
                         }
-                        
-                     }
+   
                   }
-                  
                   
                   else
                   {
@@ -302,12 +225,138 @@ int main (int argc, char *argv[])
       Usage();
       
    }
-   
-   
+  
    return(0);
    
-   
 }
+
+
+/*************************************/
+
+BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix, char *chain1, 
+                         char *chain2, char *insert1, char *insert2, BOOL *hbplus,
+                         char *hatom1, char *hatom2, REAL cutoff, char *res1, char *res2,
+                         FILE *OUT)
+{
+   VEC3F CAtoCAVector;
+
+   PDB *res1_start, *res1_stop, *res2_start, *res2_stop;
+   
+   for(res1_start = pdb; res1_start !=NULL;
+       res1_start=res1_stop)
+   {
+      
+      res1_stop = FindNextResidue(res1_start);
+                        
+      /* if *key* residue of choice */
+      if((resnum1 == res1_start->resnum)
+         && (chain1[0]==res1_start->chain[0])
+         && (insert1[0] == res1_start->insert[0]))
+      {
+         strcpy(res1, res1_start->resnam);
+
+         
+         
+         break;
+      }
+      else
+      {
+         if(res1_start==NULL)
+         {
+            fprintf(stderr, "Error: Can't find residue 1  in PDB file\n");
+         }
+         
+      }
+   }
+
+  
+   
+   
+   /*step though each residue in list
+     is it *partner* residue? */
+   for(res2_start = pdb; res2_start !=NULL;
+       res2_start=res2_stop)
+   {
+      res2_stop = FindNextResidue(res2_start);
+      
+      /* if *partner* residue of choice */
+      if((resnum2 == res2_start->resnum)
+         && (chain1[0]==res1_start->chain[0])
+         && (insert1[0] == res1_start->insert[0]))
+      {
+           
+         break;
+      }
+      else
+      {
+         if(res2_start==NULL)
+         {
+            fprintf(stderr, "Error: Can't find residue 2 in PDB file\n");
+         }
+      }
+   }
+   
+   if(!ReadInMatrices(res1, res2, matrix))
+   {
+      /*fprintf(OUT, "No hydrogen bonds\n");*/
+      return(FALSE);
+   }
+   
+   OrientatePDB(pdb, res2_start, res2_stop);
+   CullArrays(pdb, res1_start, res2_start, gPartnertoDonate,
+              gPartnertoAccept);
+   
+   OrientatePDB(pdb, res1_start, res1_stop);
+   CullArrays(pdb, res1_start, res2_start,
+              gDonate, gAccept);
+   
+   CalculateCaToCaVector(res1_start, res1_stop, res2_start,
+                         res2_stop, &CAtoCAVector);
+
+  
+   
+   CreateRotationMatrix(pdb, res1_start, res1_stop, res2_start,
+                        res2_stop, CAtoCAVector );
+
+   if(*hbplus == TRUE)    /* ACRM 23.07.04 Deferference pointer! */
+   {
+      
+      OrientatePDB(pdb, res2_start, res2_stop);
+      if(!CalculateHBondEnergy(pdb, res1_start, res1_stop,
+                               res2_start,
+                               res2_stop, CAtoCAVector, cutoff,
+                               hatom1, hatom2, OUT))
+      {
+       
+         fprintf(OUT, "No hydrogen bonds\n");
+      }
+      
+      
+   }
+   
+   
+   else
+   {
+      if(!CheckValidHBond(CAtoCAVector, cutoff, OUT,
+                          gDonate, gPartnertoAccept))
+      {
+         if(!CheckValidHBond(CAtoCAVector, cutoff, OUT,
+                             gAccept, gPartnertoDonate))
+         {
+            
+            return(FALSE);
+            
+         }
+         
+      }
+      
+   }
+   return(TRUE);
+   
+
+}
+
+
 /*************************************/
 
 BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
