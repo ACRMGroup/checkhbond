@@ -1,0 +1,26 @@
+ARG    110 NE   : GLY    108 O    HE   C   +
+ARG    110 NH2  : GLY    108 O     ??? C   *
+ARG    175 NE   : MET    237 O    HE   C   +
+ARG    175 NH2  : MET    237 O     ??? C   *
+ARG    213 NH1  : SER     96 O     ??? C   ************* 4.373A *************
+ARG    249 NE   : MET    246 O    HE   C   
+ARG    249 NH1  : MET    246 O     ??? C   
+ARG    249 NH2  : GLY    245 O     ??? C   +
+ARG    267 NE   : LYS    101 O    HE   C   
+ARG    267 NH2  : LYS    101 O     ??? C   
+ARG    283 NH2  : THR    118 O     ??? C   +
+ASN    235 ND2  : LYS    139 O     ??? C   +
+SER    116 OG   : CYS    124 O     ??? C   +
+SER    149 OG   : TYR    107 O     ??? C   
+SER    183 OG   : ASP    184 O     ??? C   +
+SER    185 OG   : ALA    189 O     ??? C   +
+SER    227 OG   : CYS    229 O     ??? C   
+SER    227 OG   : GLU    224 O     ??? C   
+SER    240 OG   : ARG    249 O     ??? C   
+SER    240 OG   : VAL    274 O     ??? C   
+SER    260 OG   : GLY    154 O     ??? C   
+THR    125 OG1  : GLY    117 O     ??? C   +
+THR    125 OG1  : SER    116 O     ??? C   
+THR    170 OG1  : GLN    167 O     ??? C   +
+THR    230 OG1  : GLU    221 O     ??? C   +
+THR    284 OG1  : ARG    280 O     ??? C   

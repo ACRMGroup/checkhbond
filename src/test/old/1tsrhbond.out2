@@ -1,0 +1,720 @@
+INFO: Processing residue type ARG
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type THR
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type ASN
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type ASP
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type GLU
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type GLN
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type LYS
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type SER
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type TRP
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type TYR
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type HIS
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type HIS
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type ALA
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type CYS
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type PHE
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type GLY
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type ILE
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type LEU
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type MET
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+INFO: Processing residue type VAL
+INFO: Processing file /tmp//1tsr
+LEU    130 N    : SER    127 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+THR    211 N    : ASP    208 OD1  H    CG  
+ARG    213 N    : THR    211 OG1  H    CB  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+HIS    168 N    : GLN    167 OE1  H    CD  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+ALA    189 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+ARG    202 N    : ASN    200 OD1  H    CG  
+SER    260 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+VAL    274 N    : SER    240 OG   H    CB  
+INFO: Processing file /tmp//1tsr
+LYS    101 N    : SER     99 OG   H    CB  
+LEU    130 N    : SER    127 OG   H    CB  
+ALA    189 N    : ASP    186 OD1  H    CG  
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    210 N    : ASP    208 OD1  H    CG  
+SER    261 N    : ASP    259 OD1  H    CG  
+GLY    262 N    : ASP    259 OD1  H    CG  
+ASN    263 N    : ASP    259 OD1  H    CG  

@@ -1,0 +1,53 @@
+residue ARG
+donate	      30	      30	      30	    17
+partnertodonate	      26	      27	      30	     1
+residue THR
+donate	      30	      30	      30	    14
+residue ASN
+donate	      30	      30	      30	     9
+partnertodonate	      27	      25	      30	     1
+residue ASP
+donate	      30	      30	      30	     8
+partnertodonate	      30	      26	      32	     1
+partnertodonate	      30	      27	      33	     1
+residue GLU
+donate	      30	      30	      30	    11
+residue GLN
+donate	      30	      30	      30	     7
+residue LYS
+donate	      30	      30	      30	     5
+residue SER
+donate	      30	      30	      30	    16
+partnertodonate	      28	      26	      30	     1
+residue TRP
+donate	      30	      30	      30	     1
+residue TYR
+donate	      30	      30	      30	     8
+residue HIS
+donate	      30	      30	      30	     7
+partnertodonate	      29	      25	      30	     1
+residue HIS
+donate	      30	      30	      30	     7
+partnertodonate	      29	      25	      30	     1
+residue ALA
+donate	      30	      30	      30	     7
+partnertodonate	      28	      26	      30	     1
+residue CYS
+donate	      30	      30	      30	    10
+residue PHE
+donate	      30	      30	      30	     5
+residue GLY
+donate	      30	      30	      30	    13
+partnertodonate	      28	      25	      28	     1
+residue ILE
+donate	      30	      30	      30	     6
+residue LEU
+donate	      30	      30	      30	    14
+partnertodonate	      26	      27	      29	     1
+residue MET
+donate	      30	      30	      30	     6
+residue VAL
+donate	      30	      30	      30	    15
+partnertodonate	      28	      24	      30	     1
+partnertodonate	      28	      26	      31	     1
+residue PRO

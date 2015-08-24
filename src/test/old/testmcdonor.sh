@@ -1,0 +1,12 @@
+../bin/checkhbond_Ndonor -c 0.5 -m /acrm/usr/local/share/hb/data/hbmatrices.dat -n test/mcdon1.mat 1tsrB.pdb B202 B200  ASN
+../bin/checkhbond_Ndonor -c 0.5 -m /acrm/usr/local/share/hb/data/hbmatrices.dat -n test/mcdon1.mat 1tsrB.pdb B263 B261  SER
+../bin/checkhbond_Ndonor -c 0.5 -m /acrm/usr/local/share/hb/data/hbmatrices.dat -n test/mcdon1.mat 1tsrB.pdb B184 B183  SER
+../bin/checkhbond_Ndonor -c 0.5 -m /acrm/usr/local/share/hb/data/hbmatrices.dat -n test/mcdon1.mat 1tsrB.pdb B186 B185  SER
+../bin/checkhbond_Ndonor -c 0.5 -m /acrm/usr/local/share/hb/data/hbmatrices.dat -n test/mcdon1.mat 1tsrB.pdb B260 B259  ASP
+../bin/checkhbond_Ndonor -c 0.5 -m /acrm/usr/local/share/hb/data/hbmatrices.dat -n test/mcdon1.mat 1tsrB.pdb B168 B167  GLN
+../bin/checkhbond_Ndonor -c 0.5 -m /acrm/usr/local/share/hb/data/hbmatrices.dat -n test/mcdon1.mat 1tsrB.pdb B168 B167  GLN
+../bin/checkhbond_Ndonor -c 0.5 -m /acrm/usr/local/share/hb/data/hbmatrices.dat -n test/mcdon1.mat 1tsrB.pdb B189 B186  ASP
+../bin/checkhbond_Ndonor -c 0.5 -m /acrm/usr/local/share/hb/data/hbmatrices.dat -n test/mcdon1.mat 1tsrB.pdb B187 B185  SER
+../bin/checkhbond_Ndonor -c 0.5 -m /acrm/usr/local/share/hb/data/hbmatrices.dat -n test/mcdon1.mat 1tsrB.pdb B188 B186  ASP
+../bin/checkhbond_Ndonor -c 0.5 -m /acrm/usr/local/share/hb/data/hbmatrices.dat -n test/mcdon1.mat 1tsrB.pdb B197 B205  TYR
+../bin/checkhbond_Ndonor -c 0.5 -m /acrm/usr/local/share/hb/data/hbmatrices.dat -n test/mcdon1.mat 1tsrB.pdb B274 B240  SER

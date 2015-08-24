@@ -1,0 +1,25 @@
+COPTS    = -g -I/home/bsm/martin/include -L/home/bsm/martin/lib -O3
+CHBFILES = checkhbondv2.o residues.o orientate.o
+HMFILES  = hydrogen_matricesv2.o orientate.o cavallo_userfunc.o
+BINDIR   = ../bin
+
+all: $(BINDIR)/hydrogen_matricesv2 $(BINDIR)/checkhbondv2
+
+clean :
+	\rm -f $(CHBFILES) $(HMFILES)
+
+$(BINDIR)/hydrogen_matricesv2 : $(HMFILES)
+	cc $(COPTS) -o $@ $(HMFILES) -lbiop -lgen -lm
+
+$(BINDIR)/checkhbondv2 : $(CHBFILES)
+	cc $(COPTS) -o $@ $(CHBFILES) -lbiop -lgen -lm
+
+hydrogen_matricesv2.o : hydrogen_matricesv2.c orientate.h hbondmat2.h cavallo_userfunc.h
+	cc -c $(COPTS) -o $@ hydrogen_matricesv2.c 
+
+checkhbondv2.o : checkhbondv2.c hbondmat2.h
+	cc -c $(COPTS) -o $@ checkhbondv2.c 
+
+.c.o :
+	cc -c $(COPTS) -o $@ $<
+

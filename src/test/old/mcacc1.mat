@@ -1,0 +1,63 @@
+residue ARG
+accept	      34	      30	      30	    17
+partnertoaccept	      39	      28	      28	     1
+residue THR
+accept	      34	      30	      30	    14
+partnertoaccept	      38	      30	      28	     1
+residue ASN
+accept	      34	      30	      30	     9
+residue ASP
+accept	      34	      30	      30	     8
+partnertoaccept	      35	      25	      30	     1
+residue GLU
+accept	      34	      30	      30	    11
+partnertoaccept	      37	      26	      32	     1
+residue GLN
+accept	      34	      30	      30	     7
+partnertoaccept	      39	      27	      32	     1
+residue LYS
+accept	      34	      30	      30	     5
+partnertoaccept	      33	      26	      30	     1
+partnertoaccept	      35	      27	      26	     1
+partnertoaccept	      36	      30	      24	     1
+residue SER
+accept	      34	      30	      30	    17
+residue TRP
+accept	      34	      30	      30	     1
+residue TYR
+accept	      34	      30	      30	     8
+partnertoaccept	      33	      26	      34	     1
+residue HIS
+accept	      34	      30	      30	     7
+residue HIS
+accept	      34	      30	      30	     7
+residue ALA
+accept	      34	      30	      30	     7
+partnertoaccept	      36	      26	      30	     1
+residue CYS
+accept	      34	      30	      30	    10
+partnertoaccept	      38	      30	      34	     1
+residue PHE
+accept	      34	      30	      30	     5
+residue GLY
+accept	      34	      30	      30	    13
+partnertoaccept	      37	      28	      34	     1
+partnertoaccept	      38	      26	      30	     1
+partnertoaccept	      38	      27	      29	     1
+partnertoaccept	      40	      29	      28	     1
+residue ILE
+accept	      34	      30	      30	     6
+residue LEU
+accept	      34	      30	      30	    14
+residue MET
+accept	      34	      30	      30	     6
+partnertoaccept	      35	      24	      28	     1
+partnertoaccept	      35	      27	      25	     1
+partnertoaccept	      37	      29	      35	     1
+residue VAL
+accept	      34	      30	      30	    15
+partnertoaccept	      33	      24	      28	     1
+residue PRO
+accept	      34	      30	      30	    14
+partnertoaccept	      35	      25	      33	     1
+partnertoaccept	      36	      27	      34	     1
