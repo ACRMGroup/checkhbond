@@ -336,9 +336,8 @@ domain file %s\n", location);
             }
             free(location);
          }  /* foreach name, n */
+         PrintMatrix(h, out);
       }  /* if(h->select) */
-
-      PrintMatrix(h, out);
    }  /* For each hydrogen bond type, h */
    
    fclose(fp1);
