@@ -194,75 +194,76 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
          {
             if((location = FindStructureLocation(n, &tempflag)) == NULL)
             {
-               return(1);
+               fprintf(stderr,"File not found: %s\n", location);
             }
-            
+            else
+            {
 #ifdef DEBUG
-            fprintf(stderr,"file %s\n", location);
+               fprintf(stderr,"Processing file %s\n", location);
 #endif
-            
-            /* open protein domain file */
-            if((fp2 = fopen(location, "r")) !=NULL)
-            { 
-               /* create linked list of pdb file */  
-               if((pdb = ReadPDB(fp2, &natoms)) !=NULL)
-               {   
-                  /* strip any hydrogens present in protein domain file */
-                  if((pdb2 = StripHPDB(pdb, &natoms2)) !=NULL)
-                  {
-                     FREELIST(pdb, PDB);
-                     pdb = pdb2;
-                     
-                     if((nHatoms = HAddPDB(fp1, pdb)) !=0)                    
+               /* open protein domain file */
+               if((fp2 = fopen(location, "r")) !=NULL)
+               { 
+                  /* create linked list of pdb file */  
+                  if((pdb = ReadPDB(fp2, &natoms)) !=NULL)
+                  {   
+                     /* strip any hydrogens present in protein domain file */
+                     if((pdb2 = StripHPDB(pdb, &natoms2)) !=NULL)
                      {
-                        for(start=pdb; start!=NULL; start=next)
+                        FREELIST(pdb, PDB);
+                        pdb = pdb2;
+                        
+                        if((nHatoms = HAddPDB(fp1, pdb)) !=0)                    
                         {
-                           next = FindNextResidue(start);
-                           
-                           if((!strncmp(start->resnam, h->residue, 3)))
+                           for(start=pdb; start!=NULL; start=next)
                            {
-                              /* return true if backbone atoms cannot be found
-                                 .. stops program
-                                 progressing to next stage 
-                              */
-                              if((OrientatePDB(pdb, start, next) != FALSE))
+                              next = FindNextResidue(start);
+                              
+                              if((!strncmp(start->resnam, h->residue, 3)))
                               {
-                                 StoreHBondingPosition(start, next, hb);
-                                 
-                                 for(nextres=pdb; nextres!=NULL; nextres=stop)
+                                 /* return true if backbone atoms cannot be found
+                                    .. stops program
+                                    progressing to next stage 
+                                 */
+                                 if((OrientatePDB(pdb, start, next) != FALSE))
                                  {
-                                    stop = FindNextResidue(nextres);
+                                    StoreHBondingPosition(start, next, hb);
                                     
-                                    if((nextres !=start))
+                                    for(nextres=pdb; nextres!=NULL; nextres=stop)
                                     {
-                                       /*
-                                         printf("%s %s\n", start->resnam, 
-                                         nextres->resnam);
-                                       */
+                                       stop = FindNextResidue(nextres);
                                        
-                                       if((IsHBonded(start,nextres,HBOND_SS))
-                                          !=0)
+                                       if((nextres !=start))
                                        {
-                                          FindHAtoms(start, next, nextres, 
-                                                     stop, hb);
+                                          /*
+                                            printf("%s %s\n", start->resnam, 
+                                            nextres->resnam);
+                                          */
+                                          
+                                          if((IsHBonded(start,nextres,HBOND_SS))
+                                             !=0)
+                                          {
+                                             FindHAtoms(start, next, nextres, 
+                                                        stop, hb);
+                                          }
                                        }
                                     }
                                  }
-                              }
-                              else
-                              {
-                                 printf("backbone atoms can't be found\n");
+                                 else
+                                 {
+                                    printf("ERROR: backbone atoms can't be found\n");
+                                 }
                               }
                            }
                         }
                      }
                   }
+                  else
+                  {
+                     printf("ERROR: can't create PDB linked list\n");
+                  }
+                  if(pdb != NULL) FREELIST(pdb, PDB); 
                }
-               else
-               {
-                  printf("ERROR: can't create PDB linked list\n");
-               }
-               if(pdb != NULL) FREELIST(pdb, PDB); 
             }
             if(fp2 !=NULL) fclose(fp2);
          }
@@ -351,8 +352,8 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
          }
       }
    }
-   /* if residue A is an acceptor */
 
+   /* if residue A is an acceptor */
    for(a=resA; a!=stopA; NEXT(a))
    {
       if(isAcceptor(a, hb, p_name))    
@@ -527,7 +528,10 @@ void StoreHBondingPosition(PDB *start, PDB *stop, HBOND *hb)
       }
    }
 
-   FREELIST(h, HBOND);
+   /* ACRM 18.08.05 removed this! Luckily it did no harm as
+      'h' would always be NULL when we got this far
+   */
+/*   FREELIST(h, HBOND); */
 }
 
 /********************************************************/
@@ -694,7 +698,8 @@ NAMES *InitializeDomainList(FILE *fp)
    while(fgets(buffer, MAXBUFF, fn))
    {
       TERMINATE(buffer);
-      strcpy(resol, buffer+53);
+      /* ACRM 18.08.05 Corrected from +53 */
+      strcpy(resol, buffer+54);
       resolution = atof(resol);
       
       if(resolution <= RESOL)
@@ -716,6 +721,12 @@ NAMES *InitializeDomainList(FILE *fp)
             return(NULL);
          }
          strncpy(n->filename, buffer, 7);
+      }
+      else
+      {
+         buffer[7] = '\0';
+         fprintf(stderr,"%s: Discarded as resolution is %.2f\n",
+                 buffer, resolution);
       }
    }
 
@@ -789,25 +800,40 @@ create protein structure chain\n");
 
 HBOND *InitializeHbondTypes()
 {
-   static HBOND h1 = {"ARG", "NE  ",1, 0, 1, "HE  ", NULL, NULL, NULL };
-   static HBOND h2 = {"ARG", "NH1 ",0, 0, 1, "HH11", "HH12", NULL, NULL };
-   static HBOND h3 = {"ARG", "NH2 ",0, 0, 1, "HH21", "HH22", NULL, NULL };
-   static HBOND h4 = {"THR", "OG1 ",1,1, 1, NULL, NULL, NULL, "CB  " };
-   static HBOND h5 = {"ASN", "ND2 ",1, 0, 1, "HD21", "HD22", NULL,  NULL };
-   static HBOND h6 = {"ASN", "OD1 ",0, 1, 0, NULL, NULL, NULL, "CG  "};
-   static HBOND h7 = {"ASP", "OD1 ",1, 1, 0, NULL, NULL, NULL, "CG  " };
-   static HBOND h8 = {"ASP", "OD2 ",0,1, 0, NULL, NULL, NULL, "CG  " };
-   static HBOND h9 = {"GLU", "OE1 ",1,1, 0, NULL, NULL, NULL, "CD  " };
-   static HBOND h10 = {"GLU", "OE2 ",0,1, 0, NULL, NULL, NULL, "CD  " };
-   static HBOND h11 = {"GLN", "NE2 ",1,0, 1, "HE21", "HE22", NULL, NULL};
-   static HBOND h12 = {"GLN", "OE1 ",0,1, 0, NULL, NULL, NULL, "CD  "};
-   static HBOND h13 = {"LYS", "NZ  ",1,0, 1, "HZ1 ","HZ2 ", "HZ3 ", NULL };
-   static HBOND h14 = {"SER", "OG  ",1,1, 1, NULL, NULL, NULL, "CB  "};
-   static HBOND h15 = {"TRP", "NE1 ",1,0, 1, "HE1 ", NULL, NULL, NULL };
-   static HBOND h16 = {"TYR", "OH  ",1,1, 1, NULL, NULL, NULL, "CZ  " };
-   static HBOND h17 = {"HIS", "ND1 ", 1,1,1, "HD1", NULL, NULL,"CG  " };
-   static HBOND h18 = {"HIS", "NE1 ", 1,1,1, "HE1", NULL, NULL,"CD2 " };
-   
+   /* ACRM 18.08.05 Fixed donh1 in h17 and h18 to add the missing trailing space
+      Tidied the columns so we can see what is going on!
+      
+      Also changed the following entries since we don't know precisely where the
+      hydrogens go:
+
+   static HBOND h2  = {"ARG", "NH1 ", 0,  0,  1,  "HH11", "HH12", NULL,   NULL,  NULL};
+   static HBOND h3  = {"ARG", "NH2 ", 0,  0,  1,  "HH21", "HH22", NULL,   NULL,  NULL};
+   static HBOND h5  = {"ASN", "ND2 ", 1,  0,  1,  "HD21", "HD22", NULL,   NULL,  NULL};
+   static HBOND h11 = {"GLN", "NE2 ", 1,  0,  1,  "HE21", "HE22", NULL,   NULL,  NULL};
+   static HBOND h13 = {"LYS", "NZ  ", 1,  0,  1,  "HZ1 ", "HZ2 ", "HZ3 ", NULL,  NULL};
+   */
+
+   /*                  res    hatom   sel acc don donh1   donh2   donh3   ante   next*/
+   static HBOND h1  = {"ARG", "NE  ", 1,  0,  1,  "HE  ", NULL,   NULL,   NULL,  NULL};
+   static HBOND h2  = {"ARG", "NH1 ", 0,  0,  1,  NULL,   NULL,   NULL,   NULL,  NULL};
+   static HBOND h3  = {"ARG", "NH2 ", 0,  0,  1,  NULL,   NULL,   NULL,   NULL,  NULL};
+   static HBOND h4  = {"THR", "OG1 ", 1,  1,  1,  NULL,   NULL,   NULL,   "CB  ",NULL };
+   static HBOND h5  = {"ASN", "ND2 ", 1,  0,  1,  NULL,   NULL,   NULL,   NULL,  NULL};
+   static HBOND h6  = {"ASN", "OD1 ", 0,  1,  0,  NULL,   NULL,   NULL,   "CG  ",NULL };
+   static HBOND h7  = {"ASP", "OD1 ", 1,  1,  0,  NULL,   NULL,   NULL,   "CG  ",NULL };
+   static HBOND h8  = {"ASP", "OD2 ", 0,  1,  0,  NULL,   NULL,   NULL,   "CG  ",NULL };
+   static HBOND h9  = {"GLU", "OE1 ", 1,  1,  0,  NULL,   NULL,   NULL,   "CD  ",NULL };
+   static HBOND h10 = {"GLU", "OE2 ", 0,  1,  0,  NULL,   NULL,   NULL,   "CD  ",NULL };
+   static HBOND h11 = {"GLN", "NE2 ", 1,  0,  1,  NULL,   NULL,   NULL,   NULL,  NULL};
+   static HBOND h12 = {"GLN", "OE1 ", 0,  1,  0,  NULL,   NULL,   NULL,   "CD  ",NULL };
+   static HBOND h13 = {"LYS", "NZ  ", 1,  0,  1,  NULL,   NULL,   NULL,   NULL,  NULL};
+   static HBOND h14 = {"SER", "OG  ", 1,  1,  1,  NULL,   NULL,   NULL,   "CB  ",NULL };
+   static HBOND h15 = {"TRP", "NE1 ", 1,  0,  1,  "HE1 ", NULL,   NULL,   NULL,  NULL};
+   static HBOND h16 = {"TYR", "OH  ", 1,  1,  1,  NULL,   NULL,   NULL,   "CZ  ",NULL };
+   static HBOND h17 = {"HIS", "ND1 ", 1,  1,  1,  "HD1 ", NULL,   NULL,   "CG  ",NULL };
+   static HBOND h18 = {"HIS", "NE1 ", 1,  1,  1,  "HE1 ", NULL,   NULL,   "CD2 ",NULL };
+
+
    HBOND *first;
    
    first = &h1; 
