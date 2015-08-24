@@ -159,7 +159,7 @@ PDB so that the n atom is on the xz plane */
    REAL matrix[3][3];
    VEC3F n_angle;
    
-   angle = TrueAngle(n->y, n->x);
+   angle = TheAngle(n->y, n->x);
    
    CreateRotMat('z', -angle, matrix);
    
@@ -179,7 +179,7 @@ void RotateToX(PDB *pdb, VEC3F *n)
    REAL matrix[3][3];
    VEC3F n_angle;
    
-   angle = TrueAngle(n->z, n->x);
+   angle = TheAngle(n->z, n->x);
    
    CreateRotMat('y', angle, matrix);
    
@@ -199,7 +199,7 @@ void RotateToXY(PDB *pdb, VEC3F *c_beta)
    REAL matrix[3][3];
    VEC3F c_beta_angle;
    
-   angle = TrueAngle(c_beta->z, c_beta->y);
+   angle = TheAngle(c_beta->z, c_beta->y);
    
    CreateRotMat('x', -angle, matrix);
    
@@ -213,7 +213,7 @@ void RotateToXY(PDB *pdb, VEC3F *c_beta)
 /* function that returns angle when given the opposite and adjacent
  values. Uses atan2 */
 
-REAL TrueAngle(REAL opp, REAL adj)
+REAL TheAngle(REAL opp, REAL adj)
 {
    REAL angle;
    
