@@ -37,7 +37,7 @@ BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
    
    /* find co-ordinates of *key* residue after the translation */
   
-    if(!FindNCACAtoms(start, next, &c_alpha, &c_beta, &n))
+   if(!FindNCACAtoms(start, next, &c_alpha, &c_beta, &n))
    {
       printf("Unable to find backbone atoms\n");
       return(FALSE);
@@ -50,7 +50,6 @@ BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
    /* rotate n onto the x axis */
 
    RotateToX(pdb, &n);
-
 
    /** ACRM c_beta has moved now!!! because of the rotations in the 2 previous steps
        c-beta has to be refound!
@@ -71,11 +70,12 @@ BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
       return(FALSE);
    }
 
-   /*printf("%s %d\n",start->resnam, start->resnum);
+#ifdef DEBUG
+   printf("%s %d\n",start->resnam, start->resnum);
    printf("c_alpha atoms %f %f %f\n", c_alpha.x, c_alpha.y, c_alpha.z);
    printf("c_beta atoms %f %f %f\n", c_beta.x, c_beta.y, c_beta.z);
-   printf("n atoms %f %f %f\n", n.x, n.y, n.z);*/
-   
+   printf("n atoms %f %f %f\n", n.x, n.y, n.z);
+#endif
   
    return(TRUE); 
 
