@@ -3,12 +3,12 @@
    Program:    hydrogen_matrices
    File:       hydrogen_matrices.c
    
-   Version:    V1.1
-   Date:       19.08.05
+   Version:    V2.0
+   Date:       24.01.06
    Function:   Generate matrices of hydrogen bond information for use
                by checkhbond
    
-   Copyright:  (c) University of Reading / Alison L. Cuff 2002
+   Copyright:  (c) University of Reading / Alison L. Cuff 2002-2006
    Author:     Alison L. Cuff
    Address:    School of Animal and Microbial Sciences,
                The University of Reading,
@@ -71,6 +71,7 @@ output file to be used in program checkhbond.c
    =================
    V1.0  17.06.03 Original version as used for thesis
    V1.1  19.08.05 Various bug fixes By: ACRM
+   V2.0  24.01.05 Modified to allow mc/sc matrices to be generated
 
 *************************************************************************/
 /* Includes
@@ -152,6 +153,11 @@ void StoreHBondingPosition(PDB *start, PDB *next, HBOND *hb);
 void PrintMatrix(HBOND *h, FILE *out);
 void StorePartnertoDonatePosition(PDB *a);
 void StorePartnertoAcceptPosition(PDB *d);
+void FindMCDonorHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb);
+void StoreHBondingNPosition(PDB *start, PDB *stop, HBOND *hb);
+void FindMCAcceptorAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb);
+void StoreHBondingCOPosition(PDB *start, PDB *stop, HBOND *hb);
+
 
 /************************************************************************/
 int main (int argc, char *argv[])
@@ -210,7 +216,7 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
    NAMES *n;
    HBOND *h;
    int natoms, natoms2, nHatoms;
-   PDB *pdb, *pdb2, *start, *next, *nextres, *stop;
+   PDB *pdb, *pdb2, *start, *next, *nextres, *stop, *prev;
    FILE *fp1,*fp2;
    char *location;
    BOOL noenv, tempflag;
@@ -228,7 +234,11 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
    
    for(h = hb; h!=NULL; NEXT(h))
    {
+#if defined(MCDONOR) || defined(MCACCEPTOR)
       if(h->select)
+#else
+      if(h->select && (h->accept || h->donate))
+#endif
       {
          fprintf(stderr,"INFO: Processing residue type %s\n",h->residue);
 
@@ -259,14 +269,106 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
                      if((pdb2 = StripHPDB(pdb, &natoms2)) !=NULL)
                      {
                         FREELIST(pdb, PDB);
-                        pdb = pdb2;
+                        pdb  = pdb2;
+                        prev = NULL;
                         
                         if((nHatoms = HAddPDB(fp1, pdb)) !=0)                    
                         {
-                           for(start=pdb; start!=NULL; start=next)
+                           for(start=pdb; start!=NULL; prev=start, start=next)
                            {
                               next = FindNextResidue(start);
-                              
+
+#if defined(MCDONOR)
+/*** FIXME!
+We should reset prev to NULL for discontinuous chains and chain breaks
+ ***/
+                              /* If not proline and not first residue */
+                              if(!strncmp(start->record_type, "ATOM  ", 6) &&
+                                 !strncmp(start->resnam, h->residue, 3) &&
+                                 strncmp(start->resnam, "PRO", 3) && 
+                                 (prev != NULL))
+                              {
+                                 /* return true if backbone atoms cannot be found
+                                    .. stops program
+                                    progressing to next stage 
+
+                                    This key residue is the one NOT being mutated.
+                                    So if we are doing sc/mc HBonds, this is always
+                                    the m/c residue
+                                 */
+                                 if((OrientateN_PDB(pdb, prev, start, next) != FALSE))
+                                 {
+                                    StoreHBondingNPosition(start, next, hb);
+                                    
+                                    for(nextres=pdb; nextres!=NULL; nextres=stop)
+                                    {
+                                       stop = FindNextResidue(nextres);
+                                       
+                                       if((nextres !=start))
+                                       {
+                                          /*
+                                            printf("%s %s\n", start->resnam, 
+                                            nextres->resnam);
+                                          */
+                                          
+                                          if((IsMCDonorHBonded(start,nextres,HBOND_SIDE2))
+                                             !=0)
+                                          {
+                                             FindMCDonorHAtoms(start, next, nextres, 
+                                                               stop, hb);
+                                          }
+                                       }
+                                    }
+                                 }
+                                 else /* If we couldn't orientate the residue */
+                                 {
+                                    printf("WARNING: backbone atoms can't be found for %c%d%c\
+ (PDB file: %s)\n",
+                                           start->chain[0], start->resnum, start->insert[0],
+                                           location);
+                                 }
+                              }  /* If the residue type matches */
+#elif defined(MCACCEPTOR)
+                              if(!strncmp(start->record_type, "ATOM  ", 6) &&
+                                 !strncmp(start->resnam, h->residue, 3))
+                              {
+                                 /* return true if backbone atoms cannot be found
+                                    .. stops program
+                                    progressing to next stage 
+                                 */
+                                 if((OrientateCO_PDB(pdb, start, next) != FALSE))
+                                 {
+                                    StoreHBondingCOPosition(start, next, hb);
+                                    
+                                    for(nextres=pdb; nextres!=NULL; nextres=stop)
+                                    {
+                                       stop = FindNextResidue(nextres);
+                                       
+                                       if((nextres !=start))
+                                       {
+                                          /*
+                                            printf("%s %s\n", start->resnam, 
+                                            nextres->resnam);
+                                          */
+                                          
+                                          if((IsMCAcceptorHBonded(start,nextres,HBOND_SIDE2))
+                                             !=0)
+                                          {
+                                             FindMCAcceptorAtoms(start, next, nextres, 
+                                                                 stop, hb);
+                                          }
+                                       }
+                                    }
+                                 }
+                                 else /* If we couldn't orientate the residue */
+                                 {
+                                    printf("WARNING: backbone atoms can't be found for %c%d%c\
+ (PDB file: %s)\n",
+                                           start->chain[0], start->resnum, start->insert[0],
+                                           location);
+                                 }
+                              }
+#else /* SCSC */
                               if((!strncmp(start->resnam, h->residue, 3)))
                               {
                                  /* return true if backbone atoms cannot be found
@@ -305,6 +407,7 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
                                            location);
                                  }
                               }  /* If the residue type matches */
+#endif
                            }  /* For each residue in the PDB */
                         }  /* If we added the hydrogens */
                      }  /* If we stripped the hydrogens */
@@ -878,21 +981,32 @@ HBOND *InitializeHbondTypes()
    static HBOND h1  = {"ARG", "NE  ", 1,  0,  1,  "HE  ", NULL,   NULL,   NULL,  NULL};
    static HBOND h2  = {"ARG", "NH1 ", 0,  0,  1,  NULL,   NULL,   NULL,   NULL,  NULL};
    static HBOND h3  = {"ARG", "NH2 ", 0,  0,  1,  NULL,   NULL,   NULL,   NULL,  NULL};
-   static HBOND h4  = {"THR", "OG1 ", 1,  1,  1,  NULL,   NULL,   NULL,   "CB  ",NULL };
-   static HBOND h5  = {"ASN", "ND2 ", 1,  0,  1,  NULL,   NULL,   NULL,   NULL,  NULL};
-   static HBOND h6  = {"ASN", "OD1 ", 0,  1,  0,  NULL,   NULL,   NULL,   "CG  ",NULL };
-   static HBOND h7  = {"ASP", "OD1 ", 1,  1,  0,  NULL,   NULL,   NULL,   "CG  ",NULL };
-   static HBOND h8  = {"ASP", "OD2 ", 0,  1,  0,  NULL,   NULL,   NULL,   "CG  ",NULL };
-   static HBOND h9  = {"GLU", "OE1 ", 1,  1,  0,  NULL,   NULL,   NULL,   "CD  ",NULL };
-   static HBOND h10 = {"GLU", "OE2 ", 0,  1,  0,  NULL,   NULL,   NULL,   "CD  ",NULL };
-   static HBOND h11 = {"GLN", "NE2 ", 1,  0,  1,  NULL,   NULL,   NULL,   NULL,  NULL};
-   static HBOND h12 = {"GLN", "OE1 ", 0,  1,  0,  NULL,   NULL,   NULL,   "CD  ",NULL };
+   static HBOND h4  = {"THR", "OG1 ", 1,  1,  1,  NULL,   NULL,   NULL,   "CB  ",NULL};
+   static HBOND h5  = {"ASN", "ND2 ", 1,  0,  1,  NULL,   NULL,   NULL,   "CG  ",NULL}; /* Acceptor? */
+   static HBOND h6  = {"ASN", "OD1 ", 0,  1,  0,  NULL,   NULL,   NULL,   "CG  ",NULL};
+   static HBOND h7  = {"ASP", "OD1 ", 1,  1,  0,  NULL,   NULL,   NULL,   "CG  ",NULL};
+   static HBOND h8  = {"ASP", "OD2 ", 0,  1,  0,  NULL,   NULL,   NULL,   "CG  ",NULL};
+   static HBOND h9  = {"GLU", "OE1 ", 1,  1,  0,  NULL,   NULL,   NULL,   "CD  ",NULL};
+   static HBOND h10 = {"GLU", "OE2 ", 0,  1,  0,  NULL,   NULL,   NULL,   "CD  ",NULL};
+   static HBOND h11 = {"GLN", "NE2 ", 1,  0,  1,  NULL,   NULL,   NULL,   "CD  ",NULL}; /* Acceptor? */
+   static HBOND h12 = {"GLN", "OE1 ", 0,  1,  0,  NULL,   NULL,   NULL,   "CD  ",NULL};
    static HBOND h13 = {"LYS", "NZ  ", 1,  0,  1,  NULL,   NULL,   NULL,   NULL,  NULL};
-   static HBOND h14 = {"SER", "OG  ", 1,  1,  1,  NULL,   NULL,   NULL,   "CB  ",NULL };
-   static HBOND h15 = {"TRP", "NE1 ", 1,  0,  1,  "HE1 ", NULL,   NULL,   NULL,  NULL};
-   static HBOND h16 = {"TYR", "OH  ", 1,  1,  1,  NULL,   NULL,   NULL,   "CZ  ",NULL };
-   static HBOND h17 = {"HIS", "ND1 ", 1,  1,  1,  "HD1 ", NULL,   NULL,   "CG  ",NULL };
-   static HBOND h18 = {"HIS", "NE1 ", 1,  1,  1,  "HE1 ", NULL,   NULL,   "CD2 ",NULL };
+   static HBOND h14 = {"SER", "OG  ", 1,  1,  1,  NULL,   NULL,   NULL,   "CB  ",NULL};
+   static HBOND h15 = {"TRP", "NE1 ", 1,  0,  1,  "HE1 ", NULL,   NULL,   NULL,  NULL}; /* Acceptor? */
+   static HBOND h16 = {"TYR", "OH  ", 1,  1,  1,  NULL,   NULL,   NULL,   "CZ  ",NULL};
+   static HBOND h17 = {"HIS", "ND1 ", 1,  1,  1,  "HD1 ", NULL,   NULL,   "CG  ",NULL};
+   static HBOND h18 = {"HIS", "NE1 ", 1,  1,  1,  "HE1 ", NULL,   NULL,   "CD2 ",NULL};
+   /* Backbone only HBonds */
+   static HBOND h19 = {"ALA", "    ", 1,  0,  0,  NULL,   NULL,   NULL,   NULL,  NULL};
+   static HBOND h20 = {"CYS", "    ", 1,  0,  0,  NULL,   NULL,   NULL,   NULL,  NULL};
+   static HBOND h21 = {"PHE", "    ", 1,  0,  0,  NULL,   NULL,   NULL,   NULL,  NULL};
+   static HBOND h22 = {"GLY", "    ", 1,  0,  0,  NULL,   NULL,   NULL,   NULL,  NULL};
+   static HBOND h23 = {"ILE", "    ", 1,  0,  0,  NULL,   NULL,   NULL,   NULL,  NULL};
+   static HBOND h24 = {"LEU", "    ", 1,  0,  0,  NULL,   NULL,   NULL,   NULL,  NULL};
+   static HBOND h25 = {"MET", "    ", 1,  0,  0,  NULL,   NULL,   NULL,   NULL,  NULL};
+   static HBOND h26 = {"VAL", "    ", 1,  0,  0,  NULL,   NULL,   NULL,   NULL,  NULL};
+   static HBOND h27 = {"PRO", "    ", 1,  0,  0,  NULL,   NULL,   NULL,   NULL,  NULL};
+
 
 
    HBOND *first;
@@ -915,7 +1029,16 @@ HBOND *InitializeHbondTypes()
    h15.next = &h16;
    h16.next = &h17;
    h17.next = &h18;
-   h18.next = NULL;
+   h18.next = &h19;
+   h19.next = &h20;
+   h20.next = &h21;
+   h21.next = &h22;
+   h22.next = &h23;
+   h23.next = &h24;
+   h24.next = &h25;
+   h25.next = &h26;
+   h26.next = &h27;
+   h27.next = NULL;
    
    return(first);
 }
@@ -924,8 +1047,8 @@ HBOND *InitializeHbondTypes()
 /* function to display a usage message */
 void Usage(void)
 {
-   fprintf(stderr, "\nHydrogen Matrices V1.1 (c) 2002-5, Alison Cuff, University of Reading\n");
-   fprintf(stderr, "V1.1 modification, Andrew C.R. Martin, University College London\n\n");
+   fprintf(stderr, "\nHydrogen Matrices V2.0 (c) 2002-6, Alison Cuff, University of Reading\n");
+   fprintf(stderr, "V1.1/2.0 modifications, Andrew C.R. Martin, University College London\n\n");
    
    fprintf(stderr, "Usage: hydrogen_matrices [cath domain file] [output file]\n\n");
    fprintf(stderr, "  [cath domain file] non-redundant (e.g Sreps) cath domain list file\n");
@@ -969,3 +1092,153 @@ BOOL ParseCmdLine(int argc, char **argv, char *inputfile, char *outputfile)
       
    return(TRUE);
 }
+
+/************************************************************************/
+void StoreHBondingCOPosition(PDB *start, PDB *stop, HBOND *hb)
+{
+   PDB *p;
+   
+   HBOND *h;
+     
+   for(p = start; p!=stop; NEXT(p))
+   {
+      /* search for hydrogen-capable /residue/atoms listed in 
+       *hydrogen residue* linked list 
+       */
+      if(!strncmp(p->atnam, "O  ", 3))
+      {
+         /* store location */
+         gAccept[(int)(p->x/DIV) + OFFSET]  
+            [(int)(p->y/DIV) + OFFSET]
+            [(int)(p->z/DIV) + OFFSET]++;
+         break;
+      }
+   }
+}
+
+/************************************************************************/
+void FindMCAcceptorAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
+{
+   PDB *d, *a, *h1, *h2, *h3, *p;
+   
+   char h_name1[6], h_name2[6], h_name3[6], p_name[6];
+
+   strcpy(p_name, "C   ");
+
+   /* Residue A *is* an acceptor (backbone oxygen) */
+   a = FindAtomInRange(resA, stopA, "O   ");
+   p = FindAtomInRange(resA, stopA, "C   ");
+
+   /* If residue B is a donor */
+   for(d=resB; d!=stopB; NEXT(d))
+   {
+      if(isDonor(d, hb, h_name1, h_name2, h_name3))
+      {
+         h1 = FindAtomInRange(resB, stopB, h_name1);
+         h2 = FindAtomInRange(resB, stopB, h_name2);
+         h3 = FindAtomInRange(resB, stopB, h_name3);
+               
+         /* and the hydrogen bond is valid */
+         if(ValidHBond(h1, d, a, p))
+         {
+            /* store position of partners hydrogen donating heavy atom */
+#ifdef NOISY
+            fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
+                    d->resnam, d->resnum, d->atnam, 
+                    a->resnam, a->resnum, a->atnam, 
+                    ((h1==NULL?"???":h1->atnam)), p->atnam);
+#endif
+            StorePartnertoAcceptPosition(d);
+         }
+         else if(h2!=NULL)
+         {
+            if(ValidHBond(h2, d, a, p))
+            {
+#ifdef NOISY
+               fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
+                       d->resnam, d->resnum, d->atnam, 
+                       a->resnam, a->resnum, a->atnam, 
+                       h2->atnam, p->atnam);
+#endif
+               StorePartnertoAcceptPosition(d);
+            }
+         }
+         else if(h3!=NULL)
+         {
+            if(ValidHBond(h3, d, a, p))
+            {
+#ifdef NOISY
+               fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
+                       d->resnam, d->resnum, d->atnam, 
+                       a->resnam, a->resnum, a->atnam, 
+                       h3->atnam, p->atnam);
+#endif
+               StorePartnertoAcceptPosition(d);
+            }
+         }
+      }
+   }
+}
+
+/************************************************************************/
+void StoreHBondingNPosition(PDB *start, PDB *stop, HBOND *hb)
+{
+   PDB *p;
+   
+   HBOND *h;
+     
+   /* If it's not Proline */
+   if(strncmp(start->resnam, "PRO", 3))
+   {
+      for(p = start; p!=stop; NEXT(p))
+      {
+         /* search for backbone nitrogen */
+         if(!strncmp(p->atnam, "N  ", 3))
+         {
+            /* store location */
+            gDonate[(int)(p->x/DIV) + OFFSET] 
+                   [(int)(p->y/DIV) + OFFSET]
+                   [(int)(p->z/DIV) + OFFSET]++;
+         }
+      }
+   }
+}
+
+
+/************************************************************************/
+void FindMCDonorHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
+{
+   PDB *d, *a, *h1, *h2, *h3, *p;
+   
+   char h_name1[6], h_name2[6], h_name3[6], p_name[6];
+
+   for(d=resA; d!=stopA; NEXT(d))
+   {
+      if(!strcmp(d->atnam, "N   "))
+      {
+         h1 = FindAtomInRange(resA, stopA, "H   ");
+
+         for(a=resB; a!=stopB; NEXT(a))
+         {
+            if(isAcceptor(a, hb, p_name))
+            {
+               p = FindAtomInRange(resB, stopB, p_name);
+               
+               /* if the hydrogen bond is valid */
+               if(ValidHBond(h1, d, a, p))
+               {
+                  /* store position of partner acceptor atom */          
+#ifdef NOISY
+                  fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
+                          d->resnam, d->resnum, d->atnam, 
+                          a->resnam, a->resnum,  a->atnam, 
+                          ((h1==NULL?"???":h1->atnam)), p->atnam); 
+#endif
+                  StorePartnertoDonatePosition(a);
+               }
+            }
+         }
+      }
+   }
+}
+
