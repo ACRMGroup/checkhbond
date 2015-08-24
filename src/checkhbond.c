@@ -49,7 +49,9 @@ for each position:
 
 /* defines and macros */
 /* default matrix file */
-#define MATRIXFILE "/home/alison/hydrogen_bonding/matrices_05new.txt"
+/*#define MATRIXFILE "/home/alison/hydrogen_bonding/matrices_05new.txt"*/
+/*#define MATRIXFILE "/home/alison/hydrogen_bonding/hydrogen_bonding_new/testmatrices.txt"*/
+#define MATRIXFILE "/home/alison/hydrogen_bonding/hydrogen_bonding_new/matrices2.txt"
 #define MAXBUFF 300
 /* radius of atom */
 #define RAD 25
@@ -61,7 +63,7 @@ for each position:
                        (a.z - b.z) * (a.z - b.z)
 
 /* for debugging purposes */
-#define DEBUG
+/*#define DEBUG */
 
 /*************************************/
 
@@ -301,6 +303,7 @@ int main (int argc, char *argv[])
          }
          
       }
+      
       else
       {
          fprintf(stderr, "Sorry, unable to open matrix file\n");
@@ -1238,22 +1241,23 @@ BOOL IsHBondCapable(char *residue)
 {   
    int i;
    
-   char *NotHBondRes[10];
+   char *NotHBondRes[3];
    
    BOOL flag = FALSE;
    
-   NotHBondRes[0] = "VAL";
-   NotHBondRes[1] = "LEU";
-   NotHBondRes[2] = "ILE";
-   NotHBondRes[3] = "MET";
-   NotHBondRes[4] = "PHE";
-   NotHBondRes[5] = "PRO";
-   NotHBondRes[6] = "ALA";
-   NotHBondRes[7] = "CYS";
-   NotHBondRes[8] = "HIS";
-   NotHBondRes[9] = "GLY";
+   NotHBondRes[0] = "MET";
+   NotHBondRes[1] = "CYS";
+   NotHBondRes[2] = "HIS";
+   /* NotHBondRes[3] = "ILE";
+   NotHBondRes[4] = "VAL";
+   NotHBondRes[5] = "PHE";
+   NotHBondRes[6] = "GLY";
+   NotHBondRes[7] = "ALA";
+   NotHBondRes[8] = "PRO";
+   NotHBondRes[9] = "LEU";*/
+   
 
-   for(i = 0; i < 10; i++)
+   for(i = 0; i < 3; i++)
    {
       
       if(!strcmp(residue, NotHBondRes[i]))
