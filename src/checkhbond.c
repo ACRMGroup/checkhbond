@@ -48,7 +48,7 @@ for each position:
 
 /* defines and macros */
 /* default matrix file */
-#define MATRIXFILE "/home/alison/hydrogen_bonding/matrices_05new.txt"
+#define MATRIXFILE "/acrm/home/alison/hydrogen_bonding/matrices_05new.txt"
 #define MAXBUFF 300
 /* radius of atom */
 #define RAD 25
