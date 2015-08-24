@@ -61,8 +61,7 @@ for each position:
                        (a.z - b.z) * (a.z - b.z)
 
 /* for debugging purposes */
-#define DEBUG 1
-/*#define DEBUG2 1*/
+#define DEBUG
 
 /*************************************/
 
@@ -108,13 +107,12 @@ BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
                           REAL cutoff,
                           char *hatom1, char *hatom2, FILE *out);
 void OrientateMatrix(VEC3F CAtoCAVector,int x, int y, int z,
-                     VEC3F *partner_real_coord_rotated);
+                     VEC3F *rotated_coord);
 int CalculateTotalCounts(int array[MAXSIZE][MAXSIZE][MAXSIZE]);
 REAL CalcEnergy(int count1, int totalcount1, int count2, int totalcount2);
-void PrintKeyResidueGrid(int array[MAXSIZE][MAXSIZE][MAXSIZE]);
 REAL Distance_squared (int i, int j, int k, int x_coord, int y_coord,
                        int z_coord);
-REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector,
+REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector, VEC3F *partner_coord,
                   int totalcount1, int totalcount2,
                   int keyarray[MAXSIZE][MAXSIZE][MAXSIZE],
                   int partnerarray[MAXSIZE][MAXSIZE][MAXSIZE],
@@ -153,9 +151,7 @@ int main (int argc, char *argv[])
          {
             
             if(ParseResSpec(locres2, chain2, &resnum2, insert2))
-            {
-               printf("cutoff distance chosen: %2.3f\n", cutoff);
-               
+            {               
                if(Open_Std_Files(pdbfile, outputfile, &PDBFILE, &OUT))
                { 
                   
@@ -213,19 +209,19 @@ int main (int argc, char *argv[])
                      
                      if(IsHBondCapable(res1) != 0)
                      {
-                        fprintf(stderr, "No hydrogen bonds. %s not a hydrogen bond capable residue\n", res1);
+                        fprintf(OUT, "No hydrogen bonds\n");
                         return(1);
                      }
                      
                      if(IsHBondCapable(res2) !=0)
                      {
-                        fprintf(stderr, "No hydrogen bonds. %s not a hydrogen bond capable residue\n", res2);
+                        fprintf(OUT, "No hydrogen bonds\n");
                         return(1);
                      }
                      
                      if(!ReadInMatrices(res1, res2, matrix))
                      {
-                        fprintf(stderr, "Error: Unable to read in matrices correctly\n");
+                        fprintf(OUT, "No hydrogen bonds\n");
                         return(1);
                      }
                      
@@ -251,7 +247,7 @@ int main (int argc, char *argv[])
                                                  res2_stop, CAtoCAVector, cutoff,
                                                  hatom1, hatom2, OUT))
                         {
-                           printf("No hydrogen bonds\n");
+                           fprintf(OUT, "No hydrogen bonds\n");
                         }
                         
                         
@@ -265,7 +261,7 @@ int main (int argc, char *argv[])
                            if(!CheckValidHBond(CAtoCAVector, cutoff, OUT,
                                                gAccept, gPartnertoDonate))
                            {
-                              printf("No hydrogen bonds\n");
+                              fprintf(OUT, "No hydrogen bonds\n");
                            }
                            
                         }
@@ -334,9 +330,10 @@ BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
       totalcount1 = 0, 
       totalcount2 = 0;
    
-   
-   
    FILE *OUT = out;
+
+   VEC3F partner_coord;
+   
    
    REAL pseudoenergy = -1;
    
@@ -375,7 +372,7 @@ BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
    }
    
       
-   pseudoenergy = DoCheckHBond(x_coord1, y_coord1, z_coord1, CAtoCAVector,
+   pseudoenergy = DoCheckHBond(x_coord1, y_coord1, z_coord1, CAtoCAVector,&partner_coord,
                                totalcount1, totalcount2,
                                gDonate, gPartnertoAccept, cutoff, OUT); 
    if((pseudoenergy !=-1)&& (pseudoenergy !=9999.9999))
@@ -458,10 +455,16 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
    
    VEC3F tempv;   
    
-   PDB *keyres1_pdb = NULL,
-       *partnerres2_pdb = NULL;
+   PDB *keyres1_pdb = NULL, 
+      *partnerres2_pdb = NULL;
+   
+
+   
 
    char *sel[4];
+
+
+   
    REAL *weight = NULL;
    int natoms,
        NumCo_ord1 = 0,
@@ -477,12 +480,17 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
        *start     = NULL;
 
    COOR *keyres1_coor = NULL,
-        *partnerres2_coor = NULL;   
+      *partnerres2_coor = NULL;
+   
+ 
+   
+  	
     
    SELECT(sel[0], "N   ");
    SELECT(sel[1], "CA  ");
    SELECT(sel[2], "C   ");
-   
+ 
+ 
    if(sel[0] ==NULL)
    {
       return(FALSE);
@@ -494,7 +502,7 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
       return(FALSE);
       
    }   
-    
+
    /* create linked list containing just C, N and CA atoms of residue 2 */
    if((partnerres2_pdb = SelectAtomsResidue(res2_start, res2_stop,
                                             3, sel, &natoms)) == NULL)
@@ -502,6 +510,8 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
       return(FALSE);
       
    }
+
+
 #ifdef DEBUG
    printf("original\n");
    WritePDB(stdout, keyres1_pdb);
@@ -514,13 +524,13 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
    tempv.z = -CAtoCAVector.z;
    
    TranslatePDB(partnerres2_pdb, tempv);
-     
+    
 #ifdef DEBUG
    printf("translate\n");
    WritePDB(stdout, keyres1_pdb);
    WritePDB(stdout, partnerres2_pdb);
 #endif
-   
+
    /* create coordinate arrays for res1 and res2 */
    NumCo_ord2 = GetPDBCoor(partnerres2_pdb, &partnerres2_coor);
    NumCo_ord1 = GetPDBCoor(keyres1_pdb, &keyres1_coor);
@@ -578,6 +588,7 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
    {       
       return(FALSE);
    }
+
 #ifdef DEBUG   
    ApplyMatrixPDB(keyres1_pdb, gRotation_matrix);
    
@@ -612,18 +623,18 @@ BOOL CheckValidHBond(VEC3F CAtoCAVector, REAL cutoff, FILE *out,
                      int partnerarray[MAXSIZE][MAXSIZE][MAXSIZE])
 {
    
-   int x, y, z, totalcount1 = 0, totalcount2 = 0;
+   int x, y, z, totalcount1 = 0, totalcount2 = 0, atnum = 0, resnum = 0;
 
    FILE *OUT = out;
       
    REAL pseudoenergy, final_penergy  = 9999.9999;
 
+   VEC3F partner_coord;
+   
+
    /* first ... compare *key* residue hydrogen-donor atoms
       with *partner* residue *partner-to-accept* donor atoms */ 
    
-#ifdef DEBUG
-   PrintKeyResidueGrid(keyarray);
-#endif
 
    totalcount1 = CalculateTotalCounts(keyarray);
    totalcount2 = CalculateTotalCounts(partnerarray);
@@ -636,13 +647,19 @@ BOOL CheckValidHBond(VEC3F CAtoCAVector, REAL cutoff, FILE *out,
          for(z = 0; z < MAXSIZE; z++)
          {
             
-            pseudoenergy = DoCheckHBond(x, y, z, CAtoCAVector, totalcount1,
+            pseudoenergy = DoCheckHBond(x, y, z, CAtoCAVector, &partner_coord, totalcount1,
                                         totalcount2, keyarray, partnerarray,
                                         cutoff, OUT);           
             
             if((pseudoenergy != -1) && (final_penergy > pseudoenergy))
             {
                final_penergy = pseudoenergy;
+
+               
+#ifdef DEBUG
+   fprintf(stdout, "ATOM  %5d  C   THR  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
+           atnum++, resnum++, partner_coord.x, partner_coord.y,  partner_coord.z, 1.00, 2.00);
+#endif
                
             }
             
@@ -665,7 +682,7 @@ BOOL CheckValidHBond(VEC3F CAtoCAVector, REAL cutoff, FILE *out,
 
 /****************************************/
 
-REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector, int totalcount1,
+REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector, VEC3F *partner_coord, int totalcount1,
                   int totalcount2,
                   int keyarray[MAXSIZE][MAXSIZE][MAXSIZE],
                   int partnerarray[MAXSIZE][MAXSIZE][MAXSIZE],
@@ -684,6 +701,8 @@ REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector, int totalcount1,
       dist_squared;
    
    int final_x,final_y,final_z;
+
+   int atnum = 0, resnum = 0;
          
    /* call routine to rotate matrix */
 
@@ -695,6 +714,7 @@ REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector, int totalcount1,
       
       /* convert real co-ordinates back into grid locations */
       
+
       COORD_2_GRID(x_coord,rotated_coord.x);
       COORD_2_GRID(y_coord,rotated_coord.y);
       COORD_2_GRID(z_coord,rotated_coord.z);
@@ -708,6 +728,20 @@ REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector, int totalcount1,
          { 
             final_penergy = CalcEnergy(count1, totalcount1,
                                       count2, totalcount2);
+
+            final_x = x_coord;
+            final_y = y_coord;
+            final_z = z_coord;
+
+            GRID_2_COORD(final_x, partner_coord->x);
+            GRID_2_COORD(final_y, partner_coord->y);
+            GRID_2_COORD(final_z, partner_coord->z);
+
+#ifdef DEBUG1
+   fprintf(stdout, "ATOM  %5d  C   THR  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
+           atnum++, resnum++, rotated_coord.x, rotated_coord.y,  rotated_coord.z, 1.00, 2.00);
+#endif
+            
  
          }
          
@@ -733,12 +767,21 @@ REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector, int totalcount1,
                               if(pseudoenergy < final_penergy)
                               {
                                  final_penergy = pseudoenergy;
-               
+                                 
+                                 final_x = x_coord;
+                                 final_y = y_coord;
+                                 final_z = z_coord;
+                                 
+                                 GRID_2_COORD(final_x, partner_coord->x);
+                                 GRID_2_COORD(final_y, partner_coord->y);
+                                 GRID_2_COORD(final_z, partner_coord->z);
+                                 
                               }
                               
-                              final_x = x_coord;
-                              final_y = y_coord;
-                              final_z = z_coord;
+#ifdef DEBUG1
+   fprintf(stdout, "ATOM  %5d  C   THR  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
+           atnum++, resnum++, rotated_coord.x, rotated_coord.y,  rotated_coord.z, 1.00, 3.00);
+#endif
                            }
                            
                            
@@ -760,44 +803,6 @@ REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector, int totalcount1,
    
 }
         
-/***************************************/
-
-void PrintKeyResidueGrid(int array[MAXSIZE][MAXSIZE][MAXSIZE])
-{
-
-   int x, y, z;
-
-   VEC3F real_coord;
-
-   int atnum = 0, resnum = 0;
-   
-   
-   for(x=0; x < MAXSIZE; x++)
-   {
-      for(y=0; y < MAXSIZE; y++)
-      {
-         for(z = 0; z < MAXSIZE; z++)
-         {
-            /* if *key* residue hydrogen donor atoms */
-            if(array[x][y][z] > 0)
-            {
-               /* convert location of hydrogen atoms in *key* residue matrix 
-                  to real co-ordinates */ 
-               GRID_2_COORD(x, real_coord.x);
-               GRID_2_COORD(y, real_coord.y);
-               GRID_2_COORD(z, real_coord.z);
-               
-               fprintf(stdout,"ATOM  %5d  CA  ARG  %4d  %8.3f%8.3f%8.3f%6.2f%6.2f\n", \
-                       atnum++, resnum++,  real_coord.x , real_coord.y, \
-                       real_coord.z,  1.00, 1.00);
-            }
-            
-         }
-         
-      }
-      
-   }
-}
 /***************************************/
 REAL CalcEnergy(int count1, int totalcount1, int count2, int totalcount2)
 {
@@ -823,42 +828,23 @@ void OrientateMatrix(VEC3F CAtoCAVector,int x, int y, int z,
       
    VEC3F partner_real_coord, partner_real_coord_rotated;
 
-   int atnum = 0, resnum = 0;
-
-
    /* convert location of hydrogen atoms in *partner* residue
       matrix to real coordinates */
 
    GRID_2_COORD(x, partner_real_coord.x);
    GRID_2_COORD(y, partner_real_coord.y);
    GRID_2_COORD(z, partner_real_coord.z);
-#ifdef DEBUG
-   fprintf(stdout, "ATOM  %5d  CA  THR  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
-           atnum++, resnum++,  partner_real_coord.x , partner_real_coord.y,
-           partner_real_coord.z,  1.00, 2.00);
-#endif
 
    /* multiply vector by rotation matrix */
 
    MatMult3_33(partner_real_coord, gRotation_matrix,
                &partner_real_coord_rotated);
-#ifdef DEBUG
-   fprintf(stdout, "ATOM  %5d  C   THR  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
-           atnum++, resnum++, partner_real_coord_rotated.x,
-           partner_real_coord_rotated.y, 
-           partner_real_coord_rotated.z,  1.00, 3.00);
-#endif   
+  
    /* add CA to CA vector */
 
    partner_real_coord_rotated.x += CAtoCAVector.x;
    partner_real_coord_rotated.y += CAtoCAVector.y;
    partner_real_coord_rotated.z += CAtoCAVector.z;
-#ifdef DEBUG
-   fprintf(stdout, "ATOM  %5d  C   THR  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
-           atnum++, resnum++, partner_real_coord_rotated.x,
-           partner_real_coord_rotated.y, 
-           partner_real_coord_rotated.z,  1.00, 4.00);
-#endif
   
    *rotated_coord = partner_real_coord_rotated;
    
@@ -994,7 +980,6 @@ BOOL ReadInMatrices(char *res1, char *res2, FILE *matrix)
          if(!strncmp(minibuffer, res1, 3))         
          {
             inResidue1 = TRUE;
-            printf("Residue 1: %s\n", res1);
             
          }
          else
@@ -1003,8 +988,7 @@ BOOL ReadInMatrices(char *res1, char *res2, FILE *matrix)
          }
          if(!strncmp(minibuffer, res2, 3))
          {
-            inResidue2 = TRUE;
-            printf("Replacement residue (for residue 2): %s\n", res2);       
+            inResidue2 = TRUE;       
          }
          else
          {
