@@ -7,7 +7,7 @@
 #define MAXBUFF 300
 #define PDBEXT ".ent"
 #define DOMAINLOC "/acrm/data/dompdb/"
-#define PDBLOC "/data/pdb/pdb"
+#define PDBLOC "/acrm/data/pdb/pdb"
 #define PDBSTART ""
 #define PGPFILE "Explicit.pgp"
 #define COORD_2_GRID(x,y) (x) = ((int)(y/DIV) + OFFSET)
