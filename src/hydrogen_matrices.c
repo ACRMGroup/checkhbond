@@ -25,9 +25,7 @@ Output: text file printing matrices (see above) for hydrogen-capable
 
 output file to be used in program checkhbond.c
 
-
 ***************************************************/
-
 
 /* Includes */
 
@@ -63,8 +61,6 @@ static int gDonate[MAXSIZE][MAXSIZE][MAXSIZE];
 static int gPartnertoAccept[MAXSIZE][MAXSIZE][MAXSIZE];
 /* matrix storing partner atoms to hydrogen donating heavy atoms */
 static int gPartnertoDonate[MAXSIZE][MAXSIZE][MAXSIZE];
-
-
 
 struct hbond_data
 {
@@ -111,7 +107,6 @@ void StoreHBondingPosition(PDB *start, PDB *next, HBOND *hb);
 void PrintMatrix(HBOND *h, FILE *out);
 void StorePartnertoDonatePosition(PDB *a);
 void StorePartnertoAcceptPosition(PDB *d);
-
 
 /******************************************/
 
@@ -820,6 +815,13 @@ char *FindStructureLocation (NAMES *names)
    
    char *filename=(char *)malloc((size_t)(sizeof(char)*(6+1)));
    char *result,*tbuffer,*tbuffer1,chainlabel;
+
+   if(!filename)
+   {
+      printf("Out of memory\n");
+      exit(1);
+      
+   }
    
    if(strlen(names->filename) !=6) {
       fprintf(stderr,"the name does not contain 6 char: %s\n",names->filename);
