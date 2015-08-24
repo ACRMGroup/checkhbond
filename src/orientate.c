@@ -476,10 +476,10 @@ BOOL ResiduesBonded(PDB *pdb1, PDB *pdb2)
 /************************************************************************/
 void PrintError(FILE *out, char *error)
 {
-   fprintf(stderr,"Error (checkhbond) %s", error);
+   fprintf(stderr,"Error (checkhbond): %s", error);
    if(out != NULL)
    {
-      fprintf(out,"Error (checkhbond) %s", error);
+      fprintf(out,"Error (checkhbond): %s", error);
    }
 }
 
