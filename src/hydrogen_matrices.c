@@ -858,7 +858,6 @@ NAMES *InitializeDomainList(FILE *fp)
    FILE *fn = fp;
    char *p;
    char buffer[MAXBUFF];
-   char resol[6];
    float resolution;
    
    while(fgets(buffer, MAXBUFF, fn))
@@ -1109,8 +1108,6 @@ void StoreHBondingCOPosition(PDB *start, PDB *stop, HBOND *hb)
 {
    PDB *p;
    
-   HBOND *h;
-     
    for(p = start; p!=stop; NEXT(p))
    {
       /* search for hydrogen-capable /residue/atoms listed in 
@@ -1196,8 +1193,6 @@ void StoreHBondingNPosition(PDB *start, PDB *stop, HBOND *hb)
 {
    PDB *p;
    
-   HBOND *h;
-     
    /* If it's not Proline */
    if(strncmp(start->resnam, "PRO", 3))
    {
@@ -1219,9 +1214,9 @@ void StoreHBondingNPosition(PDB *start, PDB *stop, HBOND *hb)
 /************************************************************************/
 void FindMCDonorHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
 {
-   PDB *d, *a, *h1, *h2, *h3, *p;
+   PDB *d, *a, *h1, *p;
    
-   char h_name1[6], h_name2[6], h_name3[6], p_name[6];
+   char p_name[6];
 
    for(d=resA; d!=stopA; NEXT(d))
    {
