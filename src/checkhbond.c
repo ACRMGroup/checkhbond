@@ -312,7 +312,8 @@ int main (int argc, char *argv[])
                                                insert1, insert2, &hbplus, hatom1, hatom2,
                                                cutoff, res1, res2, OUT))
                         {
-                           PrintError(OUT, "Mainchain donor could not be analyzed\n");
+                           /* ACRM 13.09.11 Corrected message - not an error state! */
+                           PrintError(OUT, "No hydrogen bonds (SC/MC-donor)\n");
                         }
                      }
 #elif  MCACCEPTOR
@@ -322,7 +323,8 @@ int main (int argc, char *argv[])
                                                   insert1, insert2, &hbplus, hatom1, hatom2,
                                                   cutoff, res1, res2, OUT))
                         {
-                           PrintError(OUT, "Mainchain acceptor could not be analyzed\n");
+                           /* ACRM 13.09.11 Corrected message - not an error state! */
+                           PrintError(OUT, "No hydrogen bonds (SC/MC-acceptor)\n");
                         }
                      }
 #else
@@ -1653,6 +1655,8 @@ void CalculateCToCaVector(PDB *res1_start, PDB *res1_stop,
 
 
 /************************************************************************/
+/* 13.09.11 Added more error messages
+ */
 BOOL AnalyzeMCDonorPair(int resnum1, int resnum2, PDB *pdb, 
                         FILE *matrix, FILE *matrix2,
                         char *chain1, char *chain2, 
@@ -1727,7 +1731,11 @@ BOOL AnalyzeMCDonorPair(int resnum1, int resnum2, PDB *pdb,
    
    /* ACRM 25.03.11 Check return value */
    if(!OrientatePDB(pdb, res2_start, res2_stop))
+   {
+      PrintError(OUT, "Can't orientate PDB file\n");
       return(FALSE);
+   }
+   
 #ifndef NOCULL
    CullArrays(pdb, res1_start, res2_start, gPartnertoAccept,
               gAccept);
@@ -1735,7 +1743,11 @@ BOOL AnalyzeMCDonorPair(int resnum1, int resnum2, PDB *pdb,
 
    /* ACRM 25.03.11 Check return value */
    if(!OrientateN_PDB(pdb, prevres1, res1_start, res1_stop))
+   {
+      PrintError(OUT, "Can't orientate PDB file about N\n");
       return(FALSE);
+   }
+   
 #ifndef NOCULL
    CullArrays(pdb, res1_start, res2_start,
               gDonate, gPartnertoDonate);
@@ -1751,13 +1763,17 @@ BOOL AnalyzeMCDonorPair(int resnum1, int resnum2, PDB *pdb,
    {
       /* ACRM 25.03.11 Check return value */
       if(!OrientatePDB(pdb, res2_start, res2_stop))
+      {
+         PrintError(OUT, "Can't orientate PDB file\n");
          return(FALSE);
+      }
+      
       if(CalculateHBondEnergy(pdb, res1_start, res1_stop,
                               res2_start,
                               res2_stop, NtoCAVector, cutoff,
                               hatom1, hatom2, OUT) == CHBE_ERROR)
       {
-         PrintError(OUT, "nable to calculate HBondEnergy (2)\n");
+         PrintError(OUT, "Unable to calculate HBondEnergy (2)\n");
       }
    }
    else
@@ -1769,6 +1785,7 @@ BOOL AnalyzeMCDonorPair(int resnum1, int resnum2, PDB *pdb,
          if(!CheckValidHBond(NtoCAVector, cutoff, OUT,
                              gPartnertoDonate, gAccept))
          {
+            PrintError(OUT, "Invalid HBond\n");
             return(FALSE);
          }
       }
@@ -1777,6 +1794,7 @@ BOOL AnalyzeMCDonorPair(int resnum1, int resnum2, PDB *pdb,
 }
 
 /************************************************************************/
+/* ACRM 13.09.11 Added more error messages */
 BOOL AnalyzeMCAcceptorPair(int resnum1, int resnum2, PDB *pdb, 
                            FILE *matrix, FILE *matrix2,
                            char *chain1, char *chain2, 
@@ -1850,7 +1868,11 @@ BOOL AnalyzeMCAcceptorPair(int resnum1, int resnum2, PDB *pdb,
    
    /* ACRM 25.03.11 Check return value */
    if(!OrientatePDB(pdb, res2_start, res2_stop))
+   {
+      PrintError(OUT, "Can't orientate the PDB file\n");
       return(FALSE);
+   }
+   
 #ifndef NOCULL
    CullArrays(pdb, res1_start, res2_start, gDonate,
               gPartnertoDonate);
@@ -1858,7 +1880,11 @@ BOOL AnalyzeMCAcceptorPair(int resnum1, int resnum2, PDB *pdb,
 
    /* ACRM 25.03.11 Check return value */
    if(!OrientateCO_PDB(pdb, res1_start, res1_stop))
+   {
+      PrintError(OUT, "Can't orientate the PDB file about CO\n");
       return(FALSE);
+   }
+   
 #ifndef NOCULL
    CullArrays(pdb, res1_start, res2_start,
               gAccept, gPartnertoAccept);
@@ -1874,7 +1900,11 @@ BOOL AnalyzeMCAcceptorPair(int resnum1, int resnum2, PDB *pdb,
    {
       /* ACRM 25.03.11 Check return value */
       if(!OrientatePDB(pdb, res2_start, res2_stop))
+      {
+         PrintError(OUT, "Can't orientate the PDB file\n");
          return(FALSE);
+      }
+      
       if(CalculateHBondEnergy(pdb, res1_start, res1_stop,
                               res2_start,
                               res2_stop, CtoCAVector, cutoff,
