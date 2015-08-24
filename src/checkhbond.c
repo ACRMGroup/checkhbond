@@ -112,7 +112,7 @@
 #define MAT_READ_DONOR2    2
 #define MAT_READ_ACCEPTOR1 4
 #define MAT_READ_ACCEPTOR2 8
-#define MAT_READ_BOTH      9
+#define MAT_READ_BOTH      9 /* DONOR1 and ACCEPTOR2 */
 #define MAT_RES_1          1
 #define MAT_RES_2          2
 #define MAT_RES_BOTH       3
@@ -252,6 +252,16 @@ int main (int argc, char *argv[])
                   /* create linked list of pdb file */ 
                   if((pdb = ReadPDBAtoms(PDBFILE, &natoms)) !=NULL)
                   {
+                     PDB *pdb2;
+                     int natoms2;
+                     
+                     /* ACRM 02.02.06 strip any hydrogens present */
+                     if((pdb2 = StripHPDB(pdb, &natoms2)) !=NULL)
+                     {
+                        FREELIST(pdb, PDB);
+                        pdb  = pdb2;
+                     }
+
                      /* ACRM 08.09.05 Get only the residues of interest */
                      if((pdb = GetResidues(pdb, chain1, resnum1, insert1, 
                                            chain2, resnum2, insert2,
@@ -294,7 +304,7 @@ int main (int argc, char *argv[])
                         }
                      }
 #elif  MCACCEPTOR
-                     if((matrix2 = OpenMatrixFile(matrix_file2, MATRIXFILE_MCDONOR)))
+                     if((matrix2 = OpenMatrixFile(matrix_file2, MATRIXFILE_MCACCEPTOR)))
                      {
                         if(!AnalyzeMCAcceptorPair(resnum1, resnum2, pdb, matrix, matrix2, chain1, chain2, 
                                                   insert1, insert2, &hbplus, hatom1, hatom2,
@@ -449,8 +459,9 @@ BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix,
       if(!CheckValidHBond(CAtoCAVector, cutoff, OUT,
                           gDonate, gPartnertoAccept))
       {
+         /* 06.02.06 ACRM - the two grids were the wrong way around! */
          if(!CheckValidHBond(CAtoCAVector, cutoff, OUT,
-                             gAccept, gPartnertoDonate))
+                             gPartnertoDonate, gAccept))
          {
             return(FALSE);
          }
@@ -589,8 +600,7 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
        resnum     = 0,
        i          = 0;
    char insert = ' ';
-   PDB *p         = NULL,
-       *q         = NULL,
+   PDB *q         = NULL,
        *start     = NULL;
    COOR *keyres1_coor = NULL,
       *partnerres2_coor = NULL;
@@ -794,7 +804,7 @@ BOOL CheckValidHBond(VEC3F CAtoCAVector, REAL cutoff, FILE *out,
                      int keyarray[MAXSIZE][MAXSIZE][MAXSIZE],
                      int partnerarray[MAXSIZE][MAXSIZE][MAXSIZE])
 {
-   int x, y, z, totalcount1 = 0, totalcount2 = 0, atnum = 0, resnum = 0;
+   int x, y, z, totalcount1 = 0, totalcount2 = 0;
    FILE *OUT = out;
    REAL pseudoenergy, final_penergy  = 9999.9999;
    VEC3F partner_coord;
@@ -895,7 +905,6 @@ REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector,
         pseudoenergy = -1, final_penergy = 9999.9999,
         dist_squared;
    int final_x,final_y,final_z;
-   static int atnum = 0, resnum = 0;
 
    /* call routine to rotate matrix */
    if(partnerarray[x][y][z] > 0)
@@ -1594,11 +1603,11 @@ void CalculateCToCaVector(PDB *res1_start, PDB *res1_stop,
                           PDB *res2_start, PDB *res2_stop, 
                           VEC3F *CtoCAVector)
 {
-   VEC3F res1_n, 
+   VEC3F res1_c, 
       res2_calpha;
 
    /*find co-ordinates of N atom */   
-   if(!FindAtom(res1_start, res1_stop, "C   ", &res1_n))
+   if(!FindAtom(res1_start, res1_stop, "C   ", &res1_c))
    {
       fprintf(stderr, "Error: Can't find C atoms of key residue\n");
    }
@@ -1609,9 +1618,9 @@ void CalculateCToCaVector(PDB *res1_start, PDB *res1_stop,
       fprintf(stderr, "Error: Can't find c-alpha atoms of partner residue\n");
    }
    
-   CtoCAVector->x =  res2_calpha.x - res1_n.x;
-   CtoCAVector->y =  res2_calpha.y - res1_n.y;
-   CtoCAVector->z =  res2_calpha.z - res1_n.z;
+   CtoCAVector->x =  res2_calpha.x - res1_c.x;
+   CtoCAVector->y =  res2_calpha.y - res1_c.y;
+   CtoCAVector->z =  res2_calpha.z - res1_c.z;
 }
 
 
@@ -1716,8 +1725,9 @@ BOOL AnalyzeMCDonorPair(int resnum1, int resnum2, PDB *pdb,
       if(!CheckValidHBond(NtoCAVector, cutoff, OUT,
                           gDonate, gPartnertoAccept))
       {
+         /* 06.02.06 ACRM - the two grids were the wrong way around! */
          if(!CheckValidHBond(NtoCAVector, cutoff, OUT,
-                             gAccept, gPartnertoDonate))
+                             gPartnertoDonate, gAccept))
          {
             return(FALSE);
          }
@@ -1823,8 +1833,9 @@ BOOL AnalyzeMCAcceptorPair(int resnum1, int resnum2, PDB *pdb,
    }
    else
    {
+      /* 06.02.06 ACRM - the two grids were the wrong way around! */
       if(!CheckValidHBond(CtoCAVector, cutoff, OUT,
-                          gDonate, gPartnertoAccept))
+                          gPartnertoAccept, gDonate))
       {
          if(!CheckValidHBond(CtoCAVector, cutoff, OUT,
                              gAccept, gPartnertoDonate))
