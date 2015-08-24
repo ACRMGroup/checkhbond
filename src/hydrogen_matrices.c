@@ -1,8 +1,40 @@
-#define DEBUG
+/*************************************************************************
 
+   Program:    hydrogen_matrices
+   File:       hydrogen_matrices.c
+   
+   Version:    V1.1
+   Date:       19.08.05
+   Function:   Generate matrices of hydrogen bond information for use
+               by checkhbond
+   
+   Copyright:  (c) University of Reading / Alison L. Cuff 2002
+   Author:     Alison L. Cuff
+   Address:    School of Animal and Microbial Sciences,
+               The University of Reading,
+               Whiteknights,
+               P.O. Box 228,
+               Reading RG6 6AJ.
+               England.
+               
+**************************************************************************
 
-/**************hydrogen_matrices.c*******************
+   This program is not in the public domain, but it may be copied
+   according to the conditions laid out in the accompanying file
+   COPYING.DOC
 
+   The code may be modified as required, but any modifications must be
+   documented so that the person responsible can be identified. If someone
+   else breaks this code, I don't want to be blamed for code that does not
+   work! 
+
+   The code may not be sold commercially or included as part of a 
+   commercial product except as described in the file COPYING.DOC.
+
+**************************************************************************
+
+   Description:
+   ============
 creates four matrices ....
 
 gAccept: stores all acceptor atoms of *key* residue
@@ -28,12 +60,21 @@ Output: text file printing matrices (see above) for hydrogen-capable
 
 output file to be used in program checkhbond.c
 
+**************************************************************************
 
-***************************************************/
+   Usage:
+   ======
 
+**************************************************************************
 
-/* Includes */
+   Revision History:
+   =================
+   V1.0  17.06.03 Original version as used for thesis
+   V1.1  19.08.05 Various bug fixes By: ACRM
 
+*************************************************************************/
+/* Includes
+*/
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -50,24 +91,10 @@ output file to be used in program checkhbond.c
 #include "hbondmat2.h"
 #include "cavallo_userfunc.h"
 
-/********************************************/
-
-/* Defines */
-
-/********************************************/
-
-/* Global variables */
-
-/* matrices that store all acceptor and donor atoms */
-static int gAccept[MAXSIZE][MAXSIZE][MAXSIZE];
-static int gDonate[MAXSIZE][MAXSIZE][MAXSIZE];
-
-/* matrix storing partner atoms to hydrogen accepting atoms */
-static int gPartnertoAccept[MAXSIZE][MAXSIZE][MAXSIZE];
-/* matrix storing partner atoms to hydrogen donating heavy atoms */
-static int gPartnertoDonate[MAXSIZE][MAXSIZE][MAXSIZE];
-
-
+/************************************************************************/
+/* Defines and macros
+*/
+#define NOISY
 
 struct hbond_data
 {
@@ -94,10 +121,21 @@ struct pdb_names
 
 typedef struct pdb_names NAMES;
 
-/******************************************/
+/************************************************************************/
+/* Globals
+*/
+/* matrices that store all acceptor and donor atoms */
+static int gAccept[MAXSIZE][MAXSIZE][MAXSIZE];
+static int gDonate[MAXSIZE][MAXSIZE][MAXSIZE];
 
-/* Prototypes */
+/* matrix storing partner atoms to hydrogen accepting atoms */
+static int gPartnertoAccept[MAXSIZE][MAXSIZE][MAXSIZE];
+/* matrix storing partner atoms to hydrogen donating heavy atoms */
+static int gPartnertoDonate[MAXSIZE][MAXSIZE][MAXSIZE];
 
+/************************************************************************/
+/* Prototypes
+*/
 int main (int argc, char *argv[]);
 HBOND *InitializeHbondTypes(void);
 BOOL ParseCmdLine(int argc, char **argv, char *inputfile, char *outputfile);
@@ -115,9 +153,7 @@ void PrintMatrix(HBOND *h, FILE *out);
 void StorePartnertoDonatePosition(PDB *a);
 void StorePartnertoAcceptPosition(PDB *d);
 
-
-/******************************************/
-
+/************************************************************************/
 int main (int argc, char *argv[])
 {
    FILE *in = stdin, *out = stdout;
@@ -142,19 +178,21 @@ int main (int argc, char *argv[])
             }
             else
             {
-               printf("ERROR: can't read protein domains linked list\n");
+               printf("ERROR: Can't read protein domains linked list\n");
+               printf("       (perhaps no high resolution structures?)\n");
                return(1);
             }
          }
          else
          {
-            printf("ERROR: can't read hydrogen atoms linked list\n");
+            printf("ERROR: Internal error in building hydrogen atoms linked list\n");
             return(1);
          }
       }
       else
       {
-         Usage();
+         printf("ERROR: Unable to open specified input or output files\n");
+         return(1);
       }
    }
    else
@@ -166,8 +204,7 @@ int main (int argc, char *argv[])
 }
    
                
-/******************************************/
-
+/************************************************************************/
 BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
 {
    NAMES *n;
@@ -181,6 +218,11 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
    if((fp1 = OpenFile(PGPFILE, "DATADIR", "r", &noenv)) == NULL)
    {
       fprintf(stderr, "ERROR: Can't open pgp file\n");
+      if(noenv)
+      {
+         fprintf(stderr, "       DATADIR environment variable not set\n");
+      }
+      
       return(FALSE);
    }
    
@@ -188,18 +230,24 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
    {
       if(h->select)
       {
+         fprintf(stderr,"INFO: Processing residue type %s\n",h->residue);
+
          ClearArrays();
          
          for(n=names; n !=NULL; NEXT(n))
          {
             if((location = FindStructureLocation(n, &tempflag)) == NULL)
             {
-               fprintf(stderr,"File not found: %s\n", location);
+               /* 19.08.05 ACRM: Corrected from 'location' to 'n->filename' 
+                  Also, FindStructureLocation() will generate a warning, so
+                  this is a continuation.
+                */
+               fprintf(stderr,"         File not processed for: %s\n", n->filename);
             }
             else
             {
-#ifdef DEBUG
-               fprintf(stderr,"Processing file %s\n", location);
+#ifdef NOISY
+               fprintf(stderr,"INFO: Processing file %s\n", location);
 #endif
                /* open protein domain file */
                if((fp2 = fopen(location, "r")) !=NULL)
@@ -249,45 +297,55 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
                                        }
                                     }
                                  }
-                                 else
+                                 else /* If we couldn't orientate the residue */
                                  {
-                                    printf("ERROR: backbone atoms can't be found\n");
+                                    printf("WARNING: backbone atoms can't be found for %c%d%c\
+ (PDB file: %s)\n",
+                                           start->chain[0], start->resnum, start->insert[0],
+                                           location);
                                  }
-                              }
-                           }
-                        }
-                     }
+                              }  /* If the residue type matches */
+                           }  /* For each residue in the PDB */
+                        }  /* If we added the hydrogens */
+                     }  /* If we stripped the hydrogens */
                   }
-                  else
+                  else /* if we didn't read the PDB file */
                   {
-                     printf("ERROR: can't create PDB linked list\n");
+                     printf("WARNING: Can't read atom list from PDB file %s\n",
+                            location);
                   }
                   if(pdb != NULL) FREELIST(pdb, PDB); 
                }
             }
             if(fp2 !=NULL) fclose(fp2);
-         }
-            
-         /* remove protein domain files created by getchain */
-         if(tempflag)
-         {
-            if(remove(location))
+            /* ACRM 19.08.05 - Moved this in here. Previously only one
+               temporary file was created and re-used each time. After
+               Antonio's changes, a new filename was created for each
+               temp file being processed, so they weren't getting
+               deleted. Similarly, the location variable needs to
+               be freed on each cycle.
+            */
+            /* remove protein domain files created by getchain */
+            if(tempflag)
             {
-               fprintf(stderr, "WARNING: unable to remove temporary protein \
+               if(remove(location))
+               {
+                  fprintf(stderr, "WARNING: Unable to remove temporary protein \
 domain file %s\n", location);
-            } 
-         } 
-         free(location);
-      }
-      
+               } 
+            }
+            free(location);
+         }  /* foreach name, n */
+      }  /* if(h->select) */
+
       PrintMatrix(h, out);
-   }
+   }  /* For each hydrogen bond type, h */
    
    fclose(fp1);
    return(TRUE);
 }
 
-/**********************************************************/
+/************************************************************************/
 void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
 {
    PDB *d, *a, *h1, *h2, *h3, *p;
@@ -314,8 +372,8 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
                if(ValidHBond(h1, d, a, p))
                {
                   /* store position of partner acceptor atom */          
-#ifdef DEBUG
-                  fprintf(stderr,"%s %d %s %s %d %s %s %s\n", 
+#ifdef NOISY
+                  fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
                           d->resnam, d->resnum, d->atnam, 
                           a->resnam, a->resnum,  a->atnam, 
                           ((h1==NULL?"???":h1->atnam)), p->atnam); 
@@ -326,8 +384,8 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
                {
                   if(ValidHBond(h2, d, a, p))
                   {                     
-#ifdef DEBUG
-                     fprintf(stderr,"%s %d  %s %s %d %s %s %s\n", 
+#ifdef NOISY
+                     fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
                             d->resnam, d->resnum, d->atnam, 
                             a->resnam, a->resnum, a->atnam, 
                             h2->atnam, p->atnam);
@@ -339,8 +397,8 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
                {
                   if(ValidHBond(h3, d, a, p))
                   {
-#ifdef DEBUG                     
-                     fprintf(stderr,"%s %d %s %s %d %s %s %s\n", 
+#ifdef NOISY                     
+                     fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
                             d->resnam, d->resnum, d->atnam, 
                             a->resnam, a->resnum, a->atnam, 
                             h3->atnam, p->atnam);
@@ -375,8 +433,8 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
                if(ValidHBond(h1, d, a, p))
                {
                   /* store position of partners hydrogen donating heavy atom */
-#ifdef DEBUG
-                  fprintf(stderr,"%s %d %s %s %d %s %s %s\n", 
+#ifdef NOISY
+                  fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
                           d->resnam, d->resnum, d->atnam, 
                           a->resnam, a->resnum, a->atnam, 
                           ((h1==NULL?"???":h1->atnam)), p->atnam);
@@ -387,8 +445,8 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
                {
                   if(ValidHBond(h2, d, a, p))
                   {
-#ifdef DEBUG
-                     fprintf(stderr,"%s %d  %s %s %d  %s %s %s\n", 
+#ifdef NOISY
+                     fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
                              d->resnam, d->resnum, d->atnam, 
                              a->resnam, a->resnum, a->atnam, 
                              h2->atnam, p->atnam);
@@ -400,8 +458,8 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
                {
                   if(ValidHBond(h3, d, a, p))
                   {
-#ifdef DEBUG
-                     fprintf(stderr,"%s %d %s %s  %d %s %s %s\n", 
+#ifdef NOISY
+                     fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
                             d->resnam, d->resnum, d->atnam, 
                             a->resnam, a->resnum, a->atnam, 
                             h3->atnam, p->atnam);
@@ -415,7 +473,7 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
    }
 }
 
-/**************************************************************/
+/************************************************************************/
 BOOL isDonor(PDB *d, HBOND *hb, char *h_name1, char *h_name2, char *h_name3)
 {
    HBOND *h;
@@ -445,8 +503,7 @@ BOOL isDonor(PDB *d, HBOND *hb, char *h_name1, char *h_name2, char *h_name3)
    return(FALSE);
 }
 
-/***************************************************************/
-
+/************************************************************************/
 BOOL isAcceptor(PDB *a, HBOND *hb, char *p_name)
 {
    HBOND *h;
@@ -468,7 +525,7 @@ BOOL isAcceptor(PDB *a, HBOND *hb, char *p_name)
    return(FALSE);
 }
 
-/****************************************************************/
+/************************************************************************/
 PDB *FindAtomInRange(PDB *start, PDB *stop, char *name)
 {
    PDB *p;
@@ -486,8 +543,7 @@ PDB *FindAtomInRange(PDB *start, PDB *stop, char *name)
    return(NULL);
 }
 
-/********************************************************/
-
+/************************************************************************/
 void StoreHBondingPosition(PDB *start, PDB *stop, HBOND *hb)
 {
    PDB *p;
@@ -534,7 +590,7 @@ void StoreHBondingPosition(PDB *start, PDB *stop, HBOND *hb)
 /*   FREELIST(h, HBOND); */
 }
 
-/********************************************************/
+/************************************************************************/
 void StorePartnertoAcceptPosition(PDB *d)
 {
    gPartnertoAccept[(int)(d->x/DIV) + OFFSET]
@@ -542,8 +598,7 @@ void StorePartnertoAcceptPosition(PDB *d)
       [(int)(d->z/DIV) + OFFSET]++;   
 }
 
-/********************************************************/
-
+/************************************************************************/
 void StorePartnertoDonatePosition(PDB *a)
 {
    gPartnertoDonate[(int)(a->x/DIV) + OFFSET]
@@ -551,7 +606,7 @@ void StorePartnertoDonatePosition(PDB *a)
       [(int)(a->z/DIV) + OFFSET]++;   
 }
 
-/********************************************************/
+/************************************************************************/
 void PrintMatrix(HBOND *h, FILE *out)
 {
    int x, y, z;
@@ -660,8 +715,7 @@ void PrintMatrix(HBOND *h, FILE *out)
    }
 }
 
-/********************************************************/
-
+/************************************************************************/
 void ClearArrays()
 {
    int i, j, k;
@@ -681,9 +735,8 @@ void ClearArrays()
    }
 }
 
-/************************************************/
+/************************************************************************/
 /* function to create linked list of protein domain files */
-
 NAMES *InitializeDomainList(FILE *fp)
 {
    NAMES *names = NULL;
@@ -734,7 +787,7 @@ NAMES *InitializeDomainList(FILE *fp)
       else
       {
          buffer[7] = '\0';
-         fprintf(stderr,"%s: Discarded as resolution is %.2f\n",
+         fprintf(stderr,"INFO: %s Discarded as resolution is %.2f\n",
                  buffer, resolution);
       }
    }
@@ -742,7 +795,7 @@ NAMES *InitializeDomainList(FILE *fp)
    return(names);
 }
 
-/**********************************************************/
+/************************************************************************/
 char *FindStructureLocation (NAMES *names, BOOL *tempflag)
 {
    char *filename=(char *)malloc((size_t)(sizeof(char)*(6+1)));
@@ -751,15 +804,16 @@ char *FindStructureLocation (NAMES *names, BOOL *tempflag)
    
    if(!filename)
    {
-      fprintf(stderr, "ERROR: Unable to allocate memory for name of \
-protein structure\n");
+      fprintf(stderr, "WARNING: Unable to allocate memory for name of \
+structure file\n");
       return(NULL);
       
    }
    
    if(strlen(names->filename) !=6) 
    {
-      fprintf(stderr,"the name does not contain 6 char: %s\n",names->filename);
+      fprintf(stderr,"WARNING: Name from CATH file does not contain 6 char: %s\n",
+              names->filename);
       return(NULL);
    } 
 
@@ -769,7 +823,7 @@ protein structure\n");
       /*dompdb */
       result=multiappend("%s%s",DOMAINLOC,filename);		  
       free(filename);
-      return (result);
+      return(result);
    }
    else
    {
@@ -786,7 +840,7 @@ protein structure\n");
          free(tbuffer);
          free(filename);
          *tempflag = 1;
-         return (tbuffer1);
+         return(tbuffer1);
       }
       else
       {
@@ -794,19 +848,18 @@ protein structure\n");
          filename[4]='\0';
          result=multiappend("%s%s%s",PDBLOC,filename,PDBEXT);		  
          free(filename);
-         return (result);
+         return(result);
       }
    }	  
-   fprintf(stderr,"ERROR: Unable to locate protein structure or \
-create protein structure chain\n");
-   exit(1);
+
+   fprintf(stderr,"WARNING: Internal error in finding file\n");
+   return(NULL);
 }
 
-/******************************************/
+/************************************************************************/
 /* function that creates a linked list of all the hydrogen-capable 
    atoms present in each amino acid 
 */
-
 HBOND *InitializeHbondTypes()
 {
    /* ACRM 18.08.05 Fixed donh1 in h17 and h18 to add the missing trailing space
@@ -868,13 +921,13 @@ HBOND *InitializeHbondTypes()
    return(first);
 }
 
-/********************************************************/
-
+/************************************************************************/
 /* function to display a usage message */
-
 void Usage(void)
 {
-   fprintf(stderr, "\nHydrogen Matrices V1.0 (c) 2002, Alison Cuff, University of Reading\n\n");
+   fprintf(stderr, "\nHydrogen Matrices V1.1 (c) 2002-5, Alison Cuff, University of Reading\n");
+   fprintf(stderr, "V1.1 modification, Andrew C.R. Martin, University College London\n\n");
+   
    fprintf(stderr, "Usage: hydrogen_matrices [cath domain file] [output file]\n\n");
    fprintf(stderr, "  [cath domain file] non-redundant (e.g Sreps) cath domain list file\n");
    fprintf(stderr, "  [output file] name of file to print out matrices\n");
@@ -891,9 +944,8 @@ void Usage(void)
     
 }
       
-/**********************************************************/
+/************************************************************************/
 /* function to parse the command line */
-
 BOOL ParseCmdLine(int argc, char **argv, char *inputfile, char *outputfile)
 {
    argc--;
