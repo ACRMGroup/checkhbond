@@ -17,3 +17,5 @@
   ((z) < MAXSIZE) && ((z) >= 0))
 #define GRIDSPACING ((REAL)1/DIV_PER_ANGSTROM)
 #define RESOL 2.5
+#define DEFAULT_CUTOFF_VALUE 0.25 /* default cutoff for off-grid matching */
+
