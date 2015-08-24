@@ -1785,7 +1785,6 @@ BOOL AnalyzeMCDonorPair(int resnum1, int resnum2, PDB *pdb,
          if(!CheckValidHBond(NtoCAVector, cutoff, OUT,
                              gPartnertoDonate, gAccept))
          {
-            PrintError(OUT, "Invalid HBond\n");
             return(FALSE);
          }
       }
