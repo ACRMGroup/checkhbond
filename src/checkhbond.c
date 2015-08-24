@@ -172,7 +172,7 @@ int main (int argc, char *argv[])
                                                 insert2, insert1, &hbplus, hatom2, hatom1,
                                                 cutoff, res2, res1, OUT))
                         {
-                           fprintf(OUT, "No hydrogen bonds\n");
+                           fprintf(stderr, "No hydrogen bonds\n");
                         }
                      }
                   }
@@ -272,7 +272,7 @@ BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix, char 
    if(!ReadInMatrices(res1, res2, matrix))
    {
       /* ACRM 08.09.05 - error message */
-      fprintf(stderr, "Unable to find residues in matrix file: %s %s\n", res1, res2);
+/*      fprintf(stderr, "Unable to find one of the residues in the matrix file: %s %s\n", res1, res2); */
       return(FALSE);
    }
    
@@ -297,7 +297,7 @@ BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix, char 
                                res2_stop, CAtoCAVector, cutoff,
                                hatom1, hatom2, OUT))
       {
-         fprintf(OUT, "No hydrogen bonds\n");
+         fprintf(stderr, "No hydrogen bonds\n");
       }
    }
    else
@@ -369,6 +369,7 @@ BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
    else
    {
       fprintf(out, "No hydrogen bonds\n");
+      printf("No hydrogen bonds\n");
       return(FALSE);
    }
 }
