@@ -279,14 +279,12 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
                               next = FindNextResidue(start);
 
 #if defined(MCDONOR)
-/*** FIXME!
-We should reset prev to NULL for discontinuous chains and chain breaks
- ***/
                               /* If not proline and not first residue */
                               if(!strncmp(start->record_type, "ATOM  ", 6) &&
                                  !strncmp(start->resnam, h->residue, 3) &&
                                  strncmp(start->resnam, "PRO", 3) && 
-                                 (prev != NULL))
+                                 (prev != NULL) &&
+                                 ResiduesBonded(prev, start))
                               {
                                  /* return true if backbone atoms cannot be found
                                     .. stops program
