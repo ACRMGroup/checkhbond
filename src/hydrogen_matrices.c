@@ -157,8 +157,8 @@ void FindMCDonorHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb);
 void StoreHBondingNPosition(PDB *start, PDB *stop, HBOND *hb);
 void FindMCAcceptorAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb);
 void StoreHBondingCOPosition(PDB *start, PDB *stop, HBOND *hb);
-PDB *CleanMultipleOccupancies(PDB *pdb);
-PDB *RemoveAlternates(PDB *pdb);
+void FindHAtomsSCMC(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb);
+
 
 
 
@@ -269,9 +269,6 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
                   /* create linked list of pdb file */  
                   if((pdb = ReadPDBAtoms(fp2, &natoms)) !=NULL)
                   {   
-/*                     pdb = CleanMultipleOccupancies(pdb); */
-                     pdb = RemoveAlternates(pdb);
-                     
                      /* strip any hydrogens present in protein domain file */
                      if((pdb2 = StripHPDB(pdb, &natoms2)) !=NULL)
                      {
@@ -395,12 +392,21 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
                                             nextres->resnam);
                                           */
                                           
+#ifdef SCMC
+                                          if((IsHBonded(start,nextres,HBOND_SIDECHAIN))
+                                             !=0)
+                                          {
+                                             FindHAtomsSCMC(start, next, nextres, 
+                                                            stop, hb);
+                                          }
+#else
                                           if((IsHBonded(start,nextres,HBOND_SS))
                                              !=0)
                                           {
                                              FindHAtoms(start, next, nextres, 
                                                         stop, hb);
                                           }
+#endif
                                        }
                                     }
                                  }
@@ -1248,62 +1254,91 @@ void FindMCDonorHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
 }
 
 /************************************************************************/
-/* This is a kludge to deal with non-standard PDB files like 1dxc where
-   multiple occupancy atoms are listed in 2 groups rather than in atom
-   pairs
-*/
-PDB *CleanMultipleOccupancies(PDB *pdb)
+void FindHAtomsSCMC(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, 
+                    HBOND *hb)
 {
-
-   PDB *p       = NULL, 
-       *q       = NULL,
-       *r       = NULL,
-       *start   = NULL, 
-       *nextres = NULL;
-   BOOL GotPartial;
+   PDB *d, *a, *h1, *h2, *h3, *p;
    
+   char h_name1[6], h_name2[6], h_name3[6], p_name[6];
 
-   /* Step through the PDB list one residue at a time                   */
-   for(start=pdb; start!=NULL; start=nextres)
+   for(d=resA; d!=stopA; NEXT(d))
    {
-      nextres = FindNextResidue(start);
+      /* if residue A heavy atom is a donor */
+      if(isDonor(d, hb, h_name1, h_name2, h_name3))
+      {
+         h1 = FindAtomInRange(resA, stopA, h_name1);
+         h2 = FindAtomInRange(resA, stopA, h_name2);
+         h3 = FindAtomInRange(resA, stopA, h_name3);
 
-      /* See if we have any partial occupancy atoms                     */
-      GotPartial = FALSE;
-      for(p=start; p!=nextres; NEXT(p))
-      {
-         if(p->altpos != ' ')
+         /* Residue B is a mainchain acceptor */
+         a = FindAtomInRange(resB, stopB, "O   ");
+         p = FindAtomInRange(resB, stopB, "C   ");
+               
+         /* if the hydrogen bond is valid */
+         if(ValidHBond(h1, d, a, p))
          {
-            GotPartial = TRUE;
-            break;
+            /* store position of partner acceptor atom */          
+#ifdef NOISY
+            fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
+                    d->resnam, d->resnum, d->atnam, 
+                    a->resnam, a->resnum,  a->atnam, 
+                    ((h1==NULL?"???":h1->atnam)), p->atnam); 
+#endif
+            StorePartnertoDonatePosition(a);
          }
-      }
-      
-      if(GotPartial)
-      {
-         for(p=start; p!= nextres; NEXT(p))
+         else if(h2!=NULL)
          {
-            /* Got first partial position                               */
-            if(p->altpos == 'A')
+            if(ValidHBond(h2, d, a, p))
+            {                     
+#ifdef NOISY
+               fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
+                       d->resnam, d->resnum, d->atnam, 
+                       a->resnam, a->resnum, a->atnam, 
+                       h2->atnam, p->atnam);
+#endif
+               StorePartnertoDonatePosition(a);
+            }
+         }
+         else if(h3!=NULL)
+         {
+            if(ValidHBond(h3, d, a, p))
             {
-               r=p;
-               for(q=p->next; q!=nextres; NEXT(q))
-               {
-                  if(!strncmp(p->atnam_raw, q->atnam_raw, 4))
-                  {
-                     r->next = q->next;
-                     free(q);
-                     q=r;
-                     p->altpos = ' ';
-                     break;
-                  }
-                  r=q;
-               }
+#ifdef NOISY                     
+               fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
+                       d->resnam, d->resnum, d->atnam, 
+                       a->resnam, a->resnum, a->atnam, 
+                       h3->atnam, p->atnam);
+#endif
+               StorePartnertoDonatePosition(a);
             }
          }
       }
    }
-   return(pdb);
-}
 
+   /* if residue A is an acceptor */
+   for(a=resA; a!=stopA; NEXT(a))
+   {
+      if(isAcceptor(a, hb, p_name))    
+      {
+         p = FindAtomInRange(resA, stopA, p_name);
+
+         /* Residue B is a mainchain donor */
+         h1 = FindAtomInRange(resB, stopB, "H   ");
+         
+         /* If the hydrogen bond is valid */
+
+         if(ValidHBond(h1, d, a, p))
+         {
+            /* store position of partners hydrogen donating heavy atom */
+#ifdef NOISY
+            fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
+                    d->resnam, d->resnum, d->atnam, 
+                    a->resnam, a->resnum, a->atnam, 
+                    ((h1==NULL?"???":h1->atnam)), p->atnam);
+#endif
+            StorePartnertoAcceptPosition(d);
+         }
+      }
+   }
+}
 
