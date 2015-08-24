@@ -49,9 +49,9 @@ for each position:
 
 /* defines and macros */
 /* default matrix file */
-/*#define MATRIXFILE "/home/alison/hydrogen_bonding/matrices_05new.txt"*/
+#define MATRIXFILE "/home/alison/hydrogen_bonding/matrices_05new.txt"
 /*#define MATRIXFILE "/home/alison/hydrogen_bonding/hydrogen_bonding_new/testmatrices.txt"*/
-#define MATRIXFILE "/home/alison/hydrogen_bonding/hydrogen_bonding_new/matrices2.txt"
+/*#define MATRIXFILE "/home/alison/hydrogen_bonding/hydrogen_bonding_new/matrices2.txt"*/
 #define MAXBUFF 300
 /* radius of atom */
 #define RAD 25
@@ -84,7 +84,7 @@ REAL gRotation_matrix[3][3];
 
 int main (int argc, char *argv[]);
 void Usage(void);
-BOOL ReadInMatrices(char *res1, char *res2, FILE *matrix);
+BOOL ReadInMatrices(char *res1, char *res2, FILE *matrix, char *hbondtype);
 void CullArrays(PDB *pdb, PDB *res1, PDB *res2,
                 int donate_array[MAXSIZE][MAXSIZE][MAXSIZE],
                 int accept_array[MAXSIZE][MAXSIZE][MAXSIZE]);
@@ -103,7 +103,8 @@ void ClearArrays();
 BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff,
                   BOOL *hbplus, char *hatom1,
                   char *hatom2, char *matrix_file, char *pdbfile,
-                  char *locres1, char *locres2, char *res1,char *res2, char *outputfile);
+                  char *locres1, char *locres2, char *res1,char *res2,
+                  char *hbondtype, char *outputfile);
 BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
                           PDB *res2_start, PDB *res2_stop, VEC3F CAtoCAVector,
                           REAL cutoff,
@@ -130,7 +131,7 @@ int main (int argc, char *argv[])
    FILE *PDBFILE = stdin,
       *OUT = stdout,
       *matrix = stdout;
-   char locres1[6], locres2[6],res1[4], res2[6],
+   char locres1[6], locres2[6],res1[4], res2[6], hbondtype[4],
       pdbfile[MAXBUFF], outputfile[MAXBUFF];
    char chain1[6], insert1[6], chain2[6], insert2[6], hatom1[6], hatom2[6];
    char matrix_file[MAXBUFF];
@@ -144,7 +145,7 @@ int main (int argc, char *argv[])
    ClearArrays();
    
    if(ParseCmdLine(argc, argv,  &cutoff, &hbplus,  hatom1, hatom2,
-                   matrix_file, pdbfile, locres1, locres2, res1, res2, outputfile))
+                   matrix_file, pdbfile, locres1, locres2, res1, res2, hbondtype, outputfile))
    {
       if((matrix = OpenMatrixFile(matrix_file)))
       {
@@ -221,7 +222,7 @@ int main (int argc, char *argv[])
                         return(1);
                      }
                      
-                     if(!ReadInMatrices(res1, res2, matrix))
+                     if(!ReadInMatrices(res1, res2, matrix, hbondtype))
                      {
                         fprintf(OUT, "No hydrogen bonds\n");
                         return(1);
@@ -965,7 +966,7 @@ void CullArrays(PDB *pdb, PDB *res1, PDB *res2,
 /*************************************/
 /* function that populates matrices from text file 
    (created in hydrogen_matrices.c program */
-BOOL ReadInMatrices(char *res1, char *res2, FILE *matrix)
+BOOL ReadInMatrices(char *res1, char *res2, FILE *matrix, char *hbondtype)
 {
    char buffer[MAXBUFF], junk[15], minibuffer[6];
    int x, y, z, count;
@@ -1016,30 +1017,60 @@ BOOL ReadInMatrices(char *res1, char *res2, FILE *matrix)
          }
          found_residue1 = TRUE;
       }         
-       if(inResidue2)
+      if(inResidue2)
       {
-         if(!strncmp(buffer, "partnertoaccept", 15))
+         /* if sidechain sidechain hydrogen bond, read in corresponding partner matrices */
+         
+         if(!strncmp(hbondtype, "SS", 2))
          {
-            /* storing res 2 donor atoms */
-            sscanf(buffer, "%s %d %d %d %d", junk, &x, &y, &z, &count);          
-            gPartnertoAccept[x][y][z] = count;
+            
+            if(!strncmp(buffer, "partnertoaccept_SS", 18))
+            {
+               /* storing res 2 donor atoms */
+               sscanf(buffer, "%s %d %d %d %d", junk, &x, &y, &z, &count);          
+               gPartnertoAccept[x][y][z] = count;
+            }
+            
+            else if(!strncmp(buffer, "partnertodonate_SS", 18))
+            {
+               /* storing res 2 donor atoms */
+               sscanf(buffer, "%s %d %d %d %d", junk, &x, &y, &z, &count);          
+               gPartnertoDonate[x][y][z] = count;
+            }
          }
-         else if(!strncmp(buffer, "partnertodonate", 15))
-         {
-            /* storing res 2 donor atoms */
-            sscanf(buffer, "%s %d %d %d %d", junk, &x, &y, &z, &count);          
-            gPartnertoDonate[x][y][z] = count;
+         /* similarly, if mainchain sidechain hydrogen bond ... */
+         
+         else if(!strncmp(hbondtype, "MS", 2))
+         {            
+            if(!strncmp(buffer, "partnertoaccept_MS", 18))
+            {
+               /* storing res 2 donor atoms */
+               sscanf(buffer, "%s %d %d %d %d", junk, &x, &y, &z, &count);          
+               gPartnertoAccept[x][y][z] = count;
+            }
+            
+            else if(!strncmp(buffer, "partnertodonate_MS", 18))
+            {
+               /* storing res 2 donor atoms */
+               sscanf(buffer, "%s %d %d %d %d", junk, &x, &y, &z, &count);          
+               gPartnertoDonate[x][y][z] = count;
+            } 
+            
          }
+
          found_residue2 = TRUE; 
-      }          
+      }
+   
    }
+
    if(found_residue1 && found_residue2)
       return(TRUE);
    return(FALSE);
 }
-
+  
 /********************************************************/
 /* function that sets array elements to 0 */
+
 void ClearArrays(int array)
 {
    int i, j, k;
@@ -1097,7 +1128,8 @@ FILE *OpenMatrixFile(char *matrix_file)
 
 BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff, BOOL *hbplus,
                   char *hatom1, char *hatom2,char *matrix_file,char *pdbfile,
-                  char *locres1, char *locres2, char *res1, char *res2, char *outputfile)
+                  char *locres1, char *locres2, char *res1, char *res2, 
+                  char *hbondtype, char *outputfile)
 {
    argc--;
    argv++;
@@ -1145,8 +1177,8 @@ BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff, BOOL *hbplus,
       }
       else
       {
-         /* check there are 5 or 6 arguments remaining */
-         if((argc > 6) || (argc < 5))
+         /* check there are 6 or 7 arguments remaining */
+         if((argc > 7) || (argc < 6))
             return(FALSE);
          
          strcpy(pdbfile, argv[0]);
@@ -1164,7 +1196,10 @@ BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff, BOOL *hbplus,
          strcpy(res2, argv[0]);
          argc--;
          argv++;
-         
+         strcpy(hbondtype, argv[0]);
+         argc--;
+         argv++;
+              
          if(argc)
          {
             strcpy(outputfile, argv[0]);
@@ -1187,17 +1222,19 @@ void Usage(void)
    
    fprintf(stderr, "\nCheckHBond v1.0 (c) 2002, Alison Cuff,University of Reading\n\n");
    fprintf(stderr, "USAGE: checkhbond [-c cutoff] [-p hatom1 hatom2][-m matrix file]\n");
-   fprintf(stderr, "   pdbfile residue1 residue2 nameres1 nameres2/sub [output file]\n\n");
+   fprintf(stderr, "   pdbfile residue1 residue2 nameres1 nameres2/sub hbondtype [output file]\n\n");
    fprintf(stderr, "  -c [cutoff]: cutoff distance between hydrogen-capable atoms(default: 0.5A)\n");
    fprintf(stderr, "  -p: Parse HBplus data.\n");
    fprintf(stderr, "  Hydrogen donating atom (hatom1) and hydrogen accepting atom (hatom2) required \n");
    fprintf(stderr, "  -m [matrix file]: matrix file (if not using default file\n");
    fprintf(stderr, "  pdbfile:  pdb file of protein structure\n");
-   fprintf(stderr, "  residue1:  First residue (chain, residue number, insert)\n");
+   fprintf(stderr, "  residue1: First residue (chain, residue number, insert)\n");
    fprintf(stderr, "  residue2: Second residue (chain, residue number, insert)\n");
    fprintf(stderr, "  nameres1: Name of first residue\n");
    fprintf(stderr, "  nameres2/sub:  Name of replacement amino acid (mutation of residue 2),\n");
    fprintf(stderr, "      or native residue 1 if creating 'pseudo-energy distribution'\n");
+   fprintf(stderr, "  hbondtype: Input SS for sidechain sidechain hydrogen bond\n");
+   fprintf(stderr, "             Input MS for mainchain sidechain hydrogen bond\n");
    fprintf(stderr, "  [output file]: for saving hydrogen-capable atoms (in pdb format)\n");
    fprintf(stderr, "      I/O is through stdout if file not specified\n\n");   
    fprintf(stderr, "Determines the validity of a hydrogen bond in a protein \n");
@@ -1210,6 +1247,8 @@ void Usage(void)
 }
 
 /****************************************************/
+
+/* Function that opens input file for reading and output file for writing to and appending */
       
 BOOL Open_Std_Files(char *infile, char *outfile, FILE **in, FILE **out)
 {
@@ -1236,28 +1275,28 @@ BOOL Open_Std_Files(char *infile, char *outfile, FILE **in, FILE **out)
 
 /******************************************************/
 
+/* Function that recognises any residues not capable of hydrogen bonding */
 
 BOOL IsHBondCapable(char *residue)
 {   
    int i;
    
-   char *NotHBondRes[3];
+   char *NotHBondRes[9];
    
    BOOL flag = FALSE;
    
    NotHBondRes[0] = "MET";
    NotHBondRes[1] = "CYS";
-   NotHBondRes[2] = "HIS";
-   /* NotHBondRes[3] = "ILE";
-   NotHBondRes[4] = "VAL";
-   NotHBondRes[5] = "PHE";
-   NotHBondRes[6] = "GLY";
-   NotHBondRes[7] = "ALA";
-   NotHBondRes[8] = "PRO";
-   NotHBondRes[9] = "LEU";*/
+   NotHBondRes[2] = "ILE";
+   NotHBondRes[3] = "VAL";
+   NotHBondRes[4] = "PHE";
+   NotHBondRes[5] = "GLY";
+   NotHBondRes[6] = "ALA";
+   NotHBondRes[7] = "PRO";
+   NotHBondRes[8] = "LEU";
    
 
-   for(i = 0; i < 3; i++)
+   for(i = 0; i < 9; i++)
    {
       
       if(!strcmp(residue, NotHBondRes[i]))
@@ -1277,4 +1316,9 @@ BOOL IsHBondCapable(char *residue)
    return(flag);
    
 }
+
+
+
+
+
 
