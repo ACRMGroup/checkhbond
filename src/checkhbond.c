@@ -69,7 +69,10 @@
    =================
    V1.0  17.06.03 Original version as used for thesis
    V1.1  19.08.05 Various bug fixes By: ACRM
-   V2.0  24.01.05 Modified to allow mc/sc matrices to be used
+   V2.0  24.01.06 Modified to allow mc/sc matrices to be used
+   V2.1  25.03.11 Corrected usage message. Consistent error message 
+                  printing. Checks returns from OrientateXXX() routines
+                  to deal correctly with missing atoms.
 
 *************************************************************************/
 /* Includes
@@ -123,6 +126,11 @@
 #define ATOMS_CACO   3
 #define ATOMS_NCACB  4
 
+/* Returns from CalculateHBondEnergy() */
+#define CHBE_OK      0
+#define CHBE_NOHB    1
+#define CHBE_ERROR   2
+
 /* for debugging purposes */
 
 /*
@@ -172,10 +180,10 @@ BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff,
                   char *hatom2, char *matrix_file, char *matrix_file2, char *pdbfile,
                   char *locres1, char *locres2, char *res2,
                   char *outputfile);
-BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
-                          PDB *res2_start, PDB *res2_stop, VEC3F CAtoCAVector,
-                          REAL cutoff,
-                          char *hatom1, char *hatom2, FILE *out);
+int CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
+                         PDB *res2_start, PDB *res2_stop, VEC3F CAtoCAVector,
+                         REAL cutoff,
+                         char *hatom1, char *hatom2, FILE *out);
 void OrientateMatrix(VEC3F CAtoCAVector,int x, int y, int z,
                      VEC3F *rotated_coord);
 int CalculateTotalCounts(int array[MAXSIZE][MAXSIZE][MAXSIZE]);
@@ -269,24 +277,28 @@ int main (int argc, char *argv[])
                      {
                         if(errorcode == ERR_NOMEM)
                         {
-                           fprintf(stderr,"No memory for storing residues of interest\n");
+                           PrintError(OUT,"No memory for storing residues of interest\n");
                            return(1);
                         }
                         else if(errorcode == ERR_NOPREVRES1)
                         {
-                           fprintf(stderr,"No preceeding residue for residue %c%d%c\n",
+                           char buffer[160];
+                           sprintf(buffer,"No preceeding residue for residue %c%d%c\n",
                                    chain1[0], resnum1, insert1[0]);
+                           PrintError(OUT,buffer);
                            return(1);
                         }
                         else if(errorcode == ERR_NOPREVRES2)
                         {
-                           fprintf(stderr,"No preceeding residue for residue %c%d%c\n",
+                           char buffer[160];
+                           sprintf(buffer,"No preceeding residue for residue %c%d%c\n",
                                    chain2[0], resnum2, insert2[0]);
+                           PrintError(OUT,buffer);
                            return(1);
                         }
                         else
                         {
-                           fprintf(stderr,"Undefined error in getting residues\n");
+                           PrintError(OUT,"Undefined error in getting residues\n");
                            return(1);
                         }
                      }
@@ -300,7 +312,7 @@ int main (int argc, char *argv[])
                                                insert1, insert2, &hbplus, hatom1, hatom2,
                                                cutoff, res1, res2, OUT))
                         {
-                           fprintf(stderr, "No hydrogen bonds\n");
+                           PrintError(OUT, "Mainchain donor could not be analyzed\n");
                         }
                      }
 #elif  MCACCEPTOR
@@ -310,7 +322,7 @@ int main (int argc, char *argv[])
                                                   insert1, insert2, &hbplus, hatom1, hatom2,
                                                   cutoff, res1, res2, OUT))
                         {
-                           fprintf(stderr, "No hydrogen bonds\n");
+                           PrintError(OUT, "Mainchain acceptor could not be analyzed\n");
                         }
                      }
 #else
@@ -323,38 +335,38 @@ int main (int argc, char *argv[])
                                                 insert2, insert1, &hbplus, hatom2, hatom1,
                                                 cutoff, res2, res1, OUT))
                         {
-                           fprintf(stderr, "No hydrogen bonds\n");
+                           PrintError(OUT, "No hydrogen bonds (SC/SC)\n");
                         }
                      }
 #endif
                   }
                   else
                   {
-                     fprintf(stderr, "Sorry, cannot read pdb file\n");   
+                     PrintError(OUT, "Sorry, cannot read pdb file\n");   
                      return(1);
                   }
                }
                else
                {
-                  fprintf(stderr, "Sorry, unable to open PDB file or output file\n");
+                  PrintError(OUT, "Sorry, unable to open PDB file or output file\n");
                   return(1);
                }
             }
             else
             {
-               fprintf(stderr, "Sorry, unable to parse second residue correctly\n");
+               PrintError(OUT, "Sorry, unable to parse second residue correctly\n");
                return(1);
             }
          }
          else
          {
-            fprintf(stderr, "Sorry, unable to parse first residue correctly\n");
+            PrintError(OUT, "Sorry, unable to parse first residue correctly\n");
             return(1);
          }
       }
       else
       {
-         fprintf(stderr, "Sorry, unable to open matrix file\n");
+         PrintError(OUT, "Sorry, unable to open matrix file\n");
       }
    }
    else
@@ -392,7 +404,7 @@ BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix,
    }
    if(res1_start==NULL)
    {
-      fprintf(stderr, "Error: Can't find residue 1  in PDB file\n");
+      PrintError(OUT, "Can't find residue 1  in PDB file\n");
       return(FALSE);
    }
    
@@ -413,27 +425,33 @@ BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix,
    }
    if(res2_start==NULL)
    {
-      fprintf(stderr, "Error: Can't find residue 2 in PDB file\n");
+      PrintError(OUT, "Can't find residue 2 in PDB file\n");
       return(FALSE);
    }
    
    if(!ReadInMatrices(res1, res2, matrix, MAT_READ_BOTH, MAT_RES_BOTH))
    {
       /* ACRM 08.09.05 - error message */
-/*      fprintf(stderr, "Unable to find one of the residues in the matrix file: %s %s\n", res1, res2); */
+/*      PrintError(OUT, "f the residues in the matrix file: %s %s\n", res1, res2); */
       return(FALSE);
    }
    
-   OrientatePDB(pdb, res2_start, res2_stop);
+   /* ACRM 25.03.11 Check return value */
+   if(!OrientatePDB(pdb, res2_start, res2_stop))
+      return(FALSE);
 #ifndef NOCULL
    CullArrays(pdb, res1_start, res2_start, gPartnertoDonate,
               gPartnertoAccept);
 #endif
-   OrientatePDB(pdb, res1_start, res1_stop);
+
+   /* ACRM 25.03.11 Check return value */
+   if(!OrientatePDB(pdb, res1_start, res1_stop))
+      return(FALSE);
 #ifndef NOCULL
    CullArrays(pdb, res1_start, res2_start,
               gDonate, gAccept);
 #endif   
+
    CalculateCaToCaVector(res1_start, res1_stop, res2_start,
                          res2_stop, &CAtoCAVector);
    
@@ -445,13 +463,16 @@ BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix,
 
    if(*hbplus == TRUE)    /* ACRM 23.07.04 Dereference pointer! */
    {
-      OrientatePDB(pdb, res2_start, res2_stop);
-      if(!CalculateHBondEnergy(pdb, res1_start, res1_stop,
+      /* ACRM 25.03.11 Check return value */
+      if(!OrientatePDB(pdb, res2_start, res2_stop))
+         return(FALSE);
+
+      if(CalculateHBondEnergy(pdb, res1_start, res1_stop,
                                res2_start,
                                res2_stop, CAtoCAVector, cutoff,
-                               hatom1, hatom2, OUT))
+                               hatom1, hatom2, OUT) == CHBE_ERROR)
       {
-         fprintf(stderr, "No hydrogen bonds\n");
+         PrintError(OUT, "Unable to calculate HBondEnergy (1)\n");
       }
    }
    else
@@ -471,10 +492,10 @@ BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix,
 }
 
 /************************************************************************/
-BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
-                          PDB *res2_start,PDB *res2_stop,
-                          VEC3F CAtoCAVector, REAL cutoff,
-                          char *hatom1, char *hatom2, FILE *out)
+int CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
+                         PDB *res2_start,PDB *res2_stop,
+                         VEC3F CAtoCAVector, REAL cutoff,
+                         char *hatom1, char *hatom2, FILE *out)
 {
    int x_coord1, y_coord1, z_coord1,
       totalcount1 = 0, 
@@ -505,8 +526,10 @@ BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
 
    if(!OK)
    {
-      fprintf(stderr, "Can't find %s in protein structure\n", hatom1);
-      return(FALSE);
+      char buffer[160];
+      sprintf(buffer, "Can't find %s in protein structure\n", hatom1);
+      PrintError(OUT, buffer);
+      return(CHBE_ERROR);
    }
       
    pseudoenergy = DoCheckHBond(x_coord1, y_coord1, z_coord1, CAtoCAVector,&partner_coord,
@@ -514,18 +537,12 @@ BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
                                gDonate, gPartnertoAccept, cutoff, OUT); 
    if((pseudoenergy !=-1)&& (pseudoenergy !=9999.9999))
    {
-      fprintf(out, "Pseudoenergy of best quality hydrogen bond: %.2f\n",
-              pseudoenergy);
-      printf("Pseudoenergy of best quality hydrogen bond: %.2f\n",
-             pseudoenergy);
-      return(TRUE);
+      fprintf(out, "Pseudoenergy of best quality hydrogen bond: %.2f\n", pseudoenergy);
+      return(CHBE_OK);
    }
-   else
-   {
-      fprintf(out, "No hydrogen bonds\n");
-      printf("No hydrogen bonds\n");
-      return(FALSE);
-   }
+
+   fprintf(out, "No hydrogen bonds\n");
+   return(CHBE_NOHB);
 }
 
 /************************************************************************/
@@ -559,12 +576,12 @@ void CalculateCaToCaVector(PDB *res1_start, PDB *res1_stop,
    /*find co-ordinates of CA atom */   
    if(!FindAtom(res1_start, res1_stop, "CA  ", &res1_calpha))
    {
-      fprintf(stderr, "Error: Can't find c-alpha atoms of key residue\n");
+      PrintError(NULL, "Can't find c-alpha atoms of key residue\n");
    }
    
    if(!FindAtom(res2_start, res2_stop, "CA  ", &res2_calpha))
    {
-      fprintf(stderr, "Error: Can't find c-alpha atoms of partner residue\n");
+      PrintError(NULL, "Can't find c-alpha atoms of partner residue\n");
    }
    
    CAtoCAVector->x =  res2_calpha.x - res1_calpha.x;
@@ -644,7 +661,7 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
       SELECT(sel2[2], "CB  ");
       break;
    case ATOMS_CNCA:
-      fprintf(stderr,"INTERNAL ERROR: Code must be modified to support C,N,CA in second position\n");
+      PrintError(NULL,"ENTERNAL ERROR - Code must be modified to support C,N,CA in second position\n");
       exit(1);
       SELECT(sel2[0], "C   ");
       SELECT(sel2[1], "N   ");
@@ -688,7 +705,7 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
    }
 
 #ifdef DEBUG
-   printf("original\n");
+   printf("REMARK DEBUG (checkhbond): original coordinates\n");
    WritePDB(stdout, keyres1_pdb);
    WritePDB(stdout, partnerres2_pdb);
 #endif
@@ -701,7 +718,7 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
    TranslatePDB(partnerres2_pdb, tempv);
     
 #ifdef DEBUG
-   printf("translate\n");
+   printf("REMARK DEBUG (checkhbond): translated coordinates\n");
    WritePDB(stdout, keyres1_pdb);
    WritePDB(stdout, partnerres2_pdb);
 #endif
@@ -747,13 +764,13 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
    if(!matfit(partnerres2_coor, keyres1_coor, gRotation_matrix,
               NumCo_ord2, weight, FALSE))
    {
-      fprintf(stderr,"Fitting failed!\n");
+      PrintError(NULL,"Fitting failed!\n");
       return(FALSE);
    }
 
 #ifdef DEBUG   
    ApplyMatrixPDB(keyres1_pdb, gRotation_matrix);
-   printf("rotate\n");
+   printf("REMARK DEBUG (checkhbond) rotated coordinates\n");
    WritePDB(stdout, keyres1_pdb);
    WritePDB(stdout, partnerres2_pdb);
 #endif
@@ -819,7 +836,7 @@ BOOL CheckValidHBond(VEC3F CAtoCAVector, REAL cutoff, FILE *out,
    int x_coord, y_coord, z_coord;
    VEC3F rotated_coord;
 
-   fprintf(stderr, "REMARK Key array: chain %c\n", gChain);
+   fprintf(stdout, "REMARK (checkhbond): Key array chain %c\n", gChain);
 
    for(x2=0; x2<MAXSIZE; x2++)
    {
@@ -853,7 +870,7 @@ BOOL CheckValidHBond(VEC3F CAtoCAVector, REAL cutoff, FILE *out,
    totalcount2 = CalculateTotalCounts(partnerarray);
       
 #ifdef DEBUG3
-   fprintf(stderr, "REMARK Partner array: chain %c\n", gChain);
+   fprintf(stdout, "REMARK (checkhbond): Partner array chain %c\n", gChain);
 #endif
    /* go though grid for *partner* residue */
    for(x=0; x < MAXSIZE; x++)
@@ -880,7 +897,7 @@ BOOL CheckValidHBond(VEC3F CAtoCAVector, REAL cutoff, FILE *out,
    
    if(final_penergy != 9999.9999)
    {
-      fprintf(out, "Pseudoenergy of best quality hydrogen bond: %.2f\n", 
+      fprintf(out, "Pseudoenergy of best quality hydrogen bond: %.2f (valid)\n", 
               final_penergy);
       return(TRUE);
    }
@@ -1386,14 +1403,21 @@ BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff, BOOL *hbplus,
 /* function to display a usage message */
 void Usage(void)
 {
-   fprintf(stderr, "\nCheckHBond V2.0 (c) 2002-6, Alison Cuff, University of Reading\n\n");
-   fprintf(stderr, "V2.0 changes by Andrew Martin, UCL\n\n");
-   fprintf(stderr, "Usage: checkhbond [-c cutoff] [-p hatom1 hatom2][-m matrix file]\n");
+   fprintf(stderr, "\nCheckHBond V2.1 (c) 2002-11, Alison Cuff, University of Reading\n\n");
+   fprintf(stderr, "V2.0+ changes by Andrew Martin, UCL\n\n");
+   fprintf(stderr, "Usage: checkhbond [-c cutoff] [-p hatom1 hatom2][-m matrix_file]\n");
+#if defined(MCDONOR) || defined(MCACCEPTOR)
+   fprintf(stderr, "   [-n matrix_file2]\n\n");
+#endif
    fprintf(stderr, "   pdbfile residue1 residue2 nameres2 [output file]\n\n");
    fprintf(stderr, "  -c [cutoff]: cutoff distance between hydrogen-capable atoms(default: 0.5A)\n");
    fprintf(stderr, "  -p: Parse HBplus data.\n");
    fprintf(stderr, "  Hydrogen donating atom (hatom1) and hydrogen accepting atom (hatom2) required \n");
-   fprintf(stderr, "  -m [matrix file]: matrix file (if not using default file\n");
+   fprintf(stderr, "  -m [matrix_file]: matrix file (if not using default file\n");
+#if defined(MCDONOR) || defined(MCACCEPTOR)
+   fprintf(stderr, "  -n [matrix_file2]: matrix file2 (if not using default file\n");
+   fprintf(stderr, "    This is only used for s/c-m/c HBonds and specifies the m/c matrix\n");
+#endif
    fprintf(stderr, "  pdbfile:  pdb file of protein structure\n");
    fprintf(stderr, "  residue1: First residue (chain, residue number, insert)\n");
    fprintf(stderr, "  residue2: Second residue (chain, residue number, insert)\n");
@@ -1419,7 +1443,9 @@ BOOL Open_Std_Files(char *infile, char *outfile, FILE **in, FILE **out)
    {
       if((*in = fopen(infile,"r"))==NULL)
       {
-         fprintf(stderr,"Unable to open input file: %s\n",infile);
+         char buffer[160];
+         sprintf(buffer,"Enable to open input file: %s\n",infile);
+         PrintError(NULL, buffer);
          return(FALSE);
       }
    }
@@ -1428,7 +1454,9 @@ BOOL Open_Std_Files(char *infile, char *outfile, FILE **in, FILE **out)
    {
       if((*out = fopen(outfile,"a+"))==NULL)
       {
-         fprintf(stderr,"Unable to open output file: %s\n",outfile);
+         char buffer[160];
+         sprintf(buffer,"Enable to open output file: %s\n",outfile);
+         PrintError(NULL, buffer);
          return(FALSE);
       }
    }
@@ -1581,13 +1609,13 @@ void CalculateNToCaVector(PDB *res1_start, PDB *res1_stop,
    /*find co-ordinates of N  atom */   
    if(!FindAtom(res1_start, res1_stop, "N   ", &res1_n))
    {
-      fprintf(stderr, "Error: Can't find N atom of key residue\n");
+      PrintError(NULL, "Can't find N atom of key residue\n");
    }
    
    /*find co-ordinates of CA atom */   
    if(!FindAtom(res2_start, res2_stop, "CA  ", &res2_calpha))
    {
-      fprintf(stderr, "Error: Can't find c-alpha atom of partner residue\n");
+      PrintError(NULL, "Can't find c-alpha atom of partner residue\n");
    }
    
    NtoCAVector->x =  res2_calpha.x - res1_n.x;
@@ -1609,13 +1637,13 @@ void CalculateCToCaVector(PDB *res1_start, PDB *res1_stop,
    /*find co-ordinates of N atom */   
    if(!FindAtom(res1_start, res1_stop, "C   ", &res1_c))
    {
-      fprintf(stderr, "Error: Can't find C atoms of key residue\n");
+      PrintError(NULL, "Can't find C atoms of key residue\n");
    }
    
    /*find co-ordinates of CA atom */   
    if(!FindAtom(res2_start, res2_stop, "CA  ", &res2_calpha))
    {
-      fprintf(stderr, "Error: Can't find c-alpha atoms of partner residue\n");
+      PrintError(NULL, "Can't find c-alpha atoms of partner residue\n");
    }
    
    CtoCAVector->x =  res2_calpha.x - res1_c.x;
@@ -1655,7 +1683,7 @@ BOOL AnalyzeMCDonorPair(int resnum1, int resnum2, PDB *pdb,
    }
    if(res1_start==NULL)
    {
-      fprintf(stderr, "Error: Can't find residue 1  in PDB file\n");
+      PrintError(OUT, "Can't find residue 1  in PDB file\n");
       return(FALSE);
    }
    
@@ -1675,34 +1703,44 @@ BOOL AnalyzeMCDonorPair(int resnum1, int resnum2, PDB *pdb,
    }
    if(res2_start==NULL)
    {
-      fprintf(stderr, "Error: Can't find residue 2 in PDB file\n");
+      PrintError(OUT, "Can't find residue 2 in PDB file\n");
       return(FALSE);
    }
    
    if(!ReadInMatrices(res1, res2, matrix, MAT_READ_ACCEPTOR2, MAT_RES_2))
    {
       /* ACRM 08.09.05 - error message */
-      fprintf(stderr, "Unable to find residue in the sc/sc matrix file: %s\n", res2);
+      char buffer[160];
+      sprintf(buffer, "Unable to find residue in the sc/sc matrix file: %s\n", res2);
+      PrintError(OUT, buffer);
       return(FALSE);
    }
    
    if(!ReadInMatrices(res1, res2, matrix2, MAT_READ_DONOR1, MAT_RES_1))
    {
       /* ACRM 08.09.05 - error message */
-      fprintf(stderr, "Unable to find residue in the mc donor matrix file: %s\n", res1);
+      char buffer[160];
+      sprintf(buffer, "Unable to find residue in the mc donor matrix file: %s\n", res1);
+      PrintError(OUT, buffer);
       return(FALSE);
    }
    
-   OrientatePDB(pdb, res2_start, res2_stop);
+   /* ACRM 25.03.11 Check return value */
+   if(!OrientatePDB(pdb, res2_start, res2_stop))
+      return(FALSE);
 #ifndef NOCULL
    CullArrays(pdb, res1_start, res2_start, gPartnertoAccept,
               gAccept);
 #endif
-   OrientateN_PDB(pdb, prevres1, res1_start, res1_stop);
+
+   /* ACRM 25.03.11 Check return value */
+   if(!OrientateN_PDB(pdb, prevres1, res1_start, res1_stop))
+      return(FALSE);
 #ifndef NOCULL
    CullArrays(pdb, res1_start, res2_start,
               gDonate, gPartnertoDonate);
 #endif   
+
    CalculateNToCaVector(res1_start, res1_stop, res2_start,
                          res2_stop, &NtoCAVector);
    
@@ -1711,13 +1749,15 @@ BOOL AnalyzeMCDonorPair(int resnum1, int resnum2, PDB *pdb,
 
    if(*hbplus == TRUE)    /* ACRM 23.07.04 Dereference pointer! */
    {
-      OrientatePDB(pdb, res2_start, res2_stop);
-      if(!CalculateHBondEnergy(pdb, res1_start, res1_stop,
-                               res2_start,
-                               res2_stop, NtoCAVector, cutoff,
-                               hatom1, hatom2, OUT))
+      /* ACRM 25.03.11 Check return value */
+      if(!OrientatePDB(pdb, res2_start, res2_stop))
+         return(FALSE);
+      if(CalculateHBondEnergy(pdb, res1_start, res1_stop,
+                              res2_start,
+                              res2_stop, NtoCAVector, cutoff,
+                              hatom1, hatom2, OUT) == CHBE_ERROR)
       {
-         fprintf(stderr, "No hydrogen bonds\n");
+         PrintError(OUT, "nable to calculate HBondEnergy (2)\n");
       }
    }
    else
@@ -1766,7 +1806,7 @@ BOOL AnalyzeMCAcceptorPair(int resnum1, int resnum2, PDB *pdb,
    }
    if(res1_start==NULL)
    {
-      fprintf(stderr, "Error: Can't find residue 1  in PDB file\n");
+      PrintError(OUT, "Can't find residue 1  in PDB file\n");
       return(FALSE);
    }
    
@@ -1786,34 +1826,44 @@ BOOL AnalyzeMCAcceptorPair(int resnum1, int resnum2, PDB *pdb,
    }
    if(res2_start==NULL)
    {
-      fprintf(stderr, "Error: Can't find residue 2 in PDB file\n");
+      PrintError(OUT, "Can't find residue 2 in PDB file\n");
       return(FALSE);
    }
    
    if(!ReadInMatrices(res1, res2, matrix, MAT_READ_DONOR2, MAT_RES_2))
    {
       /* ACRM 08.09.05 - error message */
-      fprintf(stderr, "Unable to find residue in the sc/sc matrix file: %s\n", res2);
+      char buffer[160];
+      sprintf(buffer, "Unable to find residue in the sc/sc matrix file: %s\n", res2);
+      PrintError(OUT, buffer);
       return(FALSE);
    }
    
    if(!ReadInMatrices(res1, res2, matrix2, MAT_READ_ACCEPTOR1, MAT_RES_1))
    {
       /* ACRM 08.09.05 - error message */
-      fprintf(stderr, "Unable to find residue in the mc acceptor matrix file: %s\n", res1);
+      char buffer[160];
+      sprintf(buffer, "Unable to find residue in the mc acceptor matrix file: %s\n", res1);
+      PrintError(OUT, buffer);
       return(FALSE);
    }
    
-   OrientatePDB(pdb, res2_start, res2_stop);
+   /* ACRM 25.03.11 Check return value */
+   if(!OrientatePDB(pdb, res2_start, res2_stop))
+      return(FALSE);
 #ifndef NOCULL
    CullArrays(pdb, res1_start, res2_start, gDonate,
               gPartnertoDonate);
 #endif
-   OrientateCO_PDB(pdb, res1_start, res1_stop);
+
+   /* ACRM 25.03.11 Check return value */
+   if(!OrientateCO_PDB(pdb, res1_start, res1_stop))
+      return(FALSE);
 #ifndef NOCULL
    CullArrays(pdb, res1_start, res2_start,
               gAccept, gPartnertoAccept);
 #endif   
+
    CalculateCToCaVector(res1_start, res1_stop, res2_start,
                          res2_stop, &CtoCAVector);
    
@@ -1822,13 +1872,15 @@ BOOL AnalyzeMCAcceptorPair(int resnum1, int resnum2, PDB *pdb,
 
    if(*hbplus == TRUE)    /* ACRM 23.07.04 Dereference pointer! */
    {
-      OrientatePDB(pdb, res2_start, res2_stop);
-      if(!CalculateHBondEnergy(pdb, res1_start, res1_stop,
-                               res2_start,
-                               res2_stop, CtoCAVector, cutoff,
-                               hatom1, hatom2, OUT))
+      /* ACRM 25.03.11 Check return value */
+      if(!OrientatePDB(pdb, res2_start, res2_stop))
+         return(FALSE);
+      if(CalculateHBondEnergy(pdb, res1_start, res1_stop,
+                              res2_start,
+                              res2_stop, CtoCAVector, cutoff,
+                              hatom1, hatom2, OUT) == CHBE_ERROR)
       {
-         fprintf(stderr, "No hydrogen bonds\n");
+         PrintError(OUT, "Unable to calculate HBondEnergy (3)\n");
       }
    }
    else
@@ -1892,3 +1944,5 @@ PDB *SwapCarbon(PDB *pdb, PDB *prevres)
    
    return(newc);
 }
+
+
