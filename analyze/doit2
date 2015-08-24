@@ -1,0 +1,3 @@
+./calcent.pl    S ../build/build_sreps.out   &>sreps_S_ecalc.out
+./calcent.pl -o S ../build/build_sreps.out   &>sreps_S_ecalc_O.out
+./calcent.pl -r S ../build/build_sreps.out   &>sreps_S_ecalc_R.out

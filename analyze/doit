@@ -1,0 +1,3 @@
+./calce.pl N ../build/build_sreps_N.out  &>sreps_N.out
+./calce.pl O ../build/build_sreps_O.out  &>sreps_O.out
+./calce.pl S ../build/build_sreps.out    &>sreps_S.out
