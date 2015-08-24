@@ -49,11 +49,8 @@ for each position:
 /* defines and macros */
 /* default matrix file */
 #define MATRIXFILE "/acrm/home/alison/hydrogen_bonding/matrices_05new.txt"
-#define MAXBUFF 300
 /* radius of atom */
 #define RAD 25
-/* default cutoff dostance between atoms */
-#define DEFAULT_CUTOFF_VALUE 0.5
 /* calculates distance in angstroms between atoms */
 #define DISTSQ_HATOMS(a,b) (a.x - b.x) * (a.x - b.x) + \
                        (a.y - b.y) * (a.y - b.y) + \
@@ -101,7 +98,7 @@ void ClearArrays();
 BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff,
                   BOOL *hbplus, char *hatom1,
                   char *hatom2, char *matrix_file, char *pdbfile,
-                  char *locres1, char *locres2, char *res1,char *res2,
+                  char *locres1, char *locres2, char *res2,
                   char *outputfile);
 BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
                           PDB *res2_start, PDB *res2_stop, VEC3F CAtoCAVector,
@@ -125,6 +122,9 @@ BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix, char 
                          char *chain2, char *insert1, char *insert2, BOOL *hbplus,
                          char *hatom1, char *hatom2, REAL cutoff, char *res1, char *res2,
                          FILE *OUT);
+PDB *GetResidues(PDB *pdb, char *chain1, int resnum1, char *insert1, 
+                 char *chain2, int resnum2, char *insert2);
+void FindRes1Type(PDB *pdb, char *chain, int resnum, char *insert, char *res);
 
 
 /*************************************/
@@ -146,7 +146,7 @@ int main (int argc, char *argv[])
    ClearArrays();
    
    if(ParseCmdLine(argc, argv,  &cutoff, &hbplus,  hatom1, hatom2,
-                   matrix_file, pdbfile, locres1, locres2, res1, res2, outputfile))
+                   matrix_file, pdbfile, locres1, locres2, res2, outputfile))
    {
       if((matrix = OpenMatrixFile(matrix_file)))
       {
@@ -159,6 +159,10 @@ int main (int argc, char *argv[])
                   /* create linked list of pdb file */ 
                   if((pdb = ReadPDB(PDBFILE, &natoms)) !=NULL)
                   {
+                     /* ACRM 08.09.05 Get only the residues of interest */
+                     pdb = GetResidues(pdb, chain1, resnum1, insert1, chain2, resnum2, insert2);
+                     FindRes1Type(pdb, chain1, resnum1, insert1, res1);
+
                      if(!PrepareHBondingPair(resnum1, resnum2, pdb, matrix, chain1, chain2, 
                                              insert1, insert2, &hbplus, hatom1, hatom2,
                                              cutoff, res1, res2, OUT))
@@ -231,7 +235,6 @@ BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix, char 
          && (chain1[0]==res1_start->chain[0])
          && (insert1[0] == res1_start->insert[0]))
       {
-         strcpy(res1, res1_start->resnam);
          break;
       }
       else
@@ -357,9 +360,9 @@ BOOL CalculateHBondEnergy(PDB *pdb, PDB *res1_start, PDB *res1_stop,
                                gDonate, gPartnertoAccept, cutoff, OUT); 
    if((pseudoenergy !=-1)&& (pseudoenergy !=9999.9999))
    {
-      fprintf(out, "Pseudoenergy of best quality hydrogen bond: %f\n",
+      fprintf(out, "Pseudoenergy of best quality hydrogen bond: %.2f\n",
               pseudoenergy);
-      printf("Pseudoenergy of best quality hydrogen bond: %f\n",
+      printf("Pseudoenergy of best quality hydrogen bond: %.2f\n",
              pseudoenergy);
       return(TRUE);
    }
@@ -607,7 +610,7 @@ BOOL CheckValidHBond(VEC3F CAtoCAVector, REAL cutoff, FILE *out,
    
    if(final_penergy != 9999.9999)
    {
-      fprintf(out, "Pseudoenergy of best quality hydrogen bond: %f\n", 
+      fprintf(out, "Pseudoenergy of best quality hydrogen bond: %.2f\n", 
               final_penergy);
       return(TRUE);
    }
@@ -668,7 +671,7 @@ REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector, VEC3F *partner_coord,
            atnum++, resnum++, rotated_coord.x, rotated_coord.y,  rotated_coord.z, 1.00, 2.00);
 #endif
          }
-         else
+         else if(cutoff > 0.0)
          {
             for(i=x_coord-number_of_cells; i<=x_coord+number_of_cells; i++)
             {
@@ -701,7 +704,6 @@ REAL DoCheckHBond(int x, int y, int z, VEC3F CAtoCAVector, VEC3F *partner_coord,
                                  GRID_2_COORD(final_x, partner_coord->x);
                                  GRID_2_COORD(final_y, partner_coord->y);
                                  GRID_2_COORD(final_z, partner_coord->z);
-                                 
                               }
 #ifdef DEBUG1
    fprintf(stdout, "ATOM  %5d  C   THR  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
@@ -973,7 +975,7 @@ FILE *OpenMatrixFile(char *matrix_file)
 
 BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff, BOOL *hbplus,
                   char *hatom1, char *hatom2,char *matrix_file,char *pdbfile,
-                  char *locres1, char *locres2, char *res1, char *res2, 
+                  char *locres1, char *locres2, char *res2, 
                   char *outputfile)
 {
    argc--;
@@ -1021,7 +1023,7 @@ BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff, BOOL *hbplus,
       else
       {
          /* check there are 5 or 6 arguments remaining */
-         if((argc > 6) || (argc < 5))
+         if((argc > 5) || (argc < 4))
             return(FALSE);
          
          strcpy(pdbfile, argv[0]);
@@ -1033,10 +1035,6 @@ BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff, BOOL *hbplus,
          argv++;
          strcpy(locres2, argv[0]);
          UPPER(locres2);
-         argc--;
-         argv++;
-         strcpy(res1, argv[0]);
-         UPPER(res1);
          argc--;
          argv++;
          strcpy(res2, argv[0]);
@@ -1053,7 +1051,7 @@ BOOL ParseCmdLine(int argc, char **argv, REAL *cutoff, BOOL *hbplus,
       argc--;
       argv++;
    }
-   return(TRUE);
+   return(FALSE);
 }
 
 /*************************************/
@@ -1063,7 +1061,7 @@ void Usage(void)
 {
    fprintf(stderr, "\nCheckHBond v1.0 (c) 2002, Alison Cuff,University of Reading\n\n");
    fprintf(stderr, "USAGE: checkhbond [-c cutoff] [-p hatom1 hatom2][-m matrix file]\n");
-   fprintf(stderr, "   pdbfile residue1 residue2 nameres1 nameres2/sub [output file]\n\n");
+   fprintf(stderr, "   pdbfile residue1 residue2 nameres2 [output file]\n\n");
    fprintf(stderr, "  -c [cutoff]: cutoff distance between hydrogen-capable atoms(default: 0.5A)\n");
    fprintf(stderr, "  -p: Parse HBplus data.\n");
    fprintf(stderr, "  Hydrogen donating atom (hatom1) and hydrogen accepting atom (hatom2) required \n");
@@ -1071,9 +1069,8 @@ void Usage(void)
    fprintf(stderr, "  pdbfile:  pdb file of protein structure\n");
    fprintf(stderr, "  residue1: First residue (chain, residue number, insert)\n");
    fprintf(stderr, "  residue2: Second residue (chain, residue number, insert)\n");
-   fprintf(stderr, "  nameres1: Name of first residue\n");
-   fprintf(stderr, "  nameres2/sub:  Name of replacement amino acid (mutation of residue 2),\n");
-   fprintf(stderr, "      or native residue 1 if creating 'pseudo-energy distribution'\n");
+   fprintf(stderr, "  nameres2:  Name of amino acid to test at residue 2\n");
+   fprintf(stderr, "      (needs native residue 1 if creating 'pseudo-energy distribution'\n");
    fprintf(stderr, "  [output file]: for saving hydrogen-capable atoms (in pdb format)\n");
    fprintf(stderr, "      I/O is through stdout if file not specified\n\n");   
    fprintf(stderr, "Determines the validity of a hydrogen bond in a protein \n");
@@ -1145,5 +1142,61 @@ BOOL IsHBondCapable(char *residue)
    }
    
    return(flag);
+}
+
+/************************************************************************/
+PDB *GetResidues(PDB *pdb, char *chain1, int resnum1, char *insert1, 
+                 char *chain2, int resnum2, char *insert2)
+{
+   PDB *keep=NULL,
+       *p, *q;
+   
+   for(p=pdb; p!=NULL; NEXT(p))
+   {
+      if(((p->resnum == resnum1) &&
+          (p->chain[0]  == chain1[0]) &&
+          (p->insert[0] == insert1[0])) ||
+         ((p->resnum == resnum2) &&
+          (p->chain[0]  == chain2[0]) &&
+          (p->insert[0] == insert2[0])))
+      {
+         if(keep == NULL)
+         {
+            INIT(keep, PDB);
+            q = keep;
+         }
+         else
+         {
+            ALLOCNEXT(q, PDB);
+         }
+         if(q==NULL)
+         {
+            fprintf(stderr,"No memory to store residues of interest\n");
+            return(NULL);
+         }
+         CopyPDB(q, p);
+      }
+   }
+   FREELIST(pdb, PDB);
+
+   return(keep);
+}
+
+
+/************************************************************************/
+void FindRes1Type(PDB *pdb, char *chain, int resnum, char *insert, char *res)
+{
+   PDB *p;
+   for(p=pdb; p!=NULL; NEXT(p))
+   {
+      if((p->resnum == resnum) &&
+         (p->chain[0] == chain[0]) &&
+         (p->insert[0] == insert[0]))
+      {
+         strncpy(res, p->resnam, 3);
+         res[3] = '\0';
+         return;
+      }
+   }
 }
 
