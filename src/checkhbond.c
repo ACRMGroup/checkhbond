@@ -55,6 +55,13 @@ for each position:
 #define DISTSQ_HATOMS(a,b) (a.x - b.x) * (a.x - b.x) + \
                        (a.y - b.y) * (a.y - b.y) + \
                        (a.z - b.z) * (a.z - b.z)
+/* Error codes for GetResidues() */
+#define ERR_NOMEM      0
+#define ERR_NOPREVRES1 1
+#define ERR_NOPREVRES2 2
+
+/* Max distance for C...N peptide bond  */
+#define CNBONDSQ 2.25    /* 1.5A */
 
 /* for debugging purposes */
 /*#define DEBUG */ 
@@ -123,8 +130,9 @@ BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix, char 
                          char *hatom1, char *hatom2, REAL cutoff, char *res1, char *res2,
                          FILE *OUT);
 PDB *GetResidues(PDB *pdb, char *chain1, int resnum1, char *insert1, 
-                 char *chain2, int resnum2, char *insert2);
+                 char *chain2, int resnum2, char *insert2, int *errorcode);
 void FindRes1Type(PDB *pdb, char *chain, int resnum, char *insert, char *res);
+BOOL ResiduesBonded(PDB *pdb1, PDB *pdb2);
 
 
 /*************************************/
@@ -138,7 +146,7 @@ int main (int argc, char *argv[])
    char chain1[6], insert1[6], chain2[6], insert2[6], hatom1[6], hatom2[6];
    char matrix_file[MAXBUFF];
    PDB *pdb;
-   int natoms, resnum1, resnum2;
+   int natoms, resnum1, resnum2, errorcode;
    REAL cutoff;
    BOOL hbplus = FALSE;
    
@@ -160,7 +168,33 @@ int main (int argc, char *argv[])
                   if((pdb = ReadPDB(PDBFILE, &natoms)) !=NULL)
                   {
                      /* ACRM 08.09.05 Get only the residues of interest */
-                     pdb = GetResidues(pdb, chain1, resnum1, insert1, chain2, resnum2, insert2);
+                     if((pdb = GetResidues(pdb, chain1, resnum1, insert1, 
+                                           chain2, resnum2, insert2,
+                                           &errorcode))==NULL)
+                     {
+                        if(errorcode == ERR_NOMEM)
+                        {
+                           fprintf(stderr,"No memory for storing residues of interest\n");
+                           return(1);
+                        }
+                        else if(errorcode == ERR_NOPREVRES1)
+                        {
+                           fprintf(stderr,"No preceeding residue for residue %c%d%c\n",
+                                   chain1[0], resnum1, insert1[0]);
+                           return(1);
+                        }
+                        else if(errorcode == ERR_NOPREVRES2)
+                        {
+                           fprintf(stderr,"No preceeding residue for residue %c%d%c\n",
+                                   chain2[0], resnum2, insert2[0]);
+                           return(1);
+                        }
+                        else
+                        {
+                           fprintf(stderr,"Undefined error in getting residues\n");
+                           return(1);
+                        }
+                     }
                      FindRes1Type(pdb, chain1, resnum1, insert1, res1);
 
                      if(!PrepareHBondingPair(resnum1, resnum2, pdb, matrix, chain1, chain2, 
@@ -1147,11 +1181,45 @@ BOOL IsHBondCapable(char *residue)
 
 /************************************************************************/
 PDB *GetResidues(PDB *pdb, char *chain1, int resnum1, char *insert1, 
-                 char *chain2, int resnum2, char *insert2)
+                 char *chain2, int resnum2, char *insert2, int *errorcode)
 {
    PDB *keep=NULL,
-       *p, *q;
+       *p, *q,
+       *prev1, *prev2;
    
+   /* First find the residue preceeding res1 */
+   for(p=pdb, prev1=NULL; p!=NULL; )
+   {
+      if((p->resnum == resnum1) &&
+         (p->chain[0]  == chain1[0]) &&
+         (p->insert[0] == insert1[0]))
+         break;
+      prev1 = p;
+      p = FindNextResidue(p);
+   }
+   if((prev1==NULL) || !ResiduesBonded(prev1, p))
+   {
+      *errorcode = ERR_NOPREVRES1;
+      return(NULL);
+   }
+
+   /* First find the residue preceeding res2 */
+   for(p=pdb, prev2=NULL; p!=NULL; )
+   {
+      if((p->resnum == resnum2) &&
+         (p->chain[0]  == chain2[0]) &&
+         (p->insert[0] == insert2[0]))
+         break;
+      prev2 = p;
+      p = FindNextResidue(p);
+   }
+   if((prev2==NULL) || !ResiduesBonded(prev2, p))
+   {
+      *errorcode = ERR_NOPREVRES2;
+      return(NULL);
+   }
+
+
    for(p=pdb; p!=NULL; NEXT(p))
    {
       if(((p->resnum == resnum1) &&
@@ -1159,7 +1227,13 @@ PDB *GetResidues(PDB *pdb, char *chain1, int resnum1, char *insert1,
           (p->insert[0] == insert1[0])) ||
          ((p->resnum == resnum2) &&
           (p->chain[0]  == chain2[0]) &&
-          (p->insert[0] == insert2[0])))
+          (p->insert[0] == insert2[0])) ||
+         ((p->resnum == prev1->resnum) &&
+          (p->chain[0]  == prev1->chain[0]) &&
+          (p->insert[0] == prev1->insert[0])) ||
+         ((p->resnum == prev2->resnum) &&
+          (p->chain[0]  == prev2->chain[0]) &&
+          (p->insert[0] == prev2->insert[0])))
       {
          if(keep == NULL)
          {
@@ -1172,7 +1246,7 @@ PDB *GetResidues(PDB *pdb, char *chain1, int resnum1, char *insert1,
          }
          if(q==NULL)
          {
-            fprintf(stderr,"No memory to store residues of interest\n");
+            *errorcode = ERR_NOMEM;
             return(NULL);
          }
          CopyPDB(q, p);
@@ -1201,3 +1275,31 @@ void FindRes1Type(PDB *pdb, char *chain, int resnum, char *insert, char *res)
    }
 }
 
+/************************************************************************/
+/* Tests if two residues are bonded through C...N
+   The residues must be specified in the correct order!
+*/
+BOOL ResiduesBonded(PDB *pdb1, PDB *pdb2)
+{
+   PDB *c, *n, *next1, *next2;
+   
+   next1 = FindNextResidue(pdb1);
+   next2 = FindNextResidue(pdb2);
+   for(c=pdb1; c!=next1; NEXT(c))
+   {
+      if(!strncmp(c->atnam, "C   ", 4))
+         break;
+   }
+   for(n=pdb2; n!=next2; NEXT(n))
+   {
+      if(!strncmp(n->atnam, "N   ", 4))
+         break;
+   }
+   if((c==next1) || (n==next2))
+      return(FALSE);
+
+   if(DISTSQ(c,n) < CNBONDSQ)
+      return(TRUE);
+
+   return(FALSE);
+}
