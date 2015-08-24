@@ -94,7 +94,7 @@ void doIt (char * command,char *fileoutput) {
         
 }
 
-#define PDBLOC "/data/pdb/pdb"
+#define PDBLOC "/acrm/data/pdb/pdb"
 #define DOMAINLOC "/acrm/data/dompdb/"
 #define PDBEXT ".ent"
 
