@@ -1,0 +1,161 @@
+file /acrm/data/dompdb/3hflH1
+file /acrm/data/dompdb/3hflH2
+file /acrm/data/dompdb/3hflL1
+ARG  61 NE   ASP  82 OD2  HE   CG  
+ARG  61  NH2  ASP  82 OD1  HH22 CG  
+file /acrm/data/dompdb/3hflL2
+ARG  188 NE   ASP  184 OD2  HE   CG  
+ARG  188  NH2  ASP  184 OD2  HH22 CG  
+file /acrm/data/dompdb/3hflH1
+LYS  23  NZ   THR  77  OG1  HZ2  CB  
+THR  77 OG1  SER  75 OG   ??? CB  
+SER  75 OG   THR  77 OG1  ??? CB  
+THR  83 OG1  GLU  85 OE1  ??? CD  
+THR  83 OG1  ASP  86 OD1  ??? CG  
+file /acrm/data/dompdb/3hflH2
+THR  139 OG1  THR  192 OG1  ??? CB  
+THR  192 OG1  THR  139 OG1  ??? CB  
+THR  173 OG1  SER  189 OG   ??? CB  
+SER  189 OG   THR  173 OG1  ??? CB  
+LYS  145  NZ   THR  186  OG1  HZ2  CB  
+THR  186 OG1  GLN  179 OE1  ??? CD  
+THR  192 OG1  THR  139 OG1  ??? CB  
+THR  139 OG1  THR  192 OG1  ??? CB  
+THR  217 OG1  SER  215 OG   ??? CB  
+SER  215 OG   THR  217 OG1  ??? CB  
+file /acrm/data/dompdb/3hflL1
+THR  20 OG1  THR  74 OG1  ??? CB  
+THR  74 OG1  THR  20 OG1  ??? CB  
+THR  74 OG1  THR  20 OG1  ??? CB  
+THR  20 OG1  THR  74 OG1  ??? CB  
+THR  80 OG1  GLU  81 OE1  ??? CD  
+GLN  90  NE2  THR  97  OG1  HE22 CB  
+file /acrm/data/dompdb/3hflL2
+THR  180 OG1  SER  131 OG   ??? CB  
+SER  131 OG   THR  180 OG1  ??? CB  
+THR  193 OG1  SER  208 OG   ??? CB  
+SER  208 OG   THR  193 OG1  ??? CB  
+ASN  145  ND2  THR  197  OG1  HD22 CB  
+THR  200 OG1  HIS  198 ND1  ??? CG  
+HIS  198 ND1  THR  200 OG1  ??? CB  
+file /acrm/data/dompdb/3hflH1
+file /acrm/data/dompdb/3hflH2
+ASN  209 ND2  SER  162 OG   HD21 CB  
+file /acrm/data/dompdb/3hflL1
+file /acrm/data/dompdb/3hflL2
+ASN  145  ND2  THR  197 OG1  HD22 CB  
+SER  177 OG   ASN  161 OD1  ??? CG  
+file /acrm/data/dompdb/3hflH1
+SER  74 OG   ASP  72 OD1  ??? CG  
+SER  75 OG   ASP  72 OD2  ??? CG  
+THR  83 OG1  ASP  86 OD1  ??? CG  
+TYR  32 OH   ASP  98 OD2  ??? CG  
+file /acrm/data/dompdb/3hflH2
+file /acrm/data/dompdb/3hflL1
+TYR  34 OH   ASP  50 OD1  ??? CG  
+ARG  61  NH2  ASP  82  OD1  HH22 CG  
+ARG  61 NE   ASP  82 OD2  HE   CG  
+file /acrm/data/dompdb/3hflL2
+HIS  189 ND1  ASP  151 OD2  ??? CG  
+ARG  188 NE   ASP  184 OD2  HE   CG  
+ARG  188  NH2  ASP  184  OD2  HH22 CG  
+file /acrm/data/dompdb/3hflH1
+TRP  47 NE1  GLU  35 OE1  HE1  CD  
+THR  83 OG1  GLU  85 OE1  ??? CD  
+SER  84 OG   GLU  85 OE2  ??? CD  
+file /acrm/data/dompdb/3hflH2
+file /acrm/data/dompdb/3hflL1
+SER  14 OG   GLU  17 OE1  ??? CD  
+THR  80 OG1  GLU  81 OE1  ??? CD  
+file /acrm/data/dompdb/3hflL2
+LYS  149  NZ   GLU  195  OE1  HZ2  CD  
+file /acrm/data/dompdb/3hflH1
+GLN  39  NE2  TYR  91 OH   HE22 CZ  
+file /acrm/data/dompdb/3hflH2
+SER  195 OG   GLN  133 OE1  ??? CD  
+THR  186 OG1  GLN  179 OE1  ??? CD  
+file /acrm/data/dompdb/3hflL1
+TYR  86 OH   GLN  37 OE1  ??? CD  
+TYR  36 OH   GLN  89 OE1  ??? CD  
+GLN  90  NE2  THR  97 OG1  HE22 CB  
+file /acrm/data/dompdb/3hflL2
+file /acrm/data/dompdb/3hflH1
+LYS  23  NZ   THR  77 OG1  HZ2  CB  
+file /acrm/data/dompdb/3hflH2
+LYS  145  NZ   THR  186 OG1  HZ2  CB  
+file /acrm/data/dompdb/3hflL1
+file /acrm/data/dompdb/3hflL2
+LYS  149  NZ   GLU  195 OE1  HZ2  CD  
+file /acrm/data/dompdb/3hflH1
+SER  21 OG   SER  7 OG   ??? CB  
+SER  21 OG   SER  7 OG   ??? CB  
+SER  54 OG   SER  56 OG   ??? CB  
+SER  56 OG   SER  54 OG   ??? CB  
+SER  56 OG   SER  54 OG   ??? CB  
+SER  54 OG   SER  56 OG   ??? CB  
+SER  74 OG   ASP  72 OD1  ??? CG  
+SER  75 OG   ASP  72 OD2  ??? CG  
+SER  75 OG   THR  77 OG1  ??? CB  
+THR  77 OG1  SER  75 OG   ??? CB  
+SER  84 OG   GLU  85 OE2  ??? CD  
+file /acrm/data/dompdb/3hflH2
+ASN  209 ND2  SER  162 OG   HD21 CB  
+TRP  157 NE1  SER  189 OG   HE1  CB  
+SER  189 OG   THR  173 OG1  ??? CB  
+THR  173 OG1  SER  189 OG   ??? CB  
+SER  195 OG   GLN  133 OE1  ??? CD  
+SER  215 OG   HIS  212 ND1  ??? CG  
+HIS  212 ND1  SER  215 OG   ??? CB  
+SER  215 OG   THR  217 OG1  ??? CB  
+THR  217 OG1  SER  215 OG   ??? CB  
+file /acrm/data/dompdb/3hflL1
+SER  14 OG   GLU  17 OE1  ??? CD  
+SER  26 OG   SER  27 OG   ??? CB  
+SER  27 OG   SER  26 OG   ??? CB  
+SER  27 OG   SER  26 OG   ??? CB  
+SER  26 OG   SER  27 OG   ??? CB  
+SER  65 OG   SER  72 OG   ??? CB  
+SER  72 OG   SER  65 OG   ??? CB  
+SER  72 OG   SER  65 OG   ??? CB  
+SER  65 OG   SER  72 OG   ??? CB  
+file /acrm/data/dompdb/3hflL2
+SER  131 OG   THR  180 OG1  ??? CB  
+THR  180 OG1  SER  131 OG   ??? CB  
+TRP  148 NE1  SER  177 OG   HE1  CB  
+SER  177 OG   ASN  161 OD1  ??? CG  
+SER  208 OG   THR  193 OG1  ??? CB  
+THR  193 OG1  SER  208 OG   ??? CB  
+file /acrm/data/dompdb/3hflH1
+TRP  47 NE1  GLU  35 OE1  HE1  CD  
+file /acrm/data/dompdb/3hflH2
+TRP  157 NE1  SER  189 OG   HE1  CB  
+file /acrm/data/dompdb/3hflL1
+file /acrm/data/dompdb/3hflL2
+TRP  148 NE1  SER  177 OG   HE1  CB  
+file /acrm/data/dompdb/3hflH1
+TYR  32 OH   ASP  98 OD2  ??? CG  
+GLN  39  NE2  TYR  91  OH   HE22 CZ  
+file /acrm/data/dompdb/3hflH2
+file /acrm/data/dompdb/3hflL1
+TYR  34 OH   ASP  50 OD1  ??? CG  
+TYR  36 OH   GLN  89 OE1  ??? CD  
+TYR  86 OH   GLN  37 OE1  ??? CD  
+file /acrm/data/dompdb/3hflL2
+file /acrm/data/dompdb/3hflH1
+file /acrm/data/dompdb/3hflH2
+HIS  212 ND1  SER  215 OG   ??? CB  
+SER  215 OG   HIS  212 ND1  ??? CG  
+file /acrm/data/dompdb/3hflL1
+file /acrm/data/dompdb/3hflL2
+HIS  189 ND1  ASP  151 OD2  ??? CG  
+HIS  198 ND1  THR  200 OG1  ??? CB  
+THR  200 OG1  HIS  198 ND1  ??? CG  
+file /acrm/data/dompdb/3hflH1
+file /acrm/data/dompdb/3hflH2
+HIS  212 ND1  SER  215 OG   ??? CB  
+SER  215 OG   HIS  212 ND1  ??? CG  
+file /acrm/data/dompdb/3hflL1
+file /acrm/data/dompdb/3hflL2
+HIS  189 ND1  ASP  151 OD2  ??? CG  
+HIS  198 ND1  THR  200 OG1  ??? CB  
+THR  200 OG1  HIS  198 ND1  ??? CG  

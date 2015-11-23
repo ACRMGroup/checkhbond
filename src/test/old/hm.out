@@ -1,0 +1,2807 @@
+# 1 "hydrogen_matrices_Ndonor.c"
+# 1 "<built-in>"
+# 1 "<command line>"
+# 1 "hydrogen_matrices_Ndonor.c"
+# 78 "hydrogen_matrices_Ndonor.c"
+# 1 "/usr/include/stdio.h" 1 3
+# 28 "/usr/include/stdio.h" 3
+# 1 "/usr/include/features.h" 1 3
+# 291 "/usr/include/features.h" 3
+# 1 "/usr/include/sys/cdefs.h" 1 3
+# 292 "/usr/include/features.h" 2 3
+# 314 "/usr/include/features.h" 3
+# 1 "/usr/include/gnu/stubs.h" 1 3
+# 315 "/usr/include/features.h" 2 3
+# 29 "/usr/include/stdio.h" 2 3
+
+
+
+
+
+# 1 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stddef.h" 1 3
+# 213 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stddef.h" 3
+typedef unsigned int size_t;
+# 35 "/usr/include/stdio.h" 2 3
+
+# 1 "/usr/include/bits/types.h" 1 3
+# 28 "/usr/include/bits/types.h" 3
+# 1 "/usr/include/bits/wordsize.h" 1 3
+# 29 "/usr/include/bits/types.h" 2 3
+
+
+# 1 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stddef.h" 1 3
+# 32 "/usr/include/bits/types.h" 2 3
+
+
+typedef unsigned char __u_char;
+typedef unsigned short int __u_short;
+typedef unsigned int __u_int;
+typedef unsigned long int __u_long;
+
+
+typedef signed char __int8_t;
+typedef unsigned char __uint8_t;
+typedef signed short int __int16_t;
+typedef unsigned short int __uint16_t;
+typedef signed int __int32_t;
+typedef unsigned int __uint32_t;
+
+
+
+
+__extension__ typedef signed long long int __int64_t;
+__extension__ typedef unsigned long long int __uint64_t;
+
+
+
+
+
+__extension__ typedef long long int __quad_t;
+__extension__ typedef unsigned long long int __u_quad_t;
+# 128 "/usr/include/bits/types.h" 3
+# 1 "/usr/include/bits/typesizes.h" 1 3
+# 129 "/usr/include/bits/types.h" 2 3
+
+
+typedef unsigned long long int __dev_t;
+typedef unsigned int __uid_t;
+typedef unsigned int __gid_t;
+typedef unsigned long int __ino_t;
+typedef unsigned long long int __ino64_t;
+typedef unsigned int __mode_t;
+typedef unsigned int __nlink_t;
+typedef long int __off_t;
+typedef long long int __off64_t;
+typedef int __pid_t;
+typedef struct { int __val[2]; } __fsid_t;
+typedef long int __clock_t;
+typedef unsigned long int __rlim_t;
+typedef unsigned long long int __rlim64_t;
+typedef unsigned int __id_t;
+typedef long int __time_t;
+typedef unsigned int __useconds_t;
+typedef long int __suseconds_t;
+
+typedef int __daddr_t;
+typedef long int __swblk_t;
+typedef int __key_t;
+
+
+typedef int __clockid_t;
+
+
+typedef int __timer_t;
+
+
+typedef long int __blksize_t;
+
+
+
+
+typedef long int __blkcnt_t;
+typedef long long int __blkcnt64_t;
+
+
+typedef unsigned long int __fsblkcnt_t;
+typedef unsigned long long int __fsblkcnt64_t;
+
+
+typedef unsigned long int __fsfilcnt_t;
+typedef unsigned long long int __fsfilcnt64_t;
+
+
+
+
+typedef int __ssize_t;
+typedef __off64_t __loff_t;
+typedef __quad_t *__qaddr_t;
+typedef char *__caddr_t;
+
+
+typedef int __intptr_t;
+
+
+typedef unsigned int __socklen_t;
+# 37 "/usr/include/stdio.h" 2 3
+
+
+
+
+
+
+
+
+
+typedef struct _IO_FILE FILE;
+
+# 62 "/usr/include/stdio.h" 3
+typedef struct _IO_FILE __FILE;
+# 72 "/usr/include/stdio.h" 3
+# 1 "/usr/include/libio.h" 1 3
+# 32 "/usr/include/libio.h" 3
+# 1 "/usr/include/_G_config.h" 1 3
+# 14 "/usr/include/_G_config.h" 3
+# 1 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stddef.h" 1 3
+# 325 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stddef.h" 3
+typedef long int wchar_t;
+# 354 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stddef.h" 3
+typedef unsigned int wint_t;
+# 15 "/usr/include/_G_config.h" 2 3
+# 24 "/usr/include/_G_config.h" 3
+# 1 "/usr/include/wchar.h" 1 3
+# 48 "/usr/include/wchar.h" 3
+# 1 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stddef.h" 1 3
+# 49 "/usr/include/wchar.h" 2 3
+
+# 1 "/usr/include/bits/wchar.h" 1 3
+# 51 "/usr/include/wchar.h" 2 3
+# 71 "/usr/include/wchar.h" 3
+typedef struct
+{
+  int __count;
+  union
+  {
+    wint_t __wch;
+    char __wchb[4];
+  } __value;
+} __mbstate_t;
+# 25 "/usr/include/_G_config.h" 2 3
+
+typedef struct
+{
+  __off_t __pos;
+  __mbstate_t __state;
+} _G_fpos_t;
+typedef struct
+{
+  __off64_t __pos;
+  __mbstate_t __state;
+} _G_fpos64_t;
+# 44 "/usr/include/_G_config.h" 3
+# 1 "/usr/include/gconv.h" 1 3
+# 28 "/usr/include/gconv.h" 3
+# 1 "/usr/include/wchar.h" 1 3
+# 48 "/usr/include/wchar.h" 3
+# 1 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stddef.h" 1 3
+# 49 "/usr/include/wchar.h" 2 3
+# 29 "/usr/include/gconv.h" 2 3
+
+
+# 1 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stddef.h" 1 3
+# 32 "/usr/include/gconv.h" 2 3
+
+
+
+
+
+enum
+{
+  __GCONV_OK = 0,
+  __GCONV_NOCONV,
+  __GCONV_NODB,
+  __GCONV_NOMEM,
+
+  __GCONV_EMPTY_INPUT,
+  __GCONV_FULL_OUTPUT,
+  __GCONV_ILLEGAL_INPUT,
+  __GCONV_INCOMPLETE_INPUT,
+
+  __GCONV_ILLEGAL_DESCRIPTOR,
+  __GCONV_INTERNAL_ERROR
+};
+
+
+
+enum
+{
+  __GCONV_IS_LAST = 0x0001,
+  __GCONV_IGNORE_ERRORS = 0x0002
+};
+
+
+
+struct __gconv_step;
+struct __gconv_step_data;
+struct __gconv_loaded_object;
+struct __gconv_trans_data;
+
+
+
+typedef int (*__gconv_fct) (struct __gconv_step *, struct __gconv_step_data *,
+                            __const unsigned char **, __const unsigned char *,
+                            unsigned char **, size_t *, int, int);
+
+
+typedef wint_t (*__gconv_btowc_fct) (struct __gconv_step *, unsigned char);
+
+
+typedef int (*__gconv_init_fct) (struct __gconv_step *);
+typedef void (*__gconv_end_fct) (struct __gconv_step *);
+
+
+
+typedef int (*__gconv_trans_fct) (struct __gconv_step *,
+                                  struct __gconv_step_data *, void *,
+                                  __const unsigned char *,
+                                  __const unsigned char **,
+                                  __const unsigned char *, unsigned char **,
+                                  size_t *);
+
+
+typedef int (*__gconv_trans_context_fct) (void *, __const unsigned char *,
+                                          __const unsigned char *,
+                                          unsigned char *, unsigned char *);
+
+
+typedef int (*__gconv_trans_query_fct) (__const char *, __const char ***,
+                                        size_t *);
+
+
+typedef int (*__gconv_trans_init_fct) (void **, const char *);
+typedef void (*__gconv_trans_end_fct) (void *);
+
+struct __gconv_trans_data
+{
+
+  __gconv_trans_fct __trans_fct;
+  __gconv_trans_context_fct __trans_context_fct;
+  __gconv_trans_end_fct __trans_end_fct;
+  void *__data;
+  struct __gconv_trans_data *__next;
+};
+
+
+
+struct __gconv_step
+{
+  struct __gconv_loaded_object *__shlib_handle;
+  __const char *__modname;
+
+  int __counter;
+
+  char *__from_name;
+  char *__to_name;
+
+  __gconv_fct __fct;
+  __gconv_btowc_fct __btowc_fct;
+  __gconv_init_fct __init_fct;
+  __gconv_end_fct __end_fct;
+
+
+
+  int __min_needed_from;
+  int __max_needed_from;
+  int __min_needed_to;
+  int __max_needed_to;
+
+
+  int __stateful;
+
+  void *__data;
+};
+
+
+
+struct __gconv_step_data
+{
+  unsigned char *__outbuf;
+  unsigned char *__outbufend;
+
+
+
+  int __flags;
+
+
+
+  int __invocation_counter;
+
+
+
+  int __internal_use;
+
+  __mbstate_t *__statep;
+  __mbstate_t __state;
+
+
+
+  struct __gconv_trans_data *__trans;
+};
+
+
+
+typedef struct __gconv_info
+{
+  size_t __nsteps;
+  struct __gconv_step *__steps;
+  __extension__ struct __gconv_step_data __data [];
+} *__gconv_t;
+# 45 "/usr/include/_G_config.h" 2 3
+typedef union
+{
+  struct __gconv_info __cd;
+  struct
+  {
+    struct __gconv_info __cd;
+    struct __gconv_step_data __data;
+  } __combined;
+} _G_iconv_t;
+
+typedef int _G_int16_t __attribute__ ((__mode__ (__HI__)));
+typedef int _G_int32_t __attribute__ ((__mode__ (__SI__)));
+typedef unsigned int _G_uint16_t __attribute__ ((__mode__ (__HI__)));
+typedef unsigned int _G_uint32_t __attribute__ ((__mode__ (__SI__)));
+# 33 "/usr/include/libio.h" 2 3
+# 53 "/usr/include/libio.h" 3
+# 1 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stdarg.h" 1 3
+# 43 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stdarg.h" 3
+typedef __builtin_va_list __gnuc_va_list;
+# 54 "/usr/include/libio.h" 2 3
+# 162 "/usr/include/libio.h" 3
+struct _IO_jump_t; struct _IO_FILE;
+# 172 "/usr/include/libio.h" 3
+typedef void _IO_lock_t;
+
+
+
+
+
+struct _IO_marker {
+  struct _IO_marker *_next;
+  struct _IO_FILE *_sbuf;
+
+
+
+  int _pos;
+# 195 "/usr/include/libio.h" 3
+};
+
+
+enum __codecvt_result
+{
+  __codecvt_ok,
+  __codecvt_partial,
+  __codecvt_error,
+  __codecvt_noconv
+};
+# 263 "/usr/include/libio.h" 3
+struct _IO_FILE {
+  int _flags;
+
+
+
+
+  char* _IO_read_ptr;
+  char* _IO_read_end;
+  char* _IO_read_base;
+  char* _IO_write_base;
+  char* _IO_write_ptr;
+  char* _IO_write_end;
+  char* _IO_buf_base;
+  char* _IO_buf_end;
+
+  char *_IO_save_base;
+  char *_IO_backup_base;
+  char *_IO_save_end;
+
+  struct _IO_marker *_markers;
+
+  struct _IO_FILE *_chain;
+
+  int _fileno;
+
+
+
+  int _flags2;
+
+  __off_t _old_offset;
+
+
+
+  unsigned short _cur_column;
+  signed char _vtable_offset;
+  char _shortbuf[1];
+
+
+
+  _IO_lock_t *_lock;
+# 311 "/usr/include/libio.h" 3
+  __off64_t _offset;
+
+
+
+
+
+  void *__pad1;
+  void *__pad2;
+
+  int _mode;
+
+  char _unused2[15 * sizeof (int) - 2 * sizeof (void *)];
+
+};
+
+
+typedef struct _IO_FILE _IO_FILE;
+
+
+struct _IO_FILE_plus;
+
+extern struct _IO_FILE_plus _IO_2_1_stdin_;
+extern struct _IO_FILE_plus _IO_2_1_stdout_;
+extern struct _IO_FILE_plus _IO_2_1_stderr_;
+# 350 "/usr/include/libio.h" 3
+typedef __ssize_t __io_read_fn (void *__cookie, char *__buf, size_t __nbytes);
+
+
+
+
+
+
+
+typedef __ssize_t __io_write_fn (void *__cookie, __const char *__buf,
+                                 size_t __n);
+
+
+
+
+
+
+
+typedef int __io_seek_fn (void *__cookie, __off64_t *__pos, int __w);
+
+
+typedef int __io_close_fn (void *__cookie);
+# 402 "/usr/include/libio.h" 3
+extern int __underflow (_IO_FILE *) ;
+extern int __uflow (_IO_FILE *) ;
+extern int __overflow (_IO_FILE *, int) ;
+extern wint_t __wunderflow (_IO_FILE *) ;
+extern wint_t __wuflow (_IO_FILE *) ;
+extern wint_t __woverflow (_IO_FILE *, wint_t) ;
+# 432 "/usr/include/libio.h" 3
+extern int _IO_getc (_IO_FILE *__fp) ;
+extern int _IO_putc (int __c, _IO_FILE *__fp) ;
+extern int _IO_feof (_IO_FILE *__fp) ;
+extern int _IO_ferror (_IO_FILE *__fp) ;
+
+extern int _IO_peekc_locked (_IO_FILE *__fp) ;
+
+
+
+
+
+extern void _IO_flockfile (_IO_FILE *) ;
+extern void _IO_funlockfile (_IO_FILE *) ;
+extern int _IO_ftrylockfile (_IO_FILE *) ;
+# 462 "/usr/include/libio.h" 3
+extern int _IO_vfscanf (_IO_FILE * __restrict, const char * __restrict,
+                        __gnuc_va_list, int *__restrict) ;
+extern int _IO_vfprintf (_IO_FILE *__restrict, const char *__restrict,
+                         __gnuc_va_list) ;
+extern __ssize_t _IO_padn (_IO_FILE *, int, __ssize_t) ;
+extern size_t _IO_sgetn (_IO_FILE *, void *, size_t) ;
+
+extern __off64_t _IO_seekoff (_IO_FILE *, __off64_t, int, int) ;
+extern __off64_t _IO_seekpos (_IO_FILE *, __off64_t, int) ;
+
+extern void _IO_free_backup_area (_IO_FILE *) ;
+# 73 "/usr/include/stdio.h" 2 3
+# 86 "/usr/include/stdio.h" 3
+
+
+typedef _G_fpos_t fpos_t;
+
+
+
+
+# 138 "/usr/include/stdio.h" 3
+# 1 "/usr/include/bits/stdio_lim.h" 1 3
+# 139 "/usr/include/stdio.h" 2 3
+
+
+
+extern struct _IO_FILE *stdin;
+extern struct _IO_FILE *stdout;
+extern struct _IO_FILE *stderr;
+
+
+
+
+
+
+
+
+
+extern int remove (__const char *__filename) ;
+
+extern int rename (__const char *__old, __const char *__new) ;
+
+
+
+
+
+
+extern FILE *tmpfile (void) ;
+# 173 "/usr/include/stdio.h" 3
+extern char *tmpnam (char *__s) ;
+
+# 200 "/usr/include/stdio.h" 3
+
+
+extern int fclose (FILE *__stream) ;
+
+extern int fflush (FILE *__stream) ;
+
+# 218 "/usr/include/stdio.h" 3
+
+
+
+extern FILE *fopen (__const char *__restrict __filename,
+                    __const char *__restrict __modes) ;
+
+extern FILE *freopen (__const char *__restrict __filename,
+                      __const char *__restrict __modes,
+                      FILE *__restrict __stream) ;
+# 241 "/usr/include/stdio.h" 3
+
+# 273 "/usr/include/stdio.h" 3
+
+
+
+extern void setbuf (FILE *__restrict __stream, char *__restrict __buf) ;
+
+
+
+extern int setvbuf (FILE *__restrict __stream, char *__restrict __buf,
+                    int __modes, size_t __n) ;
+
+# 295 "/usr/include/stdio.h" 3
+
+
+extern int fprintf (FILE *__restrict __stream,
+                    __const char *__restrict __format, ...) ;
+
+extern int printf (__const char *__restrict __format, ...) ;
+
+extern int sprintf (char *__restrict __s,
+                    __const char *__restrict __format, ...) ;
+
+
+extern int vfprintf (FILE *__restrict __s, __const char *__restrict __format,
+                     __gnuc_va_list __arg) ;
+
+extern int vprintf (__const char *__restrict __format, __gnuc_va_list __arg)
+     ;
+
+extern int vsprintf (char *__restrict __s, __const char *__restrict __format,
+                     __gnuc_va_list __arg) ;
+
+# 351 "/usr/include/stdio.h" 3
+
+
+extern int fscanf (FILE *__restrict __stream,
+                   __const char *__restrict __format, ...) ;
+
+extern int scanf (__const char *__restrict __format, ...) ;
+
+extern int sscanf (__const char *__restrict __s,
+                   __const char *__restrict __format, ...) ;
+
+# 381 "/usr/include/stdio.h" 3
+
+
+extern int fgetc (FILE *__stream) ;
+extern int getc (FILE *__stream) ;
+
+
+extern int getchar (void) ;
+
+# 406 "/usr/include/stdio.h" 3
+
+
+extern int fputc (int __c, FILE *__stream) ;
+extern int putc (int __c, FILE *__stream) ;
+
+
+extern int putchar (int __c) ;
+
+# 440 "/usr/include/stdio.h" 3
+
+
+extern char *fgets (char *__restrict __s, int __n, FILE *__restrict __stream)
+     ;
+
+
+
+extern char *gets (char *__s) ;
+
+# 477 "/usr/include/stdio.h" 3
+
+
+extern int fputs (__const char *__restrict __s, FILE *__restrict __stream)
+     ;
+
+
+extern int puts (__const char *__s) ;
+
+
+
+extern int ungetc (int __c, FILE *__stream) ;
+
+
+
+extern size_t fread (void *__restrict __ptr, size_t __size,
+                     size_t __n, FILE *__restrict __stream) ;
+
+extern size_t fwrite (__const void *__restrict __ptr, size_t __size,
+                      size_t __n, FILE *__restrict __s) ;
+
+# 513 "/usr/include/stdio.h" 3
+
+
+extern int fseek (FILE *__stream, long int __off, int __whence) ;
+
+extern long int ftell (FILE *__stream) ;
+
+extern void rewind (FILE *__stream) ;
+
+# 546 "/usr/include/stdio.h" 3
+
+
+
+extern int fgetpos (FILE *__restrict __stream, fpos_t *__restrict __pos)
+     ;
+
+extern int fsetpos (FILE *__stream, __const fpos_t *__pos) ;
+# 565 "/usr/include/stdio.h" 3
+
+# 575 "/usr/include/stdio.h" 3
+
+
+extern void clearerr (FILE *__stream) ;
+
+extern int feof (FILE *__stream) ;
+
+extern int ferror (FILE *__stream) ;
+
+# 592 "/usr/include/stdio.h" 3
+
+
+extern void perror (__const char *__s) ;
+
+
+
+
+
+
+# 1 "/usr/include/bits/sys_errlist.h" 1 3
+# 602 "/usr/include/stdio.h" 2 3
+# 679 "/usr/include/stdio.h" 3
+
+# 79 "hydrogen_matrices_Ndonor.c" 2
+# 1 "/usr/include/string.h" 1 3
+# 28 "/usr/include/string.h" 3
+
+
+
+
+
+# 1 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stddef.h" 1 3
+# 34 "/usr/include/string.h" 2 3
+
+
+
+
+extern void *memcpy (void *__restrict __dest,
+                     __const void *__restrict __src, size_t __n) ;
+
+
+extern void *memmove (void *__dest, __const void *__src, size_t __n)
+     ;
+
+# 56 "/usr/include/string.h" 3
+
+
+extern void *memset (void *__s, int __c, size_t __n) ;
+
+
+extern int memcmp (__const void *__s1, __const void *__s2, size_t __n)
+     __attribute__ ((__pure__));
+
+
+extern void *memchr (__const void *__s, int __c, size_t __n)
+      __attribute__ ((__pure__));
+
+# 80 "/usr/include/string.h" 3
+
+
+extern char *strcpy (char *__restrict __dest, __const char *__restrict __src)
+     ;
+
+extern char *strncpy (char *__restrict __dest,
+                      __const char *__restrict __src, size_t __n) ;
+
+
+extern char *strcat (char *__restrict __dest, __const char *__restrict __src)
+     ;
+
+extern char *strncat (char *__restrict __dest, __const char *__restrict __src,
+                      size_t __n) ;
+
+
+extern int strcmp (__const char *__s1, __const char *__s2)
+     __attribute__ ((__pure__));
+
+extern int strncmp (__const char *__s1, __const char *__s2, size_t __n)
+     __attribute__ ((__pure__));
+
+
+extern int strcoll (__const char *__s1, __const char *__s2)
+     __attribute__ ((__pure__));
+
+extern size_t strxfrm (char *__restrict __dest,
+                       __const char *__restrict __src, size_t __n) ;
+
+# 160 "/usr/include/string.h" 3
+
+
+extern char *strchr (__const char *__s, int __c) __attribute__ ((__pure__));
+
+extern char *strrchr (__const char *__s, int __c) __attribute__ ((__pure__));
+
+
+
+
+
+
+
+
+
+
+
+extern size_t strcspn (__const char *__s, __const char *__reject)
+     __attribute__ ((__pure__));
+
+
+extern size_t strspn (__const char *__s, __const char *__accept)
+     __attribute__ ((__pure__));
+
+extern char *strpbrk (__const char *__s, __const char *__accept)
+     __attribute__ ((__pure__));
+
+extern char *strstr (__const char *__haystack, __const char *__needle)
+     __attribute__ ((__pure__));
+
+
+
+extern char *strtok (char *__restrict __s, __const char *__restrict __delim)
+     ;
+
+
+
+
+extern char *__strtok_r (char *__restrict __s,
+                         __const char *__restrict __delim,
+                         char **__restrict __save_ptr) ;
+# 228 "/usr/include/string.h" 3
+
+
+extern size_t strlen (__const char *__s) __attribute__ ((__pure__));
+
+# 241 "/usr/include/string.h" 3
+
+
+extern char *strerror (int __errnum) ;
+
+# 253 "/usr/include/string.h" 3
+extern void __bzero (void *__s, size_t __n) ;
+# 379 "/usr/include/string.h" 3
+
+# 80 "hydrogen_matrices_Ndonor.c" 2
+# 1 "/usr/include/stdlib.h" 1 3
+# 33 "/usr/include/stdlib.h" 3
+# 1 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stddef.h" 1 3
+# 34 "/usr/include/stdlib.h" 2 3
+
+
+# 93 "/usr/include/stdlib.h" 3
+
+
+typedef struct
+  {
+    int quot;
+    int rem;
+  } div_t;
+
+
+
+typedef struct
+  {
+    long int quot;
+    long int rem;
+  } ldiv_t;
+
+
+
+# 137 "/usr/include/stdlib.h" 3
+extern size_t __ctype_get_mb_cur_max (void) ;
+
+
+
+
+extern double atof (__const char *__nptr) __attribute__ ((__pure__));
+
+extern int atoi (__const char *__nptr) __attribute__ ((__pure__));
+
+extern long int atol (__const char *__nptr) __attribute__ ((__pure__));
+
+# 157 "/usr/include/stdlib.h" 3
+
+
+extern double strtod (__const char *__restrict __nptr,
+                      char **__restrict __endptr) ;
+
+# 174 "/usr/include/stdlib.h" 3
+
+
+extern long int strtol (__const char *__restrict __nptr,
+                        char **__restrict __endptr, int __base) ;
+
+extern unsigned long int strtoul (__const char *__restrict __nptr,
+                                  char **__restrict __endptr, int __base)
+     ;
+
+# 264 "/usr/include/stdlib.h" 3
+extern double __strtod_internal (__const char *__restrict __nptr,
+                                 char **__restrict __endptr, int __group)
+     ;
+extern float __strtof_internal (__const char *__restrict __nptr,
+                                char **__restrict __endptr, int __group)
+     ;
+extern long double __strtold_internal (__const char *__restrict __nptr,
+                                       char **__restrict __endptr,
+                                       int __group) ;
+
+extern long int __strtol_internal (__const char *__restrict __nptr,
+                                   char **__restrict __endptr,
+                                   int __base, int __group) ;
+
+
+
+extern unsigned long int __strtoul_internal (__const char *__restrict __nptr,
+                                             char **__restrict __endptr,
+                                             int __base, int __group) ;
+
+
+
+
+__extension__
+extern long long int __strtoll_internal (__const char *__restrict __nptr,
+                                         char **__restrict __endptr,
+                                         int __base, int __group) ;
+
+
+
+__extension__
+extern unsigned long long int __strtoull_internal (__const char *
+                                                   __restrict __nptr,
+                                                   char **__restrict __endptr,
+                                                   int __base, int __group)
+     ;
+# 471 "/usr/include/stdlib.h" 3
+
+
+extern int rand (void) ;
+
+extern void srand (unsigned int __seed) ;
+
+# 554 "/usr/include/stdlib.h" 3
+
+
+extern void *malloc (size_t __size) __attribute__ ((__malloc__));
+
+extern void *calloc (size_t __nmemb, size_t __size)
+     __attribute__ ((__malloc__));
+
+
+
+
+
+
+
+extern void *realloc (void *__ptr, size_t __size) __attribute__ ((__malloc__));
+
+extern void free (void *__ptr) ;
+
+# 592 "/usr/include/stdlib.h" 3
+
+
+extern void abort (void) __attribute__ ((__noreturn__));
+
+
+
+extern int atexit (void (*__func) (void)) ;
+
+# 608 "/usr/include/stdlib.h" 3
+
+
+
+
+extern void exit (int __status) __attribute__ ((__noreturn__));
+
+# 624 "/usr/include/stdlib.h" 3
+
+
+extern char *getenv (__const char *__name) ;
+
+
+
+
+extern char *__secure_getenv (__const char *__name) ;
+# 694 "/usr/include/stdlib.h" 3
+
+
+extern int system (__const char *__command) ;
+
+# 722 "/usr/include/stdlib.h" 3
+typedef int (*__compar_fn_t) (__const void *, __const void *);
+
+
+
+
+
+
+
+
+
+extern void *bsearch (__const void *__key, __const void *__base,
+                      size_t __nmemb, size_t __size, __compar_fn_t __compar);
+
+
+
+extern void qsort (void *__base, size_t __nmemb, size_t __size,
+                   __compar_fn_t __compar);
+
+
+
+extern int abs (int __x) __attribute__ ((__const__));
+extern long int labs (long int __x) __attribute__ ((__const__));
+
+
+
+
+
+
+
+
+
+
+
+
+extern div_t div (int __numer, int __denom)
+     __attribute__ ((__const__));
+extern ldiv_t ldiv (long int __numer, long int __denom)
+     __attribute__ ((__const__));
+
+# 821 "/usr/include/stdlib.h" 3
+
+
+
+extern int mblen (__const char *__s, size_t __n) ;
+
+
+extern int mbtowc (wchar_t *__restrict __pwc,
+                   __const char *__restrict __s, size_t __n) ;
+
+
+extern int wctomb (char *__s, wchar_t __wchar) ;
+
+
+
+extern size_t mbstowcs (wchar_t *__restrict __pwcs,
+                        __const char *__restrict __s, size_t __n) ;
+
+extern size_t wcstombs (char *__restrict __s,
+                        __const wchar_t *__restrict __pwcs, size_t __n)
+     ;
+
+# 916 "/usr/include/stdlib.h" 3
+
+# 81 "hydrogen_matrices_Ndonor.c" 2
+# 1 "/usr/include/sys/types.h" 1 3
+# 29 "/usr/include/sys/types.h" 3
+
+# 46 "/usr/include/sys/types.h" 3
+typedef __loff_t loff_t;
+
+
+
+typedef __ino_t ino_t;
+# 62 "/usr/include/sys/types.h" 3
+typedef __dev_t dev_t;
+
+
+
+
+typedef __gid_t gid_t;
+
+
+
+
+typedef __mode_t mode_t;
+
+
+
+
+typedef __nlink_t nlink_t;
+
+
+
+
+typedef __uid_t uid_t;
+
+
+
+
+
+typedef __off_t off_t;
+# 100 "/usr/include/sys/types.h" 3
+typedef __pid_t pid_t;
+# 110 "/usr/include/sys/types.h" 3
+typedef __ssize_t ssize_t;
+# 133 "/usr/include/sys/types.h" 3
+# 1 "/usr/include/time.h" 1 3
+# 74 "/usr/include/time.h" 3
+
+
+typedef __time_t time_t;
+
+# 92 "/usr/include/time.h" 3
+typedef __clockid_t clockid_t;
+# 104 "/usr/include/time.h" 3
+typedef __timer_t timer_t;
+# 134 "/usr/include/sys/types.h" 2 3
+# 147 "/usr/include/sys/types.h" 3
+# 1 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stddef.h" 1 3
+# 148 "/usr/include/sys/types.h" 2 3
+# 191 "/usr/include/sys/types.h" 3
+typedef int int8_t __attribute__ ((__mode__ (__QI__)));
+typedef int int16_t __attribute__ ((__mode__ (__HI__)));
+typedef int int32_t __attribute__ ((__mode__ (__SI__)));
+typedef int int64_t __attribute__ ((__mode__ (__DI__)));
+
+
+typedef unsigned int u_int8_t __attribute__ ((__mode__ (__QI__)));
+typedef unsigned int u_int16_t __attribute__ ((__mode__ (__HI__)));
+typedef unsigned int u_int32_t __attribute__ ((__mode__ (__SI__)));
+typedef unsigned int u_int64_t __attribute__ ((__mode__ (__DI__)));
+
+typedef int register_t __attribute__ ((__mode__ (__word__)));
+# 231 "/usr/include/sys/types.h" 3
+typedef __blkcnt_t blkcnt_t;
+
+
+
+typedef __fsblkcnt_t fsblkcnt_t;
+
+
+
+typedef __fsfilcnt_t fsfilcnt_t;
+# 269 "/usr/include/sys/types.h" 3
+
+# 82 "hydrogen_matrices_Ndonor.c" 2
+# 1 "/usr/include/sys/wait.h" 1 3
+# 28 "/usr/include/sys/wait.h" 3
+
+
+# 1 "/usr/include/signal.h" 1 3
+# 31 "/usr/include/signal.h" 3
+
+
+# 1 "/usr/include/bits/sigset.h" 1 3
+# 23 "/usr/include/bits/sigset.h" 3
+typedef int __sig_atomic_t;
+
+
+
+
+typedef struct
+  {
+    unsigned long int __val[(1024 / (8 * sizeof (unsigned long int)))];
+  } __sigset_t;
+# 103 "/usr/include/bits/sigset.h" 3
+extern int __sigismember (__const __sigset_t *, int);
+extern int __sigaddset (__sigset_t *, int);
+extern int __sigdelset (__sigset_t *, int);
+# 34 "/usr/include/signal.h" 2 3
+
+
+
+
+
+
+
+typedef __sig_atomic_t sig_atomic_t;
+
+# 58 "/usr/include/signal.h" 3
+# 1 "/usr/include/bits/signum.h" 1 3
+# 59 "/usr/include/signal.h" 2 3
+# 73 "/usr/include/signal.h" 3
+typedef void (*__sighandler_t) (int);
+
+
+
+
+extern __sighandler_t __sysv_signal (int __sig, __sighandler_t __handler)
+     ;
+# 88 "/usr/include/signal.h" 3
+
+
+
+
+
+
+extern __sighandler_t signal (int __sig, __sighandler_t __handler) __asm__ ("" "__sysv_signal");
+
+
+
+
+
+
+
+
+# 124 "/usr/include/signal.h" 3
+
+
+extern int raise (int __sig) ;
+
+# 146 "/usr/include/signal.h" 3
+extern int __sigpause (int __sig_or_mask, int __is_sig) ;
+# 373 "/usr/include/signal.h" 3
+extern int __libc_current_sigrtmin (void) ;
+
+extern int __libc_current_sigrtmax (void) ;
+
+
+
+
+# 31 "/usr/include/sys/wait.h" 2 3
+# 1 "/usr/include/sys/resource.h" 1 3
+# 25 "/usr/include/sys/resource.h" 3
+# 1 "/usr/include/bits/resource.h" 1 3
+# 32 "/usr/include/bits/resource.h" 3
+enum __rlimit_resource
+{
+
+  RLIMIT_CPU = 0,
+
+
+
+  RLIMIT_FSIZE = 1,
+
+
+
+  RLIMIT_DATA = 2,
+
+
+
+  RLIMIT_STACK = 3,
+
+
+
+  RLIMIT_CORE = 4,
+
+
+
+
+
+
+  RLIMIT_RSS = 5,
+
+
+
+  RLIMIT_NOFILE = 7,
+  RLIMIT_OFILE = RLIMIT_NOFILE,
+
+
+
+
+  RLIMIT_AS = 9,
+
+
+
+  RLIMIT_NPROC = 6,
+
+
+
+  RLIMIT_MEMLOCK = 8,
+
+
+
+  RLIMIT_LOCKS = 10,
+
+
+  RLIMIT_NLIMITS = 11,
+  RLIM_NLIMITS = RLIMIT_NLIMITS
+
+
+};
+# 107 "/usr/include/bits/resource.h" 3
+typedef __rlim_t rlim_t;
+
+
+
+
+
+
+
+struct rlimit
+  {
+
+    rlim_t rlim_cur;
+
+    rlim_t rlim_max;
+  };
+# 134 "/usr/include/bits/resource.h" 3
+enum __rusage_who
+{
+
+  RUSAGE_SELF = 0,
+
+
+
+  RUSAGE_CHILDREN = -1,
+
+
+
+  RUSAGE_BOTH = -2
+
+};
+
+
+# 1 "/usr/include/bits/time.h" 1 3
+# 69 "/usr/include/bits/time.h" 3
+struct timeval
+  {
+    __time_t tv_sec;
+    __suseconds_t tv_usec;
+  };
+# 151 "/usr/include/bits/resource.h" 2 3
+
+
+struct rusage
+  {
+
+    struct timeval ru_utime;
+
+    struct timeval ru_stime;
+
+    long int ru_maxrss;
+
+
+    long int ru_ixrss;
+
+    long int ru_idrss;
+
+    long int ru_isrss;
+
+
+    long int ru_minflt;
+
+    long int ru_majflt;
+
+    long int ru_nswap;
+
+
+    long int ru_inblock;
+
+    long int ru_oublock;
+
+    long int ru_msgsnd;
+
+    long int ru_msgrcv;
+
+    long int ru_nsignals;
+
+
+
+    long int ru_nvcsw;
+
+
+    long int ru_nivcsw;
+  };
+
+
+
+
+
+
+
+enum __priority_which
+{
+  PRIO_PROCESS = 0,
+
+  PRIO_PGRP = 1,
+
+  PRIO_USER = 2
+
+};
+# 26 "/usr/include/sys/resource.h" 2 3
+
+
+typedef __id_t id_t;
+
+
+
+
+# 43 "/usr/include/sys/resource.h" 3
+typedef int __rlimit_resource_t;
+typedef int __rusage_who_t;
+typedef int __priority_which_t;
+
+
+
+
+
+extern int getrlimit (__rlimit_resource_t __resource,
+                      struct rlimit *__rlimits) ;
+# 71 "/usr/include/sys/resource.h" 3
+extern int setrlimit (__rlimit_resource_t __resource,
+                      __const struct rlimit *__rlimits) ;
+# 89 "/usr/include/sys/resource.h" 3
+extern int getrusage (__rusage_who_t __who, struct rusage *__usage) ;
+
+
+
+
+
+extern int getpriority (__priority_which_t __which, id_t __who) ;
+
+
+
+extern int setpriority (__priority_which_t __which, id_t __who, int __prio)
+     ;
+
+
+# 32 "/usr/include/sys/wait.h" 2 3
+
+
+
+
+
+# 1 "/usr/include/bits/waitflags.h" 1 3
+# 38 "/usr/include/sys/wait.h" 2 3
+# 79 "/usr/include/sys/wait.h" 3
+# 1 "/usr/include/bits/waitstatus.h" 1 3
+# 80 "/usr/include/sys/wait.h" 2 3
+# 109 "/usr/include/sys/wait.h" 3
+extern __pid_t wait (int * __stat_loc) ;
+# 129 "/usr/include/sys/wait.h" 3
+extern __pid_t waitpid (__pid_t __pid, int *__stat_loc, int __options) ;
+# 171 "/usr/include/sys/wait.h" 3
+
+# 83 "hydrogen_matrices_Ndonor.c" 2
+# 1 "/home/bsm/martin/include/bioplib/macros.h" 1
+# 132 "/home/bsm/martin/include/bioplib/macros.h"
+# 1 "/usr/include/ctype.h" 1 3
+# 30 "/usr/include/ctype.h" 3
+
+# 41 "/usr/include/ctype.h" 3
+# 1 "/usr/include/endian.h" 1 3
+# 37 "/usr/include/endian.h" 3
+# 1 "/usr/include/bits/endian.h" 1 3
+# 38 "/usr/include/endian.h" 2 3
+# 42 "/usr/include/ctype.h" 2 3
+
+
+
+
+
+
+enum
+{
+  _ISupper = ((0) < 8 ? ((1 << (0)) << 8) : ((1 << (0)) >> 8)),
+  _ISlower = ((1) < 8 ? ((1 << (1)) << 8) : ((1 << (1)) >> 8)),
+  _ISalpha = ((2) < 8 ? ((1 << (2)) << 8) : ((1 << (2)) >> 8)),
+  _ISdigit = ((3) < 8 ? ((1 << (3)) << 8) : ((1 << (3)) >> 8)),
+  _ISxdigit = ((4) < 8 ? ((1 << (4)) << 8) : ((1 << (4)) >> 8)),
+  _ISspace = ((5) < 8 ? ((1 << (5)) << 8) : ((1 << (5)) >> 8)),
+  _ISprint = ((6) < 8 ? ((1 << (6)) << 8) : ((1 << (6)) >> 8)),
+  _ISgraph = ((7) < 8 ? ((1 << (7)) << 8) : ((1 << (7)) >> 8)),
+  _ISblank = ((8) < 8 ? ((1 << (8)) << 8) : ((1 << (8)) >> 8)),
+  _IScntrl = ((9) < 8 ? ((1 << (9)) << 8) : ((1 << (9)) >> 8)),
+  _ISpunct = ((10) < 8 ? ((1 << (10)) << 8) : ((1 << (10)) >> 8)),
+  _ISalnum = ((11) < 8 ? ((1 << (11)) << 8) : ((1 << (11)) >> 8))
+};
+# 81 "/usr/include/ctype.h" 3
+extern __const unsigned short int **__ctype_b_loc (void)
+     __attribute__ ((__const));
+extern __const __int32_t **__ctype_tolower_loc (void)
+     __attribute__ ((__const));
+extern __const __int32_t **__ctype_toupper_loc (void)
+     __attribute__ ((__const));
+# 96 "/usr/include/ctype.h" 3
+
+
+
+
+
+
+extern int isalnum (int) ;
+extern int isalpha (int) ;
+extern int iscntrl (int) ;
+extern int isdigit (int) ;
+extern int islower (int) ;
+extern int isgraph (int) ;
+extern int isprint (int) ;
+extern int ispunct (int) ;
+extern int isspace (int) ;
+extern int isupper (int) ;
+extern int isxdigit (int) ;
+
+
+
+extern int tolower (int __c) ;
+
+
+extern int toupper (int __c) ;
+
+
+# 323 "/usr/include/ctype.h" 3
+
+# 133 "/home/bsm/martin/include/bioplib/macros.h" 2
+# 444 "/home/bsm/martin/include/bioplib/macros.h"
+      extern int isatty(int);
+# 84 "hydrogen_matrices_Ndonor.c" 2
+# 1 "/home/bsm/martin/include/bioplib/pdb.h" 1
+# 102 "/home/bsm/martin/include/bioplib/pdb.h"
+# 1 "/home/bsm/martin/include/bioplib/MathType.h" 1
+# 61 "/home/bsm/martin/include/bioplib/MathType.h"
+typedef double REAL;
+
+typedef struct
+{ REAL x, y, z;
+} VEC3F;
+
+typedef VEC3F COOR;
+# 103 "/home/bsm/martin/include/bioplib/pdb.h" 2
+# 1 "/home/bsm/martin/include/bioplib/SysDefs.h" 1
+# 52 "/home/bsm/martin/include/bioplib/SysDefs.h"
+typedef void *APTR;
+
+
+
+typedef short BOOL;
+typedef long LONG;
+typedef unsigned long ULONG;
+typedef short SHORT;
+typedef unsigned short USHORT;
+typedef unsigned char UCHAR;
+typedef unsigned char UBYTE;
+# 104 "/home/bsm/martin/include/bioplib/pdb.h" 2
+# 1 "/home/bsm/martin/include/bioplib/general.h" 1
+# 65 "/home/bsm/martin/include/bioplib/general.h"
+typedef struct _stringlist
+{
+   struct _stringlist *next;
+   char *string;
+} STRINGLIST;
+
+void StringToLower(char *string1, char *string2);
+void StringToUpper(char *string1, char *string2);
+char *KillLeadSpaces(char *string);
+void KillLine(FILE *fp);
+void SetExtn(char *File, char *Ext);
+int chindex(char *string, char ch);
+void Word(char *string1, char *string2);
+void WordN(char *string1, char *string2, int MaxChar);
+void padterm(char *string, int length);
+void padchar(char *string, int length, char ch);
+BOOL CheckExtn(char *string, char *ext);
+char *ftostr(char *str, int maxlen, REAL x, int precision);
+
+void GetFilestem(char *filename, char *stem);
+int upstrcmp(char *word1, char *word2);
+int upstrncmp(char *word1, char *word2, int ncomp);
+char *GetWord(char *buffer, char *word, int maxsize);
+BOOL OpenStdFiles(char *infile, char *outfile, FILE **in, FILE **out);
+FILE *OpenFile(char *filename, char *envvar, char *mode, BOOL *noenv);
+int countchar(char *string, char ch);
+char *fgetsany(FILE *fp);
+char *strcatalloc(char *instr, char *catstr);
+
+STRINGLIST *StoreString(STRINGLIST *StringList, char *string);
+BOOL InStringList(STRINGLIST *StringList, char *string);
+void FreeStringList(STRINGLIST *StringList);
+
+char *QueryStrStr(char *string, char *substring);
+
+void IndexReal(REAL *arrin, int *indx, int n);
+
+FILE *OpenOrPipe(char *filename);
+int CloseOrPipe(FILE *fp);
+
+BOOL WrapString(char *in, char *out, int maxlen);
+BOOL WrapPrint(FILE *out, char *string);
+void RightJustify(char *string);
+char *GetWordNC(char *buffer, char *word, int maxlen);
+void getfield(char *buffer, int start, int width, char *str);
+# 105 "/home/bsm/martin/include/bioplib/pdb.h" 2
+
+
+
+
+typedef struct pdb_entry
+{
+   REAL x,y,z,occ,bval;
+   struct pdb_entry *next;
+   int atnum;
+   int resnum;
+   char record_type[8];
+   char atnam[8];
+   char atnam_raw[8];
+   char resnam[8];
+   char insert[8];
+   char chain[8];
+   char altpos;
+} PDB;
+
+
+
+
+typedef struct sec_entry
+{
+   struct sec_entry *next;
+   char chain1[8];
+   char ins1[8];
+   char chain2[8];
+   char ins2[8];
+   int res1;
+   int res2;
+   char type;
+} SECSTRUC;
+
+typedef struct _wholepdb
+{
+   PDB *pdb;
+   STRINGLIST *header;
+   STRINGLIST *trailer;
+   int natoms;
+} WHOLEPDB;
+# 155 "/home/bsm/martin/include/bioplib/pdb.h"
+typedef struct _disulphide
+{
+   struct _disulphide *next;
+   int res1,
+                      res2;
+   char chain1[8],
+                      chain2[8],
+                      insert1[8],
+                      insert2[8];
+} DISULPHIDE;
+
+typedef struct
+{
+   int Total,
+         T1,
+         T2,
+         T3,
+         T4,
+         T5;
+} HADDINFO;
+# 217 "/home/bsm/martin/include/bioplib/pdb.h"
+   extern char gRSCError[80];
+
+
+
+
+
+
+   extern BOOL gPDBPartialOcc;
+   extern BOOL gPDBMultiNMR;
+
+
+
+
+
+PDB *ReadPDB(FILE *fp, int *natom);
+PDB *ReadPDBAll(FILE *fp, int *natom);
+PDB *ReadPDBAtoms(FILE *fp, int *natom);
+PDB *ReadPDBOccRank(FILE *fp, int *natom, int OccRank);
+PDB *ReadPDBAtomsOccRank(FILE *fp, int *natom, int OccRank);
+PDB *doReadPDB(FILE *fp, int *natom, BOOL AllAtoms, int OccRank,
+               int ModelNum);
+void WritePDB(FILE *fp, PDB *pdb);
+void WritePDBRecord(FILE *fp, PDB *pdb);
+void WritePDBRecordAtnam(FILE *fp, PDB *pdb);
+void WriteGromosPDB(FILE *fp, PDB *pdb);
+void WriteGromosPDBRecord(FILE *fp, PDB *pdb);
+void GetCofGPDB(PDB *pdb, VEC3F *cg);
+void GetCofGPDBRange(PDB *start, PDB *stop, VEC3F *cg);
+void GetCofGPDBSCRange(PDB *start, PDB *stop, VEC3F *cg);
+void OriginPDB(PDB *pdb);
+void RotatePDB(PDB *pdb, REAL rm[3][3]);
+void TranslatePDB(PDB *pdb, VEC3F tvect);
+BOOL FitPDB(PDB *ref_pdb, PDB *fit_pdb, REAL rm[3][3]);
+BOOL FitCaPDB(PDB *ref_pdb, PDB *fit_pdb, REAL rm[3][3]);
+BOOL FitNCaCPDB(PDB *ref_pdb, PDB *fit_pdb, REAL rm[3][3]);
+BOOL FitCaCbPDB(PDB *ref_pdb, PDB *fit_pdb, REAL rm[3][3]);
+REAL CalcRMSPDB(PDB *pdb1, PDB *pdb2);
+int GetPDBCoor(PDB *pdb, COOR **coor);
+BOOL FindZonePDB(PDB *pdb, int start, char startinsert, int stop, char stopinsert,
+                 char chain, int mode, PDB **pdb_start, PDB **pdb_stop);
+int HAddPDB(FILE *fp, PDB *pdb);
+int ReadPGP(FILE *fp);
+FILE *OpenPGPFile(char *pgpfile, BOOL AllHyd);
+PDB *SelectAtomsPDB(PDB *pdbin, int nsel, char **sel, int *natom);
+PDB *StripHPDB(PDB *pdbin, int *natom);
+SECSTRUC *ReadSecPDB(FILE *fp, int *nsec);
+void RenumAtomsPDB(PDB *pdb);
+BOOL UnPackPDB(FILE *in, FILE *out);
+PDB *ReadPackedPDB(FILE *in, int *natom);
+BOOL PackPDB(FILE *in, FILE *out);
+void WritePackedResidue(FILE *out, PDB *start, PDB *end);
+PDB *FindEndPDB(PDB *start);
+PDB *FixOrderPDB(PDB *pdb, BOOL Pad, BOOL Renum);
+PDB *ShuffleResPDB(PDB *start, PDB *end, BOOL Pad);
+BOOL GetAtomTypes(char *resnam, char **AtomTypes);
+PDB *KillPDB(PDB *pdb, PDB *prev);
+void CopyPDB(PDB *out, PDB *in);
+BOOL MovePDB(PDB *move, PDB **from, PDB **to);
+PDB *AppendPDB(PDB *first, PDB *second);
+PDB *ShuffleBB(PDB *pdb);
+REAL CalcChi(PDB *pdb, int type);
+PDB *GetPDBByN(PDB *pdb, int n);
+void SetChi(PDB *pdb, PDB *next, REAL chi, int type);
+BOOL KillSidechain(PDB *ResStart, PDB *NextRes, BOOL doCB);
+void SetResnam(PDB *ResStart, PDB *NextRes, char *resnam, int resnum,
+               char *insert, char *chain);
+void ApplyMatrixPDB(PDB *pdb, REAL matrix[3][3]);
+BOOL GetResolPDB(FILE *fp, REAL *resolution, REAL *RFactor,
+                 int *StrucType);
+BOOL GetExptl(FILE *fp, REAL *resolution, REAL *RFactor, REAL *FreeR,
+              int *StrucType);
+PDB **IndexPDB(PDB *pdb, int *natom);
+DISULPHIDE *ReadDisulphidesPDB(FILE *fp, BOOL *error);
+BOOL ParseResSpec(char *spec, char *chain, int *resnum, char *insert);
+BOOL ParseResSpecNoUpper(char *spec, char *chain, int *resnum, char *insert);
+BOOL DoParseResSpec(char *spec, char *chain, int *resnum, char *insert,
+                    BOOL uppercaseresspec);
+BOOL RepSChain(PDB *pdb, char *sequence, char *ChiTable, char *RefCoords);
+PDB *FindNextChainPDB(PDB *pdb);
+BOOL FixCterPDB(PDB *pdb, int style);
+BOOL CalcCterCoords(PDB *p, PDB *ca_p, PDB *c_p, PDB *o_p);
+int CalcTetraHCoords(PDB *nter, COOR *coor);
+int AddNTerHs(PDB **ppdb, BOOL Charmm);
+char *FNam2PDB(char *filename);
+PDB *TermPDB(PDB *pdb, int length);
+char *GetPDBChainLabels(PDB *pdb);
+PDB *FindResidueSpec(PDB *pdb, char *resspec);
+PDB *FindNextResidue(PDB *pdb);
+PDB *DupePDB(PDB *in);
+BOOL CopyPDBCoords(PDB *out, PDB *in);
+void CalcCellTrans(VEC3F UnitCell, VEC3F CellAngles,
+                   VEC3F *xtrans, VEC3F *ytrans, VEC3F *ztrans);
+int GetCrystPDB(FILE *fp, VEC3F *UnitCell, VEC3F *CellAngles,
+                char *spacegroup,
+                REAL OrigMatrix[3][4], REAL ScaleMatrix[3][4]);
+void WriteCrystPDB(FILE *fp, VEC3F UnitCell, VEC3F CellAngles,
+                   char *spacegroup,
+                   REAL OrigMatrix[3][4], REAL ScaleMatrix[3][4]);
+PDB *ExtractZonePDB(PDB *inpdb, char *chain1, int resnum1, char *insert1,
+                    char *chain2, int resnum2, char *insert2);
+PDB *FindResidue(PDB *pdb, char chain, int resnum, char insert);
+PDB *FindAtomInRes(PDB *pdb, char *atnam);
+BOOL InPDBZone(PDB *p, char chain, int resnum1, char insert1,
+               int resnum2, char insert2);
+BOOL InPDBZoneSpec(PDB *p, char *resspec1, char *resspec2);
+BOOL AtomNameMatch(char *atnam, char *spec, BOOL *ErrorWarn);
+BOOL AtomNameRawMatch(char *atnam, char *spec, BOOL *ErrorWarn);
+BOOL LegalAtomSpec(char *spec);
+BOOL RepOneSChain(PDB *pdb, char *ResSpec, char aa, char *ChiTable,
+                  char *RefCoords);
+void EndRepSChain(void);
+char **ReadSeqresPDB(FILE *fp, int *nchains);
+PDB *SelectCaPDB(PDB *pdb);
+char *FixAtomName(char *name, REAL occup);
+
+void FreeWholePDB(WHOLEPDB *wpdb);
+void WriteWholePDB(FILE *fp, WHOLEPDB *wpdb);
+void WriteWholePDBHeader(FILE *fp, WHOLEPDB *wpdb);
+void WriteWholePDBTrailer(FILE *fp, WHOLEPDB *wpdb);
+WHOLEPDB *ReadWholePDB(FILE *fpin);
+
+BOOL AddCBtoGly(PDB *pdb);
+BOOL AddCBtoAllGly(PDB *pdb);
+PDB *StripGlyCB(PDB *pdb);
+# 85 "hydrogen_matrices_Ndonor.c" 2
+# 1 "/usr/include/math.h" 1 3
+# 29 "/usr/include/math.h" 3
+
+
+
+
+# 1 "/usr/include/bits/huge_val.h" 1 3
+# 34 "/usr/include/math.h" 2 3
+
+
+
+
+
+
+# 1 "/usr/include/bits/mathdef.h" 1 3
+# 41 "/usr/include/math.h" 2 3
+# 65 "/usr/include/math.h" 3
+# 1 "/usr/include/bits/mathcalls.h" 1 3
+# 53 "/usr/include/bits/mathcalls.h" 3
+
+
+extern double acos (double __x) ; extern double __acos (double __x) ;
+
+extern double asin (double __x) ; extern double __asin (double __x) ;
+
+extern double atan (double __x) ; extern double __atan (double __x) ;
+
+extern double atan2 (double __y, double __x) ; extern double __atan2 (double __y, double __x) ;
+
+
+extern double cos (double __x) ; extern double __cos (double __x) ;
+
+extern double sin (double __x) ; extern double __sin (double __x) ;
+
+extern double tan (double __x) ; extern double __tan (double __x) ;
+
+
+
+
+extern double cosh (double __x) ; extern double __cosh (double __x) ;
+
+extern double sinh (double __x) ; extern double __sinh (double __x) ;
+
+extern double tanh (double __x) ; extern double __tanh (double __x) ;
+
+# 99 "/usr/include/bits/mathcalls.h" 3
+
+
+extern double exp (double __x) ; extern double __exp (double __x) ;
+
+
+extern double frexp (double __x, int *__exponent) ; extern double __frexp (double __x, int *__exponent) ;
+
+
+extern double ldexp (double __x, int __exponent) ; extern double __ldexp (double __x, int __exponent) ;
+
+
+extern double log (double __x) ; extern double __log (double __x) ;
+
+
+extern double log10 (double __x) ; extern double __log10 (double __x) ;
+
+
+extern double modf (double __x, double *__iptr) ; extern double __modf (double __x, double *__iptr) ;
+
+# 152 "/usr/include/bits/mathcalls.h" 3
+
+
+extern double pow (double __x, double __y) ; extern double __pow (double __x, double __y) ;
+
+
+extern double sqrt (double __x) ; extern double __sqrt (double __x) ;
+
+# 177 "/usr/include/bits/mathcalls.h" 3
+
+
+extern double ceil (double __x) __attribute__ ((__const__)); extern double __ceil (double __x) __attribute__ ((__const__));
+
+
+extern double fabs (double __x) __attribute__ ((__const__)); extern double __fabs (double __x) __attribute__ ((__const__));
+
+
+extern double floor (double __x) __attribute__ ((__const__)); extern double __floor (double __x) __attribute__ ((__const__));
+
+
+extern double fmod (double __x, double __y) ; extern double __fmod (double __x, double __y) ;
+
+
+
+
+extern int __isinf (double __value) __attribute__ ((__const__));
+
+
+extern int __finite (double __value) __attribute__ ((__const__));
+
+# 231 "/usr/include/bits/mathcalls.h" 3
+extern int __isnan (double __value) __attribute__ ((__const__));
+# 66 "/usr/include/math.h" 2 3
+# 423 "/usr/include/math.h" 3
+
+# 86 "hydrogen_matrices_Ndonor.c" 2
+
+
+# 1 "/home/bsm/martin/include/bioplib/matrix.h" 1
+# 66 "/home/bsm/martin/include/bioplib/matrix.h"
+void MatMult3_33(VEC3F vecin, REAL matin[3][3], VEC3F *vecout);
+void MatMult33_33(REAL a[3][3], REAL b[3][3], REAL out[3][3]);
+void invert33(REAL s[3][3], REAL ss[3][3]);
+void CreateRotMat(char direction, REAL angle, REAL matrix[3][3]);
+REAL VecDist(REAL *a, REAL *b, int len);
+# 89 "hydrogen_matrices_Ndonor.c" 2
+# 1 "/home/bsm/martin/include/bioplib/hbond.h" 1
+# 69 "/home/bsm/martin/include/bioplib/hbond.h"
+int IsHBonded(PDB *res1, PDB *res2, int type);
+BOOL ValidHBond(PDB *AtomH, PDB *AtomD, PDB *AtomA, PDB *AtomP);
+int IsMCDonorHBonded(PDB *res1, PDB *res2, int type);
+int IsMCAcceptorHBonded(PDB *res1, PDB *res2, int type);
+# 90 "hydrogen_matrices_Ndonor.c" 2
+# 1 "orientate.h" 1
+
+
+
+BOOL OrientatePDB(PDB *pdb, PDB *res1_start, PDB *res1_next);
+BOOL OrientateN_PDB(PDB *pdb, PDB *prev, PDB *start, PDB *next);
+BOOL OrientateCO_PDB(PDB *pdb, PDB *start, PDB *next);
+void RotateToXZ(PDB *pdb, VEC3F *n);
+void RotateToX(PDB *pdb, VEC3F *n);
+void RotateToXY(PDB *pdb, VEC3F *c_beta);
+REAL TrueAngle(REAL opp, REAL adj);
+BOOL FindNCACAtoms(PDB *res1_start, PDB *stop, VEC3F *c_alpha, VEC3F *c_beta, VEC3F *n);
+BOOL FindCACOAtoms(PDB *res1_start, PDB *stop, VEC3F *c_alpha, VEC3F *c_beta, VEC3F *n);
+BOOL FindCNCAAtoms(PDB *res0_start, PDB *res1_start, PDB *stop, VEC3F *c, VEC3F *n, VEC3F *c_alpha);
+# 91 "hydrogen_matrices_Ndonor.c" 2
+# 1 "hbondmat2.h" 1
+# 92 "hydrogen_matrices_Ndonor.c" 2
+# 1 "cavallo_userfunc.h" 1
+
+
+
+
+# 1 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stdarg.h" 1 3
+# 110 "/usr/lib/gcc-lib/i386-redhat-linux/3.2.2/include/stdarg.h" 3
+typedef __gnuc_va_list va_list;
+# 6 "cavallo_userfunc.h" 2
+
+char * stemp (void) ;
+char * tmpdir(void);
+FILE * sfopen(char * filename, char *mode) ;
+char * multiappend(char *fmt , ... ) ;
+
+char * giveMeStructureLocation(char * name) ;
+void doIt (char * command, char *fileoutput) ;
+# 93 "hydrogen_matrices_Ndonor.c" 2
+
+
+
+
+
+
+struct hbond_data
+{
+   char *residue;
+   char *hatom;
+   BOOL select;
+   BOOL accept;
+   BOOL donate;
+   char *s_donh1;
+   char *s_donh2;
+   char *s_donh3;
+   char *s_ante;
+   struct hbond_data *next;
+
+};
+
+typedef struct hbond_data HBOND;
+
+struct pdb_names
+{
+   char filename[8];
+   struct pdb_names *next;
+};
+
+typedef struct pdb_names NAMES;
+
+
+
+
+
+static int gAccept[(2*15*2)][(2*15*2)][(2*15*2)];
+static int gDonate[(2*15*2)][(2*15*2)][(2*15*2)];
+
+
+static int gPartnertoAccept[(2*15*2)][(2*15*2)][(2*15*2)];
+
+static int gPartnertoDonate[(2*15*2)][(2*15*2)][(2*15*2)];
+
+
+
+
+int main (int argc, char *argv[]);
+HBOND *InitializeHbondTypes(void);
+BOOL ParseCmdLine(int argc, char **argv, char *inputfile, char *outputfile);
+void Usage(void);
+NAMES *InitializeDomainList(FILE *fp);
+char *FindStructureLocation(NAMES *names, BOOL *tempflag);
+BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out);
+BOOL isDonor(PDB *d, HBOND *hb, char *h_name1, char *h_name2, char *h_name3);
+BOOL isAcceptor(PDB *a, HBOND *hb, char *p_name);
+PDB *FindAtomInRange(PDB *start, PDB *stop, char *name);
+void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb);
+void FindMCDonorHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb);
+void ClearArrays(void);
+void StoreHBondingPosition(PDB *start, PDB *next, HBOND *hb);
+void StoreHBondingNPosition(PDB *start, PDB *stop, HBOND *hb);
+void PrintMatrix(HBOND *h, FILE *out);
+void StorePartnertoDonatePosition(PDB *a);
+void StorePartnertoAcceptPosition(PDB *d);
+
+
+int main (int argc, char *argv[])
+{
+   FILE *in = stdin, *out = stdout;
+   HBOND *hb;
+   char inputfile[160], outputfile[160];
+   NAMES *names;
+
+   inputfile[0] = outputfile[0] = '\0';
+
+   if(ParseCmdLine(argc, argv, inputfile, outputfile))
+   {
+      if(OpenStdFiles(inputfile, outputfile, &in, &out))
+      {
+         if((hb = InitializeHbondTypes()) !=((void *)0))
+         {
+            if((names = InitializeDomainList(in)) !=((void *)0))
+            {
+               if(!CalcAndStoreHBondData(hb, names, out))
+               {
+                  return(1);
+               }
+            }
+            else
+            {
+               printf("ERROR: Can't read protein domains linked list\n");
+               printf("       (perhaps no high resolution structures?)\n");
+               return(1);
+            }
+         }
+         else
+         {
+            printf("ERROR: Internal error in building hydrogen atoms linked list\n");
+            return(1);
+         }
+      }
+      else
+      {
+         printf("ERROR: Unable to open specified input or output files\n");
+         return(1);
+      }
+   }
+   else
+   {
+      Usage();
+   }
+
+   return(0);
+}
+
+
+
+BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
+{
+   NAMES *n;
+   HBOND *h;
+   int natoms, natoms2, nHatoms;
+   PDB *pdb, *pdb2, *start, *next, *nextres, *stop, *prev = ((void *)0);
+   FILE *fp1,*fp2;
+   char *location;
+   BOOL noenv, tempflag;
+
+   if((fp1 = OpenFile("Explicit.pgp", "DATADIR", "r", &noenv)) == ((void *)0))
+   {
+      fprintf(stderr, "ERROR: Can't open pgp file\n");
+      if(noenv)
+      {
+         fprintf(stderr, "       DATADIR environment variable not set\n");
+      }
+
+      return(0);
+   }
+
+   for(h = hb; h!=((void *)0); (h)=(h)->next)
+   {
+      if(h->select)
+      {
+         fprintf(stderr,"INFO: Processing residue type %s\n",h->residue);
+
+         ClearArrays();
+
+         for(n=names; n !=((void *)0); (n)=(n)->next)
+         {
+            if((location = FindStructureLocation(n, &tempflag)) == ((void *)0))
+            {
+
+
+
+
+               fprintf(stderr,"         File not processed for: %s\n", n->filename);
+            }
+            else
+            {
+
+               fprintf(stderr,"INFO: Processing file %s\n", location);
+
+
+               if((fp2 = fopen(location, "r")) !=((void *)0))
+               {
+
+                  if((pdb = ReadPDB(fp2, &natoms)) !=((void *)0))
+                  {
+
+                     if((pdb2 = StripHPDB(pdb, &natoms2)) !=((void *)0))
+                     {
+                        while((pdb)!=((void *)0)) { PDB *_freelist_macro_q; _freelist_macro_q = (pdb)->next; free((char *)(pdb)); (pdb) = _freelist_macro_q; };
+                        pdb = pdb2;
+                        prev=((void *)0);
+
+                        if((nHatoms = HAddPDB(fp1, pdb)) !=0)
+                        {
+                           for(start=pdb; start!=((void *)0); prev=start, start=next)
+                           {
+                              next = FindNextResidue(start);
+
+
+
+
+
+
+                              if(!strncmp(start->record_type, "ATOM  ", 6) &&
+                                 !strncmp(start->resnam, h->residue, 3) &&
+                                 strncmp(start->resnam, "PRO", 3) &&
+                                 (prev != ((void *)0)))
+                              {
+# 291 "hydrogen_matrices_Ndonor.c"
+                                 if((OrientateN_PDB(pdb, prev, start, next) != 0))
+                                 {
+                                    StoreHBondingNPosition(start, next, hb);
+
+                                    for(nextres=pdb; nextres!=((void *)0); nextres=stop)
+                                    {
+                                       stop = FindNextResidue(nextres);
+
+                                       if((nextres !=start))
+                                       {
+
+
+
+
+
+                                          if((IsMCDonorHBonded(start,nextres,0x08))
+                                             !=0)
+                                          {
+                                             FindMCDonorHAtoms(start, next, nextres,
+                                                               stop, hb);
+                                          }
+                                       }
+                                    }
+                                 }
+                                 else
+                                 {
+                                    printf("WARNING: backbone atoms can't be found for %c%d%c (PDB file: %s)\n",
+
+                                           start->chain[0], start->resnum, start->insert[0],
+                                           location);
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+                  else
+                  {
+                     printf("WARNING: Can't read atom list from PDB file %s\n",
+                            location);
+                  }
+                  if(pdb != ((void *)0)) while((pdb)!=((void *)0)) { PDB *_freelist_macro_q; _freelist_macro_q = (pdb)->next; free((char *)(pdb)); (pdb) = _freelist_macro_q; };
+               }
+            }
+            if(fp2 !=((void *)0)) fclose(fp2);
+# 344 "hydrogen_matrices_Ndonor.c"
+            if(tempflag)
+            {
+               if(remove(location))
+               {
+                  fprintf(stderr, "WARNING: Unable to remove temporary protein domain file %s\n", location);
+
+               }
+            }
+            free(location);
+         }
+         PrintMatrix(h, out);
+      }
+   }
+
+   fclose(fp1);
+   return(1);
+}
+
+
+void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
+{
+   PDB *d, *a, *h1, *h2, *h3, *p;
+
+   char h_name1[6], h_name2[6], h_name3[6], p_name[6];
+
+   for(d=resA; d!=stopA; (d)=(d)->next)
+   {
+
+      if(isDonor(d, hb, h_name1, h_name2, h_name3))
+      {
+         for(a=resB; a!=stopB; (a)=(a)->next)
+         {
+
+            if(isAcceptor(a, hb, p_name))
+            {
+               h1 = FindAtomInRange(resA, stopA, h_name1);
+               h2 = FindAtomInRange(resA, stopA, h_name2);
+               h3 = FindAtomInRange(resA, stopA, h_name3);
+
+               p = FindAtomInRange(resB, stopB, p_name);
+
+
+               if(ValidHBond(h1, d, a, p))
+               {
+
+
+                  fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n",
+                          d->resnam, d->resnum, d->atnam,
+                          a->resnam, a->resnum, a->atnam,
+                          ((h1==((void *)0)?"???":h1->atnam)), p->atnam);
+
+                  StorePartnertoDonatePosition(a);
+               }
+               else if(h2!=((void *)0))
+               {
+                  if(ValidHBond(h2, d, a, p))
+                  {
+
+                     fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n",
+                            d->resnam, d->resnum, d->atnam,
+                            a->resnam, a->resnum, a->atnam,
+                            h2->atnam, p->atnam);
+
+                     StorePartnertoDonatePosition(a);
+                  }
+               }
+               else if(h3!=((void *)0))
+               {
+                  if(ValidHBond(h3, d, a, p))
+                  {
+
+                     fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n",
+                            d->resnam, d->resnum, d->atnam,
+                            a->resnam, a->resnum, a->atnam,
+                            h3->atnam, p->atnam);
+
+                     StorePartnertoDonatePosition(a);
+                  }
+               }
+            }
+         }
+      }
+   }
+
+
+   for(a=resA; a!=stopA; (a)=(a)->next)
+   {
+      if(isAcceptor(a, hb, p_name))
+      {
+
+
+         for(d=resB; d!=stopB; (d)=(d)->next)
+         {
+            if(isDonor(d, hb, h_name1, h_name2, h_name3))
+            {
+               h1 = FindAtomInRange(resB, stopB, h_name1);
+               h2 = FindAtomInRange(resB, stopB, h_name2);
+               h3 = FindAtomInRange(resB, stopB, h_name3);
+
+               p = FindAtomInRange(resA, stopA, p_name);
+
+
+
+               if(ValidHBond(h1, d, a, p))
+               {
+
+
+                  fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n",
+                          d->resnam, d->resnum, d->atnam,
+                          a->resnam, a->resnum, a->atnam,
+                          ((h1==((void *)0)?"???":h1->atnam)), p->atnam);
+
+                  StorePartnertoAcceptPosition(d);
+               }
+               else if(h2!=((void *)0))
+               {
+                  if(ValidHBond(h2, d, a, p))
+                  {
+
+                     fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n",
+                             d->resnam, d->resnum, d->atnam,
+                             a->resnam, a->resnum, a->atnam,
+                             h2->atnam, p->atnam);
+
+                     StorePartnertoAcceptPosition(d);
+                  }
+               }
+               else if(h3!=((void *)0))
+               {
+                  if(ValidHBond(h3, d, a, p))
+                  {
+
+                     fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n",
+                            d->resnam, d->resnum, d->atnam,
+                            a->resnam, a->resnum, a->atnam,
+                            h3->atnam, p->atnam);
+
+                     StorePartnertoAcceptPosition(d);
+                  }
+               }
+            }
+         }
+      }
+   }
+}
+
+
+BOOL isDonor(PDB *d, HBOND *hb, char *h_name1, char *h_name2, char *h_name3)
+{
+   HBOND *h;
+
+   for(h=hb; h!=((void *)0); (h)=(h)->next)
+   {
+      if(h->donate && !strncmp(h->residue, d->resnam, 3) &&
+         !strncmp(h->hatom, d->atnam, 3))
+      {
+         if(h->s_donh1 !=((void *)0))
+            strcpy(h_name1, h->s_donh1);
+         else
+            h_name1[0] = '\0';
+         if(h->s_donh2 !=((void *)0))
+            strcpy(h_name2, h->s_donh2);
+         else
+            h_name2[0] = '\0';
+         if(h->s_donh3 !=((void *)0))
+            strcpy(h_name3, h->s_donh3);
+         else
+            h_name3[0] = '\0';
+
+         return(1);
+      }
+   }
+   h_name1[0] = '\0';
+   return(0);
+}
+
+
+BOOL isAcceptor(PDB *a, HBOND *hb, char *p_name)
+{
+   HBOND *h;
+
+   for(h=hb; h!=((void *)0); (h)=(h)->next)
+   {
+      if(h->accept && !strncmp(h->residue, a->resnam, 3) &&
+         !strncmp(h->hatom, a->atnam, 3))
+      {
+         if(h->s_ante !=((void *)0))
+            strcpy(p_name, h->s_ante);
+         else
+            p_name[0] = '\0';
+
+         return(1);
+      }
+   }
+   p_name[0] = '\0';
+   return(0);
+}
+
+
+PDB *FindAtomInRange(PDB *start, PDB *stop, char *name)
+{
+   PDB *p;
+
+   if(!name[0])
+      return(((void *)0));
+
+   for(p=start; p!=stop; (p)=(p)->next)
+   {
+      if(!strncmp(p->atnam, name, 4))
+      {
+         return(p);
+      }
+   }
+   return(((void *)0));
+}
+
+
+void StoreHBondingPosition(PDB *start, PDB *stop, HBOND *hb)
+{
+   PDB *p;
+
+   HBOND *h;
+
+   for(h=hb; h!=((void *)0); (h)=(h)->next)
+   {
+      if(!strncmp(start->resnam, h->residue, 3))
+      {
+         for(p = start; p!=stop; (p)=(p)->next)
+         {
+
+
+
+            if(!strncmp(p->atnam, h->hatom, 3))
+            {
+
+               if(h->donate)
+               {
+
+                  gDonate[(int)(p->x/((REAL)1/2)) + ((2*15*2)/2)]
+                     [(int)(p->y/((REAL)1/2)) + ((2*15*2)/2)]
+                     [(int)(p->z/((REAL)1/2)) + ((2*15*2)/2)]++;
+               }
+
+
+               if(h->accept)
+               {
+
+                  gAccept[(int)(p->x/((REAL)1/2)) + ((2*15*2)/2)]
+                     [(int)(p->y/((REAL)1/2)) + ((2*15*2)/2)]
+                     [(int)(p->z/((REAL)1/2)) + ((2*15*2)/2)]++;
+               }
+               break;
+            }
+         }
+      }
+   }
+
+
+
+
+
+}
+
+
+void StoreHBondingNPosition(PDB *start, PDB *stop, HBOND *hb)
+{
+   PDB *p;
+
+   HBOND *h;
+
+
+   if(strncmp(start->resnam, "PRO", 3))
+   {
+      for(p = start; p!=stop; (p)=(p)->next)
+      {
+
+         if(!strncmp(p->atnam, "N  ", 3))
+         {
+
+            gDonate[(int)(p->x/((REAL)1/2)) + ((2*15*2)/2)]
+                   [(int)(p->y/((REAL)1/2)) + ((2*15*2)/2)]
+                   [(int)(p->z/((REAL)1/2)) + ((2*15*2)/2)]++;
+         }
+      }
+   }
+}
+
+
+void StorePartnertoAcceptPosition(PDB *d)
+{
+   gPartnertoAccept[(int)(d->x/((REAL)1/2)) + ((2*15*2)/2)]
+      [(int)(d->y/((REAL)1/2)) + ((2*15*2)/2)]
+      [(int)(d->z/((REAL)1/2)) + ((2*15*2)/2)]++;
+}
+
+
+void StorePartnertoDonatePosition(PDB *a)
+{
+   gPartnertoDonate[(int)(a->x/((REAL)1/2)) + ((2*15*2)/2)]
+      [(int)(a->y/((REAL)1/2)) + ((2*15*2)/2)]
+      [(int)(a->z/((REAL)1/2)) + ((2*15*2)/2)]++;
+}
+
+
+void PrintMatrix(HBOND *h, FILE *out)
+{
+   int x, y, z;
+
+   if(h->select)
+   {
+      fprintf(out, "residue %s\n", h->residue);
+   }
+
+   for(x = 0; x < (2*15*2); x++)
+   {
+      for(y = 0; y < (2*15*2); y++)
+      {
+         for(z = 0; z < (2*15*2); z++)
+         {
+            if(gDonate[x][y][z] > 0)
+            {
+               fprintf(out, "donate\t%8d\t%8d\t%8d\t%6d\n", x, y, z,
+                       gDonate[x][y][z]);
+# 676 "hydrogen_matrices_Ndonor.c"
+            }
+         }
+      }
+   }
+
+
+
+   for(x = 0; x < (2*15*2); x++)
+   {
+      for(y = 0; y < (2*15*2); y++)
+      {
+         for(z = 0; z < (2*15*2); z++)
+         {
+            if(gPartnertoDonate[x][y][z] > 0)
+            {
+               fprintf(out, "partnertodonate\t%8d\t%8d\t%8d\t%6d\n",
+                       x, y, z, gPartnertoDonate[x][y][z]);
+# 702 "hydrogen_matrices_Ndonor.c"
+            }
+         }
+      }
+   }
+
+   for(x = 0; x < (2*15*2); x++)
+   {
+      for(y = 0; y < (2*15*2); y++)
+      {
+         for(z = 0; z < (2*15*2); z++)
+         {
+            if(gAccept[x][y][z] > 0)
+            {
+               fprintf(out, "accept\t%8d\t%8d\t%8d\t%6d\n",
+                       x, y, z, gAccept[x][y][z]);
+# 725 "hydrogen_matrices_Ndonor.c"
+            }
+         }
+      }
+   }
+
+
+
+
+   for(x = 0; x < (2*15*2); x++)
+   {
+      for(y = 0; y < (2*15*2); y++)
+      {
+         for(z = 0; z < (2*15*2); z++)
+         {
+            if(gPartnertoAccept[x][y][z] > 0)
+            {
+              fprintf(out, "partnertoaccept\t%8d\t%8d\t%8d\t%6d\n",
+                      x, y, z, gPartnertoAccept[x][y][z]);
+
+
+
+
+
+
+
+            }
+         }
+      }
+   }
+}
+
+
+void ClearArrays()
+{
+   int i, j, k;
+
+   for(i = 0; i < (2*15*2); i++)
+   {
+      for(j = 0; j < (2*15*2); j++)
+      {
+         for(k = 0; k < (2*15*2); k++)
+         {
+            gDonate[i][j][k] = 0;
+            gAccept[i][j][k] = 0;
+            gPartnertoDonate[i][j][k] = 0;
+            gPartnertoAccept[i][j][k] = 0;
+         }
+      }
+   }
+}
+
+
+
+NAMES *InitializeDomainList(FILE *fp)
+{
+   NAMES *names = ((void *)0);
+
+   NAMES *n;
+   FILE *fn = fp;
+   char *p;
+   char buffer[300];
+   char resol[6];
+   float resolution;
+
+   while(fgets(buffer, 300, fn))
+   {
+      if(buffer[0] == '#')
+         continue;
+
+      do { int _terminate_macro_j; for(_terminate_macro_j=0; (buffer)[_terminate_macro_j]; _terminate_macro_j++) { if((buffer)[_terminate_macro_j] == '\n') { (buffer)[_terminate_macro_j] = '\0'; break; } } } while(0);
+# 803 "hydrogen_matrices_Ndonor.c"
+      sscanf(buffer, "%*s %*s %*s %*s %*s %*s %*s %*s %*s %f", &resolution);
+
+      if(resolution <= 2.5)
+      {
+         if((p = strchr(buffer, ' '))!=((void *)0))
+            *p='\0';
+
+         if(names == ((void *)0))
+         {
+            do { names=(NAMES *)malloc(sizeof(NAMES)); if(names != ((void *)0)) names->next = ((void *)0); } while(0);
+            n = names;
+         }
+         else
+         {
+            do { (n)->next=(NAMES *)malloc(sizeof(NAMES)); if((n)->next != ((void *)0)) { (n)->next->next=((void *)0); } (n)=(n)->next; } while(0);
+         }
+         if(n==((void *)0))
+         {
+            return(((void *)0));
+         }
+         strncpy(n->filename, buffer, 7);
+      }
+      else
+      {
+         buffer[7] = '\0';
+         fprintf(stderr,"INFO: %s Discarded as resolution is %.2f\n",
+                 buffer, resolution);
+      }
+   }
+
+   return(names);
+}
+
+
+char *FindStructureLocation (NAMES *names, BOOL *tempflag)
+{
+   char *filename=(char *)malloc((size_t)(sizeof(char)*(6+1)));
+   char *result,*tbuffer,*tbuffer1,chainlabel;
+   *tempflag = 0;
+
+   if(!filename)
+   {
+      fprintf(stderr, "WARNING: Unable to allocate memory for name of structure file\n");
+
+      return(((void *)0));
+
+   }
+
+   if(strlen(names->filename) !=6)
+   {
+      fprintf(stderr,"WARNING: Name from CATH file does not contain 6 char: %s\n",
+              names->filename);
+      return(((void *)0));
+   }
+
+   filename=strcpy(filename,names->filename);
+   if(filename[5]!='0')
+   {
+
+      result=multiappend("%s%s","/acrm/data/dompdb/",filename);
+      free(filename);
+      return(result);
+   }
+   else
+   {
+      if(filename[4]!='0')
+      {
+
+         chainlabel=filename[4];
+         filename[4]='\0';
+         tbuffer=multiappend("getchain %c %s%s%s",
+                             chainlabel,"/data/pdb/pdb",filename,".ent");
+         tbuffer1=multiappend("%s/%s",
+                              tmpdir(),filename);
+         doIt(tbuffer,tbuffer1);
+         free(tbuffer);
+         free(filename);
+         *tempflag = 1;
+         return(tbuffer1);
+      }
+      else
+      {
+
+         filename[4]='\0';
+         result=multiappend("%s%s%s","/data/pdb/pdb",filename,".ent");
+         free(filename);
+         return(result);
+      }
+   }
+
+   fprintf(stderr,"WARNING: Internal error in finding file\n");
+   return(((void *)0));
+}
+
+
+
+
+
+HBOND *InitializeHbondTypes()
+{
+# 917 "hydrogen_matrices_Ndonor.c"
+   static HBOND h1 = {"ARG", "NE  ", 1, 0, 1, "HE  ", ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+   static HBOND h2 = {"ARG", "NH1 ", 0, 0, 1, ((void *)0), ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+   static HBOND h3 = {"ARG", "NH2 ", 0, 0, 1, ((void *)0), ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+   static HBOND h4 = {"THR", "OG1 ", 1, 1, 1, ((void *)0), ((void *)0), ((void *)0), "CB  ",((void *)0)};
+   static HBOND h5 = {"ASN", "ND2 ", 1, 0, 1, ((void *)0), ((void *)0), ((void *)0), "CG  ",((void *)0)};
+   static HBOND h6 = {"ASN", "OD1 ", 0, 1, 0, ((void *)0), ((void *)0), ((void *)0), "CG  ",((void *)0)};
+   static HBOND h7 = {"ASP", "OD1 ", 1, 1, 0, ((void *)0), ((void *)0), ((void *)0), "CG  ",((void *)0)};
+   static HBOND h8 = {"ASP", "OD2 ", 0, 1, 0, ((void *)0), ((void *)0), ((void *)0), "CG  ",((void *)0)};
+   static HBOND h9 = {"GLU", "OE1 ", 1, 1, 0, ((void *)0), ((void *)0), ((void *)0), "CD  ",((void *)0)};
+   static HBOND h10 = {"GLU", "OE2 ", 0, 1, 0, ((void *)0), ((void *)0), ((void *)0), "CD  ",((void *)0)};
+   static HBOND h11 = {"GLN", "NE2 ", 1, 0, 1, ((void *)0), ((void *)0), ((void *)0), "CD  ",((void *)0)};
+   static HBOND h12 = {"GLN", "OE1 ", 0, 1, 0, ((void *)0), ((void *)0), ((void *)0), "CD  ",((void *)0)};
+   static HBOND h13 = {"LYS", "NZ  ", 1, 0, 1, ((void *)0), ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+   static HBOND h14 = {"SER", "OG  ", 1, 1, 1, ((void *)0), ((void *)0), ((void *)0), "CB  ",((void *)0)};
+   static HBOND h15 = {"TRP", "NE1 ", 1, 0, 1, "HE1 ", ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+   static HBOND h16 = {"TYR", "OH  ", 1, 1, 1, ((void *)0), ((void *)0), ((void *)0), "CZ  ",((void *)0)};
+   static HBOND h17 = {"HIS", "ND1 ", 1, 1, 1, "HD1 ", ((void *)0), ((void *)0), "CG  ",((void *)0)};
+   static HBOND h18 = {"HIS", "NE1 ", 1, 1, 1, "HE1 ", ((void *)0), ((void *)0), "CD2 ",((void *)0)};
+
+   static HBOND h19 = {"ALA", "    ", 1, 0, 0, ((void *)0), ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+   static HBOND h20 = {"CYS", "    ", 1, 0, 0, ((void *)0), ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+   static HBOND h21 = {"PHE", "    ", 1, 0, 0, ((void *)0), ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+   static HBOND h22 = {"GLY", "    ", 1, 0, 0, ((void *)0), ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+   static HBOND h23 = {"ILE", "    ", 1, 0, 0, ((void *)0), ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+   static HBOND h24 = {"LEU", "    ", 1, 0, 0, ((void *)0), ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+   static HBOND h25 = {"MET", "    ", 1, 0, 0, ((void *)0), ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+   static HBOND h26 = {"VAL", "    ", 1, 0, 0, ((void *)0), ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+   static HBOND h27 = {"PRO", "    ", 1, 0, 0, ((void *)0), ((void *)0), ((void *)0), ((void *)0), ((void *)0)};
+
+
+   HBOND *first;
+
+   first = &h1;
+   h1.next = &h2;
+   h2.next = &h3;
+   h3.next = &h4;
+   h4.next = &h5;
+   h5.next = &h6;
+   h6.next = &h7;
+   h7.next = &h8;
+   h8.next = &h9;
+   h9.next = &h10;
+   h10.next = &h11;
+   h11.next = &h12;
+   h12.next = &h13;
+   h13.next = &h14;
+   h14.next = &h15;
+   h15.next = &h16;
+   h16.next = &h17;
+   h17.next = &h18;
+   h18.next = &h19;
+   h19.next = &h20;
+   h20.next = &h21;
+   h21.next = &h22;
+   h22.next = &h23;
+   h23.next = &h24;
+   h24.next = &h25;
+   h25.next = &h26;
+   h26.next = &h27;
+   h27.next = ((void *)0);
+
+   return(first);
+}
+
+
+
+void Usage(void)
+{
+   fprintf(stderr, "\nHydrogen Matrices V1.1 (c) 2002-5, Alison Cuff, University of Reading\n");
+   fprintf(stderr, "V1.1 modification, Andrew C.R. Martin, University College London\n\n");
+
+   fprintf(stderr, "Usage: hydrogen_matrices [cath domain file] [output file]\n\n");
+   fprintf(stderr, "  [cath domain file] non-redundant (e.g Sreps) cath domain list file\n");
+   fprintf(stderr, "  [output file] name of file to print out matrices\n");
+   fprintf(stderr, "                I/O is though stdout if file not specified\n\n");
+   fprintf(stderr, "Takes a list of protein structures, and for each hydrogen-bonding residue\n");
+   fprintf(stderr, "orientates protein so that the carbon alpha atom of the residue is at the\n");
+   fprintf(stderr, "origin, the carbon beta atom on the xy plane, and the nitrogen atom on the\n");
+   fprintf(stderr, "x axis. Program then determines and prints out:\n");
+   fprintf(stderr,"  (1) location of hydrogen donor atoms\n");
+   fprintf(stderr,"  (2) location of hydrogen  acceptor atoms\n");
+   fprintf(stderr,"  (3) location of *partner* acceptor atoms to each donor atom\n");
+   fprintf(stderr,"  (4) location of *partner* donor atoms to each acceptor atom\n");
+   fprintf(stderr,"for that residue\n\n");
+
+}
+
+
+
+BOOL ParseCmdLine(int argc, char **argv, char *inputfile, char *outputfile)
+{
+   argc--;
+   argv++;
+
+   if(argc > 2 || argc < 1)
+   {
+      return(0);
+   }
+
+   strcpy(inputfile, argv[0]);
+   argc--;
+   argv++;
+   if(argc)
+   {
+      strcpy(outputfile, argv[0]);
+   }
+   return(1);
+
+   argc--;
+   argv++;
+
+   return(1);
+}
+
+
+void FindMCDonorHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
+{
+   PDB *d, *a, *h1, *h2, *h3, *p;
+
+   char h_name1[6], h_name2[6], h_name3[6], p_name[6];
+
+   for(d=resA; d!=stopA; (d)=(d)->next)
+   {
+      if(!strcmp(d->atnam, "N   "))
+      {
+         h1 = FindAtomInRange(resA, stopA, "H   ");
+
+         for(a=resB; a!=stopB; (a)=(a)->next)
+         {
+            if(isAcceptor(a, hb, p_name))
+            {
+               p = FindAtomInRange(resB, stopB, p_name);
+
+
+               if(ValidHBond(h1, d, a, p))
+               {
+
+
+                  fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n",
+                          d->resnam, d->resnum, d->atnam,
+                          a->resnam, a->resnum, a->atnam,
+                          ((h1==((void *)0)?"???":h1->atnam)), p->atnam);
+
+                  StorePartnertoDonatePosition(a);
+               }
+            }
+         }
+      }
+   }
+}

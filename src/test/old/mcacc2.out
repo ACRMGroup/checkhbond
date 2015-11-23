@@ -1,0 +1,63 @@
+INFO: Processing residue type ARG
+INFO: Processing file /tmp//1tsr
+THR    284 OG1  : ARG    280 O     ??? C   
+INFO: Processing residue type THR
+INFO: Processing file /tmp//1tsr
+ARG    283 NH2  : THR    118 O     ??? C   
+INFO: Processing residue type ASN
+INFO: Processing file /tmp//1tsr
+INFO: Processing residue type ASP
+INFO: Processing file /tmp//1tsr
+SER    183 OG   : ASP    184 O     ??? C   
+INFO: Processing residue type GLU
+INFO: Processing file /tmp//1tsr
+THR    230 OG1  : GLU    221 O     ??? C   
+INFO: Processing residue type GLN
+INFO: Processing file /tmp//1tsr
+THR    170 OG1  : GLN    167 O     ??? C   
+INFO: Processing residue type LYS
+INFO: Processing file /tmp//1tsr
+ARG    267 NE   : LYS    101 O    HE   C   
+ARG    267 NH2  : LYS    101 O     ??? C   
+ASN    235 ND2  : LYS    139 O     ??? C   
+INFO: Processing residue type SER
+INFO: Processing file /tmp//1tsr
+INFO: Processing residue type TRP
+INFO: Processing file /tmp//1tsr
+INFO: Processing residue type TYR
+INFO: Processing file /tmp//1tsr
+SER    149 OG   : TYR    107 O     ??? C   
+INFO: Processing residue type HIS
+INFO: Processing file /tmp//1tsr
+INFO: Processing residue type HIS
+INFO: Processing file /tmp//1tsr
+INFO: Processing residue type ALA
+INFO: Processing file /tmp//1tsr
+SER    185 OG   : ALA    189 O     ??? C   
+INFO: Processing residue type CYS
+INFO: Processing file /tmp//1tsr
+SER    116 OG   : CYS    124 O     ??? C   
+INFO: Processing residue type PHE
+INFO: Processing file /tmp//1tsr
+INFO: Processing residue type GLY
+INFO: Processing file /tmp//1tsr
+ARG    110 NE   : GLY    108 O    HE   C   
+ARG    110 NH2  : GLY    108 O     ??? C   
+THR    125 OG1  : GLY    117 O     ??? C   
+ARG    249 NH2  : GLY    245 O     ??? C   
+INFO: Processing residue type ILE
+INFO: Processing file /tmp//1tsr
+INFO: Processing residue type LEU
+INFO: Processing file /tmp//1tsr
+INFO: Processing residue type MET
+INFO: Processing file /tmp//1tsr
+ARG    175 NE   : MET    237 O    HE   C   
+ARG    175 NH2  : MET    237 O     ??? C   
+ARG    249 NE   : MET    246 O    HE   C   
+INFO: Processing residue type VAL
+INFO: Processing file /tmp//1tsr
+SER    240 OG   : VAL    274 O     ??? C   
+INFO: Processing residue type PRO
+INFO: Processing file /tmp//1tsr
+THR    155 OG1  : PRO    152 O     ??? C   
+ARG    175 NH1  : PRO    191 O     ??? C   

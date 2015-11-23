@@ -1,0 +1,41 @@
+ARG    249 N    : MET    246 O     ??? C   
+SER    149 N    : TYR    107 O     ??? C   
+SER    240 N    : VAL    274 O     ??? C   
+THR    284 N    : ARG    280 O     ??? C   
+
+SER    260 OG   : ASP    259 OD1   ??? CG  
+==========================================
+
+ALA    189 N    : ASP    186 OD1   ??? CG  
+ARG    202 N    : ASN    200 OD1   ??? CG  
+ASN    263 N    : SER    261 OG    ??? CB  
+GLY    187 N    : SER    185 OG    ??? CB  
+HIS    168 N    : GLN    167 OE1   ??? CD  
+LEU    188 N    : ASP    186 OD1   ??? CG  
+PRO    191 N    : GLN    192 OE1   ??? CD  
+SER    260 N    : ASP    259 OD1   ??? CG  
+VAL    197 N    : TYR    205 OH    ??? CZ  
+ARG    110 NE   : GLY    108 O    HE   C   
+ARG    175 NE   : MET    237 O    HE   C   
+ARG    175 NH1  : PRO    191 O     ??? C   
+ARG    249 NH2  : GLY    245 O     ??? C   
+ARG    283 NH2  : THR    118 O     ??? C   
+ASN    235 ND2  : LYS    139 O     ??? C   
+SER    116 OG   : CYS    124 O     ??? C   
+SER    183 OG   : ASP    184 O     ??? C   
+SER    185 OG   : ALA    189 O     ??? C   
+THR    125 OG1  : GLY    117 O     ??? C   
+THR    155 OG1  : PRO    152 O     ??? C   
+THR    170 OG1  : GLN    167 O     ??? CA  
+THR    230 OG1  : GLU    221 O     ??? C   
+
+*VAL    274 N    : SER    240 OG    ??? CB  
+*ARG    110 NH2  : GLY    108 O     ??? C   
+*ARG    175 NH2  : MET    237 O     ??? C   
+*ARG    249 NE   : MET    246 O    HE   C   
+*ARG    267 NE   : LYS    101 O    HE   C   
+*ARG    267 NH2  : LYS    101 O     ??? C   
+*SER    149 OG   : TYR    107 O     ??? C   
+*SER    240 OG   : VAL    274 O     ??? C   
+*THR    284 OG1  : ARG    280 O     ??? C   
+

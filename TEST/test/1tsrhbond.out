@@ -1,0 +1,166 @@
+INFO: Processing residue type ARG
+INFO: Processing file /tmp//1tsr
+ARG    158 NE   : SER    215 OG   HE   CB  
+ARG    174 NH2  : GLU    180 OE1   ??? CD  
+ARG    248 NH2  : ASN    247 OD1   ??? CG  
+ARG    249 NH2  : TYR    163 OH    ??? CZ  
+ARG    280 NE   : ASP    281 OD1  HE   CG  
+ARG    280 NH2  : ASP    281 OD1   ??? CG  
+ARG    280 NH1  : THR    284 OG1   ??? CB  
+ARG    282 NH1  : THR    125 OG1   ??? CB  
+ARG    282 NE   : GLU    286 OE2  HE   CD  
+ARG    282 NH2  : GLU    286 OE2   ??? CD  
+ARG    283 NH1  : THR    118 OG1   ??? CB  
+INFO: Processing file /tmp//1tsr
+ARG    158 NH1  : SER    215 OG    ??? CB  
+ARG    158 NH2  : GLU    258 OE2   ??? CD  
+ARG    175 NH1  : SER    183 OG    ??? CB  
+ARG    196 NH2  : SER    183 OG    ??? CB  
+ARG    280 NE   : ASP    281 OD1  HE   CG  
+ARG    282 NH1  : THR    125 OG1   ??? CB  
+ARG    282 NE   : SER    127 OG   HE   CB  
+INFO: Processing file /tmp//1tsr
+ARG    174 NH2  : GLN    192 OE1   ??? CD  
+ARG    196 NE   : ASP    186 OD2  HE   CG  
+ARG    196 NH2  : ASP    186 OD2   ??? CG  
+ARG    273 NE   : ASP    281 OD2  HE   CG  
+ARG    273 NH2  : ASP    281 OD2   ??? CG  
+ARG    273 NH1  : GLU    285 OE1   ??? CD  
+ARG    282 NH1  : THR    125 OG1   ??? CB  
+ARG    282 NE   : GLU    286 OE1  HE   CD  
+ARG    283 NH1  : THR    284 OG1   ??? CB  
+INFO: Processing residue type THR
+INFO: Processing file /tmp//1tsr
+ARG    283 NH1  : THR    118 OG1   ??? CB  
+ARG    282 NH1  : THR    125 OG1   ??? CB  
+THR    140 OG1  : GLU    198 OE1   ??? CD  
+THR    253 OG1  : TYR    236 OH    ??? CZ  
+TYR    236 OH   : THR    253 OG1   ??? CB  
+ARG    280 NH1  : THR    284 OG1   ??? CB  
+INFO: Processing file /tmp//1tsr
+ARG    282 NH1  : THR    125 OG1   ??? CB  
+THR    140 OG1  : GLU    198 OE1   ??? CD  
+THR    155 OG1  : ASP    259 OD2   ??? CG  
+THR    253 OG1  : TYR    236 OH    ??? CZ  
+TYR    236 OH   : THR    253 OG1   ??? CB  
+INFO: Processing file /tmp//1tsr
+ARG    282 NH1  : THR    125 OG1   ??? CB  
+THR    140 OG1  : GLU    198 OE2   ??? CD  
+THR    253 OG1  : TYR    236 OH    ??? CZ  
+TYR    236 OH   : THR    253 OG1   ??? CB  
+THR    256 OG1  : GLU    258 OE1   ??? CD  
+ARG    283 NH1  : THR    284 OG1   ??? CB  
+INFO: Processing residue type ASN
+INFO: Processing file /tmp//1tsr
+ASN    131 ND2  : TYR    126 OH    ??? CZ  
+ARG    248 NH2  : ASN    247 OD1   ??? CG  
+ASN    263 ND2  : ASP    259 OD2   ??? CG  
+INFO: Processing file /tmp//1tsr
+ASN    131 ND2  : TYR    126 OH    ??? CZ  
+INFO: Processing file /tmp//1tsr
+ASN    131 ND2  : TYR    126 OH    ??? CZ  
+INFO: Processing residue type ASP
+INFO: Processing file /tmp//1tsr
+ASN    263 ND2  : ASP    259 OD2   ??? CG  
+ARG    280 NE   : ASP    281 OD1  HE   CG  
+ARG    280 NH2  : ASP    281 OD1   ??? CG  
+INFO: Processing file /tmp//1tsr
+HIS    214 ND1  : ASP    207 OD1  HD1  CG  
+THR    155 OG1  : ASP    259 OD2   ??? CG  
+SER    260 OG   : ASP    259 OD1   ??? CG  
+ARG    280 NE   : ASP    281 OD1  HE   CG  
+INFO: Processing file /tmp//1tsr
+ARG    196 NE   : ASP    186 OD2  HE   CG  
+ARG    196 NH2  : ASP    186 OD2   ??? CG  
+TRP    146 NE1  : ASP    228 OD2  HE1  CG  
+SER    261 OG   : ASP    259 OD1   ??? CG  
+ARG    273 NE   : ASP    281 OD2  HE   CG  
+ARG    273 NH2  : ASP    281 OD2   ??? CG  
+INFO: Processing residue type GLU
+INFO: Processing file /tmp//1tsr
+ARG    174 NH2  : GLU    180 OE1   ??? CD  
+THR    140 OG1  : GLU    198 OE1   ??? CD  
+SER    227 OG   : GLU    224 OE1   ??? CD  
+LYS    132 NZ   : GLU    271 OE2   ??? CD  
+LYS    164 NZ   : GLU    271 OE1   ??? CD  
+LYS    132 NZ   : GLU    285 OE1   ??? CD  
+SER    127 OG   : GLU    286 OE2   ??? CD  
+ARG    282 NE   : GLU    286 OE2  HE   CD  
+ARG    282 NH2  : GLU    286 OE2   ??? CD  
+INFO: Processing file /tmp//1tsr
+THR    140 OG1  : GLU    198 OE1   ??? CD  
+ARG    158 NH2  : GLU    258 OE2   ??? CD  
+LYS    132 NZ   : GLU    271 OE2   ??? CD  
+LYS    132 NZ   : GLU    285 OE1   ??? CD  
+SER    127 OG   : GLU    286 OE2   ??? CD  
+INFO: Processing file /tmp//1tsr
+THR    140 OG1  : GLU    198 OE2   ??? CD  
+THR    256 OG1  : GLU    258 OE1   ??? CD  
+LYS    132 NZ   : GLU    271 OE2   ??? CD  
+LYS    132 NZ   : GLU    285 OE2   ??? CD  
+ARG    273 NH1  : GLU    285 OE1   ??? CD  
+ARG    282 NE   : GLU    286 OE1  HE   CD  
+INFO: Processing residue type GLN
+INFO: Processing file /tmp//1tsr
+HIS    168 ND1  : GLN    165 OE1  HD1  CD  
+INFO: Processing file /tmp//1tsr
+TRP    146 NE1  : GLN    144 OE1  HE1  CD  
+INFO: Processing file /tmp//1tsr
+ARG    174 NH2  : GLN    192 OE1   ??? CD  
+INFO: Processing residue type LYS
+INFO: Processing file /tmp//1tsr
+LYS    132 NZ   : GLU    271 OE2   ??? CD  
+LYS    132 NZ   : GLU    285 OE1   ??? CD  
+LYS    164 NZ   : GLU    271 OE1   ??? CD  
+INFO: Processing file /tmp//1tsr
+LYS    132 NZ   : GLU    271 OE2   ??? CD  
+LYS    132 NZ   : GLU    285 OE1   ??? CD  
+INFO: Processing file /tmp//1tsr
+LYS    132 NZ   : GLU    271 OE2   ??? CD  
+LYS    132 NZ   : GLU    285 OE2   ??? CD  
+INFO: Processing residue type SER
+INFO: Processing file /tmp//1tsr
+SER    127 OG   : GLU    286 OE2   ??? CD  
+ARG    158 NE   : SER    215 OG   HE   CB  
+SER    227 OG   : GLU    224 OE1   ??? CD  
+INFO: Processing file /tmp//1tsr
+ARG    282 NE   : SER    127 OG   HE   CB  
+SER    127 OG   : GLU    286 OE2   ??? CD  
+ARG    175 NH1  : SER    183 OG    ??? CB  
+ARG    196 NH2  : SER    183 OG    ??? CB  
+ARG    158 NH1  : SER    215 OG    ??? CB  
+SER    260 OG   : ASP    259 OD1   ??? CG  
+INFO: Processing file /tmp//1tsr
+SER    261 OG   : ASP    259 OD1   ??? CG  
+INFO: Processing residue type TRP
+INFO: Processing file /tmp//1tsr
+INFO: Processing file /tmp//1tsr
+TRP    146 NE1  : GLN    144 OE1  HE1  CD  
+INFO: Processing file /tmp//1tsr
+TRP    146 NE1  : ASP    228 OD2  HE1  CG  
+INFO: Processing residue type TYR
+INFO: Processing file /tmp//1tsr
+ASN    131 ND2  : TYR    126 OH    ??? CZ  
+ARG    249 NH2  : TYR    163 OH    ??? CZ  
+TYR    236 OH   : THR    253 OG1   ??? CB  
+THR    253 OG1  : TYR    236 OH    ??? CZ  
+INFO: Processing file /tmp//1tsr
+ASN    131 ND2  : TYR    126 OH    ??? CZ  
+TYR    236 OH   : THR    253 OG1   ??? CB  
+THR    253 OG1  : TYR    236 OH    ??? CZ  
+INFO: Processing file /tmp//1tsr
+ASN    131 ND2  : TYR    126 OH    ??? CZ  
+TYR    236 OH   : THR    253 OG1   ??? CB  
+THR    253 OG1  : TYR    236 OH    ??? CZ  
+INFO: Processing residue type HIS
+INFO: Processing file /tmp//1tsr
+HIS    168 ND1  : GLN    165 OE1  HD1  CD  
+INFO: Processing file /tmp//1tsr
+HIS    214 ND1  : ASP    207 OD1  HD1  CG  
+INFO: Processing file /tmp//1tsr
+INFO: Processing residue type HIS
+INFO: Processing file /tmp//1tsr
+HIS    168 ND1  : GLN    165 OE1  HD1  CD  
+INFO: Processing file /tmp//1tsr
+HIS    214 ND1  : ASP    207 OD1  HD1  CG  
+INFO: Processing file /tmp//1tsr

@@ -1,0 +1,12 @@
+ARG    202 N    : ASN    200 OD1  H    CG  
+ASN    263 N    : SER    261 OG   H    CB  
+ASP    184 N    : SER    183 OG   H    CB  
+ASP    186 N    : SER    185 OG   H    CB  
+SER    260 N    : ASP    259 OD1  H    CG  
+HIS    168 N    : GLN    167 OE1  H    CD  
+HIS    168 N    : GLN    167 OE1  H    CD  
+ALA    189 N    : ASP    186 OD1  H    CG  
+GLY    187 N    : SER    185 OG   H    CB  
+LEU    188 N    : ASP    186 OD1  H    CG  
+VAL    197 N    : TYR    205 OH   H    CZ  
+VAL    274 N    : SER    240 OG   H    CB  

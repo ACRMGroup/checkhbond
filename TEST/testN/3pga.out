@@ -1,0 +1,15 @@
+INFO: Processing residue type ARG
+INFO: Processing file /acrm/data/dompdb/3pga12
+ARG    262 N    : SER    260 OG   H    CB  
+INFO: Processing file /acrm/data/dompdb/3pga22
+INFO: Processing file /acrm/data/dompdb/3pga32
+ARG    262 N    : SER    260 OG   H    CB  
+INFO: Processing file /acrm/data/dompdb/3pga42
+ARG    262 N    : SER    260 OG   H    CB  
+INFO: Processing file /acrm/data/dompdb/3pga11
+ARG    127 N    : ASP    135 OD1  H    CG  
+INFO: Processing file /acrm/data/dompdb/3pga21
+Warning=> genh() found no carbonyl carbon preceeding residue 222 
+Warning=> genh() found no carbonyl carbon preceeding residue 231 
+Warning=> genh() found no carbonyl carbon preceeding residue 235 
+Warning=> genh() found no carbonyl carbon preceeding residue 236 
