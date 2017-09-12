@@ -1,0 +1,94 @@
+COPTS     = -I./bioplib -O3 -pedantic -ansi
+CHBCOMMON = residues.o orientate.o
+HMCOMMON  = orientate.o cavallo_userfunc.o
+BINDIR    = ../bin
+CC	  = gcc
+LIBS      = -lm -lxml2
+LFILES    = bioplib/ReadPDB.o bioplib/fsscanf.o bioplib/chindex.o \
+	    bioplib/StoreString.o bioplib/MatMult3_33.o bioplib/padterm.o \
+	    bioplib/FreeStringList.o bioplib/FindNextResidue.o \
+	    bioplib/hbond.o bioplib/angle.o bioplib/WritePDB.o \
+	    bioplib/BuildConect.o bioplib/FindResidue.o bioplib/IndexPDB.o \
+	    bioplib/ApMatPDB.o bioplib/CreateRotMat.o bioplib/TranslatePDB.o \
+	    bioplib/OpenStdFiles.o bioplib/HAddPDB.o bioplib/StripHPDB.o \
+	    bioplib/CopyPDB.o bioplib/RenumAtomsPDB.o bioplib/OpenFile.o \
+	    bioplib/ParseRes.o bioplib/fit.o bioplib/GetPDBCoor.o
+
+
+EXE = hydrogen_matrices \
+     hydrogen_matrices_Ndonor \
+     hydrogen_matrices_Oacceptor \
+     hydrogen_matrices_SCMC \
+     checkhbond \
+     checkhbond_Ndonor \
+     checkhbond_Oacceptor
+
+all : $(EXE)
+
+
+hydrogen_matrices :  hydrogen_matrices.o $(HMCOMMON) $(LFILES)
+	$(CC) $(COPTS) -o $@  hydrogen_matrices.o $(HMCOMMON) $(LFILES) $(LIBS)
+
+hydrogen_matrices_Ndonor : hydrogen_matrices_Ndonor.o $(HMCOMMON) $(LFILES)
+	$(CC) $(COPTS) -o $@ hydrogen_matrices_Ndonor.o $(HMCOMMON) $(LFILES) $(LIBS)
+
+hydrogen_matrices_Oacceptor : hydrogen_matrices_Oacceptor.o $(HMCOMMON) $(LFILES)
+	$(CC) $(COPTS) -o $@ hydrogen_matrices_Oacceptor.o $(HMCOMMON) $(LFILES) $(LIBS)
+
+hydrogen_matrices_SCMC : hydrogen_matrices_SCMC.o $(HMCOMMON) $(LFILES)
+	$(CC) $(COPTS) -o $@ hydrogen_matrices_SCMC.o $(HMCOMMON) $(LFILES) $(LIBS)
+
+checkhbond : checkhbond.o $(CHBCOMMON) $(LFILES)
+	$(CC) $(COPTS) -o $@ checkhbond.o $(CHBCOMMON) $(LFILES) $(LIBS)
+
+checkhbond_Ndonor : checkhbond_Ndonor.o $(CHBCOMMON) $(LFILES)
+	$(CC) $(COPTS) -o $@ checkhbond_Ndonor.o $(CHBCOMMON) $(LFILES) $(LIBS)
+
+checkhbond_Oacceptor : checkhbond_Oacceptor.o $(CHBCOMMON) $(LFILES)
+	$(CC) $(COPTS) -o $@ checkhbond_Oacceptor.o $(CHBCOMMON) $(LFILES) $(LIBS)
+
+
+hydrogen_matrices.o : hydrogen_matrices.c orientate.h hbondmat2.h cavallo_userfunc.h
+	$(CC) -c $(COPTS) $(NOWARN) -o $@ hydrogen_matrices.c
+
+hydrogen_matrices_Ndonor.o : hydrogen_matrices.c orientate.h hbondmat2.h cavallo_userfunc.h
+	$(CC) -D MCDONOR -c $(COPTS) -o $@ hydrogen_matrices.c
+
+hydrogen_matrices_Oacceptor.o : hydrogen_matrices.c orientate.h hbondmat2.h cavallo_userfunc.h
+	$(CC) -D MCACCEPTOR -c $(COPTS) $(NOWARN) -o $@ hydrogen_matrices.c
+
+hydrogen_matrices_SCMC.o : hydrogen_matrices.c orientate.h hbondmat2.h cavallo_userfunc.h
+	$(CC) -D SCMC -c $(COPTS) $(NOWARN) -o $@ hydrogen_matrices.c
+
+checkhbond.o : checkhbond.c hbondmat2.h
+	$(CC) -c $(COPTS) -o $@ checkhbond.c 
+
+checkhbond_Ndonor.o : checkhbond.c hbondmat2.h
+	$(CC) -D MCDONOR -c $(COPTS) -o $@ checkhbond.c 
+
+checkhbond_Oacceptor.o : checkhbond.c hbondmat2.h
+	$(CC) -D MCACCEPTOR -c $(COPTS) -o $@ checkhbond.c 
+
+.c.o :
+	$(CC) -c $(COPTS) $(NOWARN) -o $@ $<
+
+install :
+	mkdir -p $(BINDIR)
+	cp hydrogen_matrices $(BINDIR)
+	cp hydrogen_matrices_Ndonor $(BINDIR)
+	cp hydrogen_matrices_Oacceptor $(BINDIR)
+	cp hydrogen_matrices_SCMC $(BINDIR)
+	cp checkhbond $(BINDIR)
+	cp checkhbond_Ndonor $(BINDIR)
+	cp checkhbond_Oacceptor $(BINDIR)
+
+clean :
+	\rm -f $(EXE) $(LFILES) $(CHBCOMMON) $(HMCOMMON) \
+	hydrogen_matrices.o \
+	hydrogen_matrices_Ndonor.o \
+	hydrogen_matrices_Oacceptor.o \
+	hydrogen_matrices_SCMC.o \
+	checkhbond.o \
+	checkhbond_Ndonor.o \
+	checkhbond_Oacceptor.o
+

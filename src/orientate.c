@@ -33,7 +33,7 @@ BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
    TempVec.y = -c_alpha.y;
    TempVec.z = -c_alpha.z;
 
-   TranslatePDB(pdb, TempVec);
+   blTranslatePDB(pdb, TempVec);
    
    /* find co-ordinates of *key* residue after the translation */
   
@@ -101,7 +101,7 @@ BOOL OrientateN_PDB(PDB *pdb, PDB *prev, PDB *start, PDB *next)
    TempVec.y = -n.y;
    TempVec.z = -n.z;
 
-   TranslatePDB(pdb, TempVec);
+   blTranslatePDB(pdb, TempVec);
    
    /* find co-ordinates of *key* residue after the translation */
   
@@ -162,10 +162,10 @@ PDB so that the n atom is on the xz plane */
    
    angle = TheAngle(n->y, n->x);
    
-   CreateRotMat('z', -angle, matrix);
+   blCreateRotMat('z', -angle, matrix);
    
-   ApplyMatrixPDB(pdb, matrix);
-   MatMult3_33(*n, matrix, &n_angle);
+   blApplyMatrixPDB(pdb, matrix);
+   blMatMult3_33(*n, matrix, &n_angle);
    *n = n_angle;
    
 }
@@ -182,10 +182,10 @@ void RotateToX(PDB *pdb, VEC3F *n)
    
    angle = TheAngle(n->z, n->x);
    
-   CreateRotMat('y', angle, matrix);
+   blCreateRotMat('y', angle, matrix);
    
-   ApplyMatrixPDB(pdb, matrix);
-   MatMult3_33(*n, matrix, &n_angle);
+   blApplyMatrixPDB(pdb, matrix);
+   blMatMult3_33(*n, matrix, &n_angle);
    *n = n_angle;
 }
 
@@ -202,10 +202,10 @@ void RotateToXY(PDB *pdb, VEC3F *c_beta)
    
    angle = TheAngle(c_beta->z, c_beta->y);
    
-   CreateRotMat('x', -angle, matrix);
+   blCreateRotMat('x', -angle, matrix);
    
-   ApplyMatrixPDB(pdb, matrix);
-   MatMult3_33(*c_beta, matrix, &c_beta_angle);
+   blApplyMatrixPDB(pdb, matrix);
+   blMatMult3_33(*c_beta, matrix, &c_beta_angle);
    *c_beta = c_beta_angle;
 }
 
@@ -348,7 +348,7 @@ BOOL OrientateCO_PDB(PDB *pdb, PDB *start, PDB *next)
    TempVec.y = -c.y;
    TempVec.z = -c.z;
 
-   TranslatePDB(pdb, TempVec);
+   blTranslatePDB(pdb, TempVec);
    
    /* find co-ordinates of *key* residue after the translation */
   
@@ -451,8 +451,8 @@ BOOL ResiduesBonded(PDB *pdb1, PDB *pdb2)
 {
    PDB *c, *n, *next1, *next2;
    
-   next1 = FindNextResidue(pdb1);
-   next2 = FindNextResidue(pdb2);
+   next1 = blFindNextResidue(pdb1);
+   next2 = blFindNextResidue(pdb2);
    for(c=pdb1; c!=next1; NEXT(c))
    {
       if(!strncmp(c->atnam, "C   ", 4))

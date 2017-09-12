@@ -176,7 +176,7 @@ int main (int argc, char *argv[])
    
    if(ParseCmdLine(argc, argv, inputfile, outputfile))
    {
-      if(OpenStdFiles(inputfile, outputfile, &in, &out))
+      if(blOpenStdFiles(inputfile, outputfile, &in, &out))
       {
          if((hb = InitializeHbondTypes()) !=NULL)
          {
@@ -227,7 +227,7 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
    char *location;
    BOOL noenv, tempflag;
  
-   if((fp1 = OpenFile(PGPFILE, "DATADIR", "r", &noenv)) == NULL)
+   if((fp1 = blOpenFile(PGPFILE, "DATADIR", "r", &noenv)) == NULL)
    {
       fprintf(stderr, "ERROR: Can't open pgp file\n");
       if(noenv)
@@ -269,20 +269,20 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
                if((fp2 = fopen(location, "r")) !=NULL)
                { 
                   /* create linked list of pdb file */  
-                  if((pdb = ReadPDBAtoms(fp2, &natoms)) !=NULL)
+                  if((pdb = blReadPDBAtoms(fp2, &natoms)) !=NULL)
                   {   
                      /* strip any hydrogens present in protein domain file */
-                     if((pdb2 = StripHPDB(pdb, &natoms2)) !=NULL)
+                     if((pdb2 = blStripHPDBAsCopy(pdb, &natoms2)) !=NULL)
                      {
                         FREELIST(pdb, PDB);
                         pdb  = pdb2;
                         prev = NULL;
                         
-                        if((nHatoms = HAddPDB(fp1, pdb)) !=0)                    
+                        if((nHatoms = blHAddPDB(fp1, pdb)) !=0)                    
                         {
                            for(start=pdb; start!=NULL; prev=start, start=next)
                            {
-                              next = FindNextResidue(start);
+                              next = blFindNextResidue(start);
 
 #if defined(MCDONOR)
                               /* If not proline and not first residue */
@@ -306,7 +306,7 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
                                     
                                     for(nextres=pdb; nextres!=NULL; nextres=stop)
                                     {
-                                       stop = FindNextResidue(nextres);
+                                       stop = blFindNextResidue(nextres);
                                        
                                        if((nextres !=start))
                                        {
@@ -315,7 +315,7 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
                                             nextres->resnam);
                                           */
                                           
-                                          if((IsMCDonorHBonded(start,nextres,HBOND_SIDE2))
+                                          if((blIsMCDonorHBonded(start,nextres,HBOND_SIDE2))
                                              !=0)
                                           {
                                              FindMCDonorHAtoms(start, next, nextres, 
@@ -346,7 +346,7 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
                                     
                                     for(nextres=pdb; nextres!=NULL; nextres=stop)
                                     {
-                                       stop = FindNextResidue(nextres);
+                                       stop = blFindNextResidue(nextres);
                                        
                                        if((nextres !=start))
                                        {
@@ -355,7 +355,7 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
                                             nextres->resnam);
                                           */
                                           
-                                          if((IsMCAcceptorHBonded(start,nextres,HBOND_SIDE2))
+                                          if((blIsMCAcceptorHBonded(start,nextres,HBOND_SIDE2))
                                              !=0)
                                           {
                                              FindMCAcceptorAtoms(start, next, nextres, 
@@ -385,7 +385,7 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
                                     
                                     for(nextres=pdb; nextres!=NULL; nextres=stop)
                                     {
-                                       stop = FindNextResidue(nextres);
+                                       stop = blFindNextResidue(nextres);
                                        
                                        if((nextres !=start))
                                        {
@@ -395,14 +395,14 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
                                           */
                                           
 #ifdef SCMC
-                                          if((IsHBonded(start,nextres,HBOND_SIDECHAIN))
+                                          if((blIsHBonded(start,nextres,HBOND_SIDECHAIN))
                                              !=0)
                                           {
                                              FindHAtomsSCMC(start, next, nextres, 
                                                             stop, hb);
                                           }
 #else
-                                          if((IsHBonded(start,nextres,HBOND_SS))
+                                          if((blIsHBonded(start,nextres,HBOND_SS))
                                              !=0)
                                           {
                                              FindHAtoms(start, next, nextres, 

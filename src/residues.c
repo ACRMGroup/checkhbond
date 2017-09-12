@@ -68,7 +68,7 @@ void ApplyMatrixResidue(PDB  *start, PDB *stop, REAL matrix[3][3])
          incoords.x = p->x;
          incoords.y = p->y;
          incoords.z = p->z;
-         MatMult3_33(incoords,matrix,&outcoords);
+         blMatMult3_33(incoords,matrix,&outcoords);
          p->x = outcoords.x;
          p->y = outcoords.y;
          p->z = outcoords.z;
@@ -136,7 +136,7 @@ PDB *SelectAtomsResidue(PDB *start, PDB *stop, int nsel, char **sel, int *natom)
             (*natom)++;
             
             /* Copy the record to the output list (sets ->res1_next to NULL) */
-            CopyPDB(q, p);
+            blCopyPDB(q, p);
             
             break;
          }

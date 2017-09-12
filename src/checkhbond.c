@@ -251,20 +251,20 @@ int main (int argc, char *argv[])
    {
       if((matrix = OpenMatrixFile(matrix_file, MATRIXFILE)))
       {
-         if(ParseResSpec(locres1, chain1, &resnum1, insert1))
+         if(blParseResSpec(locres1, chain1, &resnum1, insert1))
          {
-            if(ParseResSpec(locres2, chain2, &resnum2, insert2))
+            if(blParseResSpec(locres2, chain2, &resnum2, insert2))
             {               
                if(Open_Std_Files(pdbfile, outputfile, &PDBFILE, &OUT))
                { 
                   /* create linked list of pdb file */ 
-                  if((pdb = ReadPDBAtoms(PDBFILE, &natoms)) !=NULL)
+                  if((pdb = blReadPDBAtoms(PDBFILE, &natoms)) !=NULL)
                   {
                      PDB *pdb2;
                      int natoms2;
                      
                      /* ACRM 02.02.06 strip any hydrogens present */
-                     if((pdb2 = StripHPDB(pdb, &natoms2)) !=NULL)
+                     if((pdb2 = blStripHPDBAsCopy(pdb, &natoms2)) !=NULL)
                      {
                         FREELIST(pdb, PDB);
                         pdb  = pdb2;
@@ -394,7 +394,7 @@ BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix,
    for(res1_start = pdb; res1_start !=NULL;
        res1_start=res1_stop)
    {
-      res1_stop = FindNextResidue(res1_start);
+      res1_stop = blFindNextResidue(res1_start);
                         
       /* if *key* residue of choice */
       if((resnum1 == res1_start->resnum)
@@ -415,7 +415,7 @@ BOOL PrepareHBondingPair(int resnum1, int resnum2, PDB *pdb, FILE *matrix,
    for(res2_start = pdb; res2_start !=NULL;
        res2_start=res2_stop)
    {
-      res2_stop = FindNextResidue(res2_start);
+      res2_stop = blFindNextResidue(res2_start);
       
       /* if *partner* residue of choice */
       if((resnum2 == res2_start->resnum)
@@ -824,8 +824,8 @@ void OrientateMatrix(VEC3F CAtoCAVector,int x, int y, int z,
    GRID_2_COORD(z, partner_real_coord.z);
 
    /* multiply vector by rotation matrix */
-   MatMult3_33(partner_real_coord, gRotation_matrix,
-               &partner_real_coord_rotated);
+   blMatMult3_33(partner_real_coord, gRotation_matrix,
+                 &partner_real_coord_rotated);
   
    /* add CA to CA vector */
    partner_real_coord_rotated.x += CAtoCAVector.x;
@@ -1304,7 +1304,7 @@ PDB *GetResidues(PDB *pdb, char *chain1, int resnum1, char *insert1,
          (p->insert[0] == insert1[0]))
          break;
       prev1 = p;
-      p = FindNextResidue(p);
+      p = blFindNextResidue(p);
    }
    if((prev1==NULL) || !ResiduesBonded(prev1, p))
    {
@@ -1320,7 +1320,7 @@ PDB *GetResidues(PDB *pdb, char *chain1, int resnum1, char *insert1,
          (p->insert[0] == insert2[0]))
          break;
       prev2 = p;
-      p = FindNextResidue(p);
+      p = blFindNextResidue(p);
    }
    if((prev2==NULL) || !ResiduesBonded(prev2, p))
    {
@@ -1358,7 +1358,7 @@ PDB *GetResidues(PDB *pdb, char *chain1, int resnum1, char *insert1,
             *errorcode = ERR_NOMEM;
             return(NULL);
          }
-         CopyPDB(q, p);
+         blCopyPDB(q, p);
       }
    }
    FREELIST(pdb, PDB);
@@ -1465,7 +1465,7 @@ BOOL AnalyzeMCDonorPair(int resnum1, int resnum2, PDB *pdb,
        res1_start != NULL;
        res1_start =  res1_stop)
    {
-      res1_stop = FindNextResidue(res1_start);
+      res1_stop = blFindNextResidue(res1_start);
                         
       /* if *key* residue of choice */
       if((resnum1 == res1_start->resnum)
@@ -1486,7 +1486,7 @@ BOOL AnalyzeMCDonorPair(int resnum1, int resnum2, PDB *pdb,
    for(res2_start = pdb; res2_start !=NULL;
        res2_start=res2_stop)
    {
-      res2_stop = FindNextResidue(res2_start);
+      res2_stop = blFindNextResidue(res2_start);
       
       /* if *partner* residue of choice */
       if((resnum2 == res2_start->resnum)
@@ -1602,7 +1602,7 @@ BOOL AnalyzeMCAcceptorPair(int resnum1, int resnum2, PDB *pdb,
        res1_start != NULL;
        res1_start =  res1_stop)
    {
-      res1_stop = FindNextResidue(res1_start);
+      res1_stop = blFindNextResidue(res1_start);
                         
       /* if *key* residue of choice */
       if((resnum1 == res1_start->resnum)
@@ -1622,7 +1622,7 @@ BOOL AnalyzeMCAcceptorPair(int resnum1, int resnum2, PDB *pdb,
    for(res2_start = pdb; res2_start !=NULL;
        res2_start=res2_stop)
    {
-      res2_stop = FindNextResidue(res2_start);
+      res2_stop = blFindNextResidue(res2_start);
       
       /* if *partner* residue of choice */
       if((resnum2 == res2_start->resnum)
@@ -1749,7 +1749,7 @@ PDB *SwapCarbon(PDB *pdb, PDB *prevres)
       prev = p;
    }
 
-   stop = FindNextResidue(prevres);
+   stop = blFindNextResidue(prevres);
    if((c = FindAtom(prevres, stop, "C   ", NULL))==NULL)
    {
       return(NULL);
@@ -1759,7 +1759,7 @@ PDB *SwapCarbon(PDB *pdb, PDB *prevres)
    {
       return(NULL);
    }
-   CopyPDB(newc,c);
+   blCopyPDB(newc,c);
    newc->next = pdb;
    
    return(newc);
@@ -1880,8 +1880,8 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
 
 #ifdef DEBUG
    printf("REMARK DEBUG (checkhbond): original coordinates\n");
-   WritePDB(stdout, keyres1_pdb);
-   WritePDB(stdout, partnerres2_pdb);
+   blWritePDB(stdout, keyres1_pdb);
+   blWritePDB(stdout, partnerres2_pdb);
 #endif
    
    /*moving partnerres2_pdb  CA atom to the origin */
@@ -1889,17 +1889,17 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
    tempv.y = -Vector.y;
    tempv.z = -Vector.z;
    
-   TranslatePDB(partnerres2_pdb, tempv);
+   blTranslatePDB(partnerres2_pdb, tempv);
     
 #ifdef DEBUG
    printf("REMARK DEBUG (checkhbond): translated coordinates\n");
-   WritePDB(stdout, keyres1_pdb);
-   WritePDB(stdout, partnerres2_pdb);
+   blWritePDB(stdout, keyres1_pdb);
+   blWritePDB(stdout, partnerres2_pdb);
 #endif
 
    /* create coordinate arrays for res1 and res2 */
-   NumCo_ord2 = GetPDBCoor(partnerres2_pdb, &partnerres2_coor);
-   NumCo_ord1 = GetPDBCoor(keyres1_pdb, &keyres1_coor);
+   NumCo_ord2 = blGetPDBCoor(partnerres2_pdb, &partnerres2_coor);
+   NumCo_ord1 = blGetPDBCoor(keyres1_pdb, &keyres1_coor);
 
    /* create the weight array */
    if((weight = (REAL *)malloc(NumCo_ord1 * sizeof(REAL))) == NULL)
@@ -1932,7 +1932,7 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
    }
    
    /* create rotation matrix. */
-   if(!matfit(partnerres2_coor, keyres1_coor, gRotation_matrix,
+   if(!blMatfit(partnerres2_coor, keyres1_coor, gRotation_matrix,
               NumCo_ord2, weight, FALSE))
    {
       PrintError(NULL,"Fitting failed!\n");
@@ -1940,10 +1940,10 @@ BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
    }
 
 #ifdef DEBUG   
-   ApplyMatrixPDB(keyres1_pdb, gRotation_matrix);
+   blApplyMatrixPDB(keyres1_pdb, gRotation_matrix);
    printf("REMARK DEBUG (checkhbond) rotated coordinates\n");
-   WritePDB(stdout, keyres1_pdb);
-   WritePDB(stdout, partnerres2_pdb);
+   blWritePDB(stdout, keyres1_pdb);
+   blWritePDB(stdout, partnerres2_pdb);
 #endif
    
    FREELIST(partnerres2_pdb, PDB);
