@@ -1,12 +1,14 @@
+#define _BSD_SOURCE 1 /* For mkstemp() */
+#define _POSIX_SOURCE 1 /* For fdopen() */
 #include "cavallo_userfunc.h"
 #include <errno.h>
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdarg.h>
 #include <sys/types.h>
 #include <sys/fcntl.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #define TMPDIR "/tmp/"
 

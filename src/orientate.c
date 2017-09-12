@@ -16,9 +16,10 @@
 BOOL OrientatePDB(PDB *pdb, PDB *start, PDB *next)
 {
    VEC3F c_alpha,
-      c_beta,
-      n,
-      TempVec;
+         c_beta,
+         n,
+         TempVec;
+   c_alpha.x = c_alpha.y = c_alpha.z = (REAL)0.0;
 
    /* find co-ordinates of *key* residue */
    if(!FindNCACBAtoms(start, next, &c_alpha, &c_beta, &n))

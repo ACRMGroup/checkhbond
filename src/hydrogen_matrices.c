@@ -3,12 +3,12 @@
    Program:    hydrogen_matrices
    File:       hydrogen_matrices.c
    
-   Version:    V2.0
-   Date:       24.01.06
+   Version:    V2.1
+   Date:       12.09.17
    Function:   Generate matrices of hydrogen bond information for use
                by checkhbond
    
-   Copyright:  (c) University of Reading / Alison L. Cuff 2002-2006
+   Copyright:  (c) University of Reading / Alison L. Cuff 2002-2017
    Author:     Alison L. Cuff
    Address:    School of Animal and Microbial Sciences,
                The University of Reading,
@@ -72,6 +72,7 @@ output file to be used in program checkhbond.c
    V1.0  17.06.03 Original version as used for thesis
    V1.1  19.08.05 Various bug fixes By: ACRM
    V2.0  24.01.05 Modified to allow mc/sc matrices to be generated
+   V2.1  12.09.17 Updated for new Bioplib and some cleanup
 
 *************************************************************************/
 /* Includes
@@ -221,7 +222,8 @@ BOOL CalcAndStoreHBondData(HBOND *hb, NAMES *names, FILE *out)
    HBOND *h;
    int natoms, natoms2, nHatoms;
    PDB *pdb, *pdb2, *start, *next, *nextres, *stop, *prev;
-   FILE *fp1,*fp2;
+   FILE *fp1 = NULL,
+        *fp2 = NULL;
    char *location;
    BOOL noenv, tempflag;
  
@@ -482,7 +484,7 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
                p = FindAtomInRange(resB, stopB, p_name);
                
                /* if the hydrogen bond is valid */
-               if(ValidHBond(h1, d, a, p))
+               if(blValidHBond(h1, d, a, p))
                {
                   /* store position of partner acceptor atom */          
 #ifdef NOISY
@@ -495,7 +497,7 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
                }
                else if(h2!=NULL)
                {
-                  if(ValidHBond(h2, d, a, p))
+                  if(blValidHBond(h2, d, a, p))
                   {                     
 #ifdef NOISY
                      fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
@@ -508,7 +510,7 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
                }
                else if(h3!=NULL)
                {
-                  if(ValidHBond(h3, d, a, p))
+                  if(blValidHBond(h3, d, a, p))
                   {
 #ifdef NOISY                     
                      fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
@@ -543,7 +545,7 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
                
                /* and the hydrogen bond is valid */
 
-               if(ValidHBond(h1, d, a, p))
+               if(blValidHBond(h1, d, a, p))
                {
                   /* store position of partners hydrogen donating heavy atom */
 #ifdef NOISY
@@ -556,7 +558,7 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
                }
                else if(h2!=NULL)
                {
-                  if(ValidHBond(h2, d, a, p))
+                  if(blValidHBond(h2, d, a, p))
                   {
 #ifdef NOISY
                      fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
@@ -569,7 +571,7 @@ void FindHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
                }
                else if(h3!=NULL)
                {
-                  if(ValidHBond(h3, d, a, p))
+                  if(blValidHBond(h3, d, a, p))
                   {
 #ifdef NOISY
                      fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
@@ -1147,7 +1149,7 @@ void FindMCAcceptorAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb
          h3 = FindAtomInRange(resB, stopB, h_name3);
                
          /* and the hydrogen bond is valid */
-         if(ValidHBond(h1, d, a, p))
+         if(blValidHBond(h1, d, a, p))
          {
             /* store position of partners hydrogen donating heavy atom */
 #ifdef NOISY
@@ -1160,7 +1162,7 @@ void FindMCAcceptorAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb
          }
          else if(h2!=NULL)
          {
-            if(ValidHBond(h2, d, a, p))
+            if(blValidHBond(h2, d, a, p))
             {
 #ifdef NOISY
                fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
@@ -1173,7 +1175,7 @@ void FindMCAcceptorAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb
          }
          else if(h3!=NULL)
          {
-            if(ValidHBond(h3, d, a, p))
+            if(blValidHBond(h3, d, a, p))
             {
 #ifdef NOISY
                fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
@@ -1231,7 +1233,7 @@ void FindMCDonorHAtoms(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB, HBOND *hb)
                p = FindAtomInRange(resB, stopB, p_name);
                
                /* if the hydrogen bond is valid */
-               if(ValidHBond(h1, d, a, p))
+               if(blValidHBond(h1, d, a, p))
                {
                   /* store position of partner acceptor atom */          
 #ifdef NOISY
@@ -1270,7 +1272,7 @@ void FindHAtomsSCMC(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB,
          p = FindAtomInRange(resB, stopB, "C   ");
                
          /* if the hydrogen bond is valid */
-         if(ValidHBond(h1, d, a, p))
+         if(blValidHBond(h1, d, a, p))
          {
             /* store position of partner acceptor atom */          
 #ifdef NOISY
@@ -1283,7 +1285,7 @@ void FindHAtomsSCMC(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB,
          }
          else if(h2!=NULL)
          {
-            if(ValidHBond(h2, d, a, p))
+            if(blValidHBond(h2, d, a, p))
             {                     
 #ifdef NOISY
                fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
@@ -1296,7 +1298,7 @@ void FindHAtomsSCMC(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB,
          }
          else if(h3!=NULL)
          {
-            if(ValidHBond(h3, d, a, p))
+            if(blValidHBond(h3, d, a, p))
             {
 #ifdef NOISY                     
                fprintf(stderr,"%3s %5d %4s : %3s %5d %4s %4s %4s\n", 
@@ -1322,7 +1324,7 @@ void FindHAtomsSCMC(PDB *resA, PDB *stopA, PDB *resB, PDB *stopB,
          
          /* If the hydrogen bond is valid */
 
-         if(ValidHBond(h1, d, a, p))
+         if(blValidHBond(h1, d, a, p))
          {
             /* store position of partners hydrogen donating heavy atom */
 #ifdef NOISY

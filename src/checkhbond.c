@@ -573,7 +573,9 @@ void CalculateCaToCaVector(PDB *res1_start, PDB *res1_stop,
                            VEC3F *CAtoCAVector)
 {
    VEC3F res1_calpha, 
-      res2_calpha;
+         res2_calpha;
+   res1_calpha.x = res1_calpha.y = res1_calpha.z = 0.0;
+   res2_calpha.x = res2_calpha.y = res2_calpha.z = 0.0;
 
    /*find co-ordinates of CA atom */   
    if(!FindAtom(res1_start, res1_stop, "CA  ", &res1_calpha))
@@ -589,222 +591,6 @@ void CalculateCaToCaVector(PDB *res1_start, PDB *res1_stop,
    CAtoCAVector->x =  res2_calpha.x - res1_calpha.x;
    CAtoCAVector->y =  res2_calpha.y - res1_calpha.y;
    CAtoCAVector->z =  res2_calpha.z - res1_calpha.z;
-}
-
-/************************************************************************/
-/* function that creates a rotation matrix (global) to fit res 1
-   (*key* residue) onto res 2 (*partner* residue). A weight of 1.0
-   is added to atoms CA and N and 0.1 to atom C. 
-   Includes option to print out residues at set stages for debugging
-   purposes.
-
-   If we are ever to do backbone-backbone we will need to support
-   atomset2 being C,N,CA
-*/
-BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
-                          PDB *res2_start, PDB *res2_stop,VEC3F Vector,
-                          int atomset1, int atomset2, PDB *prevres1)
-{
-   VEC3F tempv;   
-   
-   PDB  *keyres1_pdb = NULL, 
-        *partnerres2_pdb = NULL;
-   char *sel1[4], *sel2[4];
-   
-   REAL *weight = NULL;
-   int natoms,
-       NumCo_ord1 = 0,
-       NumCo_ord2 = 0,
-       natom      = 0,
-       resnum     = 0,
-       i          = 0;
-   char insert = ' ';
-   PDB *q         = NULL,
-       *start     = NULL;
-   COOR *keyres1_coor = NULL,
-      *partnerres2_coor = NULL;
-    
-   switch(atomset1)
-   {
-   case ATOMS_NCAC:
-      SELECT(sel1[0], "N   ");
-      SELECT(sel1[1], "CA  ");
-      SELECT(sel1[2], "C   ");
-      break;
-   case ATOMS_NCACB:
-      SELECT(sel1[0], "N   ");
-      SELECT(sel1[1], "CA  ");
-      SELECT(sel1[2], "CB  ");
-      break;
-   case ATOMS_CNCA:
-      SELECT(sel1[0], "C   ");
-      SELECT(sel1[1], "N   ");
-      SELECT(sel1[2], "CA  ");
-      break;
-   case ATOMS_CACO:
-      SELECT(sel1[0], "CA  ");
-      SELECT(sel1[1], "C   ");
-      SELECT(sel1[2], "O   ");
-      break;
-   default:
-      return(FALSE);
-   }
-   
-   switch(atomset2)
-   {
-   case ATOMS_NCAC:
-      SELECT(sel2[0], "N   ");
-      SELECT(sel2[1], "CA  ");
-      SELECT(sel2[2], "C   ");
-      break;
-   case ATOMS_NCACB:
-      SELECT(sel2[0], "N   ");
-      SELECT(sel2[1], "CA  ");
-      SELECT(sel2[2], "CB  ");
-      break;
-   case ATOMS_CNCA:
-      PrintError(NULL,"ENTERNAL ERROR - Code must be modified to support C,N,CA in second position\n");
-      exit(1);
-      SELECT(sel2[0], "C   ");
-      SELECT(sel2[1], "N   ");
-      SELECT(sel2[2], "CA  ");
-      break;
-   case ATOMS_CACO:
-      SELECT(sel2[0], "CA  ");
-      SELECT(sel2[1], "C   ");
-      SELECT(sel2[2], "O   ");
-      break;
-   default:
-      return(FALSE);
-   }
-   
-   if((sel1[0] ==NULL)||(sel2[0]==NULL))
-   {
-      return(FALSE);
-   }
-   /* create linked list containing just C, N and CA atoms of residue 1 */
-   if((keyres1_pdb = SelectAtomsResidue(res1_start, res1_stop,
-                                        3, sel1, &natoms)) == NULL)
-   {
-      return(FALSE);
-   }  
-
-   /* If we are doing C,N,CA, we want to swap the carbon from res1 for the
-      carbon from the previous residue
-   */
-   if(atomset1 == ATOMS_CNCA)
-   {
-      if((keyres1_pdb = SwapCarbon(keyres1_pdb, prevres1))==NULL)
-      {
-         return(FALSE);
-      }
-   }
-   /* create linked list containing just C, N and CA atoms of residue 2 */
-   if((partnerres2_pdb = SelectAtomsResidue(res2_start, res2_stop,
-                                            3, sel2, &natoms)) == NULL)
-   {
-      return(FALSE);
-   }
-
-#ifdef DEBUG
-   printf("REMARK DEBUG (checkhbond): original coordinates\n");
-   WritePDB(stdout, keyres1_pdb);
-   WritePDB(stdout, partnerres2_pdb);
-#endif
-   
-   /*moving partnerres2_pdb  CA atom to the origin */
-   tempv.x = -Vector.x;
-   tempv.y = -Vector.y;
-   tempv.z = -Vector.z;
-   
-   TranslatePDB(partnerres2_pdb, tempv);
-    
-#ifdef DEBUG
-   printf("REMARK DEBUG (checkhbond): translated coordinates\n");
-   WritePDB(stdout, keyres1_pdb);
-   WritePDB(stdout, partnerres2_pdb);
-#endif
-
-   /* create coordinate arrays for res1 and res2 */
-   NumCo_ord2 = GetPDBCoor(partnerres2_pdb, &partnerres2_coor);
-   NumCo_ord1 = GetPDBCoor(keyres1_pdb, &keyres1_coor);
-
-   /* create the weight array */
-   if((weight = (REAL *)malloc(NumCo_ord1 * sizeof(REAL))) == NULL)
-   {
-      if(partnerres2_coor)
-      {
-         free(partnerres2_coor);
-         partnerres2_coor = NULL;
-      }
-      if(keyres1_coor)
-      {
-         free(keyres1_coor);
-         keyres1_coor = NULL;
-      }
-      return(FALSE);
-   }
-
-   /* Set up the weight array */
-   resnum = partnerres2_pdb->resnum;
-   insert = partnerres2_pdb->insert[0];
-   start = partnerres2_pdb;
-   natom = 0;
-   i = 0;
-   for(q = start; q!=NULL; NEXT(q))
-   {
-      if(!strncmp(q->atnam, sel2[0], 4))
-         weight[i] = (REAL)1.0;
-      if(!strncmp(q->atnam, sel2[1], 4))
-         weight[i] = (REAL)1.0;
-      if(!strncmp(q->atnam, sel2[2], 4))
-         weight[i] = (REAL)(0.1);
-      i++;
-   }
-   
-   /* create rotation matrix. */
-   if(!matfit(partnerres2_coor, keyres1_coor, gRotation_matrix,
-              NumCo_ord2, weight, FALSE))
-   {
-      PrintError(NULL,"Fitting failed!\n");
-      return(FALSE);
-   }
-
-#ifdef DEBUG   
-   ApplyMatrixPDB(keyres1_pdb, gRotation_matrix);
-   printf("REMARK DEBUG (checkhbond) rotated coordinates\n");
-   WritePDB(stdout, keyres1_pdb);
-   WritePDB(stdout, partnerres2_pdb);
-#endif
-   
-   FREELIST(partnerres2_pdb, PDB);
-   partnerres2_pdb = NULL;
-   
-   FREELIST(keyres1_pdb, PDB);
-   keyres1_pdb = NULL;
-   
-   free(weight);
-   weight = NULL;
-   
-   free(sel1[0]);
-   sel1[0] = NULL;
-   
-   free(sel1[1]);
-   sel1[1] = NULL;
-   
-   free(sel1[2]);
-   sel1[2] = NULL;
-   
-   free(sel2[0]);
-   sel2[0] = NULL;
-   
-   free(sel2[1]);
-   sel2[1] = NULL;
-   
-   free(sel2[2]);
-   sel2[2] = NULL;
-   
-   return(TRUE);
 }
 
 /************************************************************************/
@@ -1152,8 +938,9 @@ BOOL ReadInMatrices(char *res1, char *res2, FILE *matrix,
                     int type, int whichres)
 {
    char buffer[MAXBUFF], junk[15], minibuffer[6];
-   int x, y, z, count;
-   BOOL inResidue1, inResidue2,
+   int  x, y, z, count;
+   BOOL inResidue1     = FALSE,
+        inResidue2     = FALSE,
         found_residue1 = FALSE, 
         found_residue2 = FALSE;
 
@@ -1606,7 +1393,9 @@ void CalculateNToCaVector(PDB *res1_start, PDB *res1_stop,
                           VEC3F *NtoCAVector)
 {
    VEC3F res1_n, 
-      res2_calpha;
+         res2_calpha;
+   res1_n.x      = res1_n.y      = res1_n.z      = 0.0;
+   res2_calpha.x = res2_calpha.y = res2_calpha.z = 0.0;
 
    /*find co-ordinates of N  atom */   
    if(!FindAtom(res1_start, res1_stop, "N   ", &res1_n))
@@ -1634,7 +1423,9 @@ void CalculateCToCaVector(PDB *res1_start, PDB *res1_stop,
                           VEC3F *CtoCAVector)
 {
    VEC3F res1_c, 
-      res2_calpha;
+         res2_calpha;
+   res1_c.x      = res1_c.y      = res1_c.z      = 0.0;
+   res2_calpha.x = res2_calpha.y = res2_calpha.z = 0.0;
 
    /*find co-ordinates of N atom */   
    if(!FindAtom(res1_start, res1_stop, "C   ", &res1_c))
@@ -1974,4 +1765,214 @@ PDB *SwapCarbon(PDB *pdb, PDB *prevres)
    return(newc);
 }
 
+
+/************************************************************************/
+/* function that creates a rotation matrix (global) to fit res 1
+   (*key* residue) onto res 2 (*partner* residue). A weight of 1.0
+   is added to atoms CA and N and 0.1 to atom C. 
+   Includes option to print out residues at set stages for debugging
+   purposes.
+
+   If we are ever to do backbone-backbone we will need to support
+   atomset2 being C,N,CA
+*/
+BOOL CreateRotationMatrix(PDB *pdb, PDB *res1_start, PDB *res1_stop,
+                          PDB *res2_start, PDB *res2_stop,VEC3F Vector,
+                          int atomset1, int atomset2, PDB *prevres1)
+{
+   VEC3F tempv;   
+   
+   PDB  *keyres1_pdb = NULL, 
+        *partnerres2_pdb = NULL;
+   char *sel1[4], *sel2[4];
+   
+   REAL *weight = NULL;
+   int  natoms,
+        NumCo_ord1 = 0,
+        NumCo_ord2 = 0,
+        i          = 0;
+   PDB  *q         = NULL,
+        *start     = NULL;
+   COOR *keyres1_coor = NULL,
+        *partnerres2_coor = NULL;
+    
+   switch(atomset1)
+   {
+   case ATOMS_NCAC:
+      SELECT(sel1[0], "N   ");
+      SELECT(sel1[1], "CA  ");
+      SELECT(sel1[2], "C   ");
+      break;
+   case ATOMS_NCACB:
+      SELECT(sel1[0], "N   ");
+      SELECT(sel1[1], "CA  ");
+      SELECT(sel1[2], "CB  ");
+      break;
+   case ATOMS_CNCA:
+      SELECT(sel1[0], "C   ");
+      SELECT(sel1[1], "N   ");
+      SELECT(sel1[2], "CA  ");
+      break;
+   case ATOMS_CACO:
+      SELECT(sel1[0], "CA  ");
+      SELECT(sel1[1], "C   ");
+      SELECT(sel1[2], "O   ");
+      break;
+   default:
+      return(FALSE);
+   }
+   
+   switch(atomset2)
+   {
+   case ATOMS_NCAC:
+      SELECT(sel2[0], "N   ");
+      SELECT(sel2[1], "CA  ");
+      SELECT(sel2[2], "C   ");
+      break;
+   case ATOMS_NCACB:
+      SELECT(sel2[0], "N   ");
+      SELECT(sel2[1], "CA  ");
+      SELECT(sel2[2], "CB  ");
+      break;
+   case ATOMS_CNCA:
+      PrintError(NULL,"ENTERNAL ERROR - Code must be modified to support C,N,CA in second position\n");
+      exit(1);
+      SELECT(sel2[0], "C   ");
+      SELECT(sel2[1], "N   ");
+      SELECT(sel2[2], "CA  ");
+      break;
+   case ATOMS_CACO:
+      SELECT(sel2[0], "CA  ");
+      SELECT(sel2[1], "C   ");
+      SELECT(sel2[2], "O   ");
+      break;
+   default:
+      return(FALSE);
+   }
+   
+   if((sel1[0] ==NULL)||(sel2[0]==NULL))
+   {
+      return(FALSE);
+   }
+   /* create linked list containing just C, N and CA atoms of residue 1 */
+   if((keyres1_pdb = SelectAtomsResidue(res1_start, res1_stop,
+                                        3, sel1, &natoms)) == NULL)
+   {
+      return(FALSE);
+   }  
+
+   /* If we are doing C,N,CA, we want to swap the carbon from res1 for the
+      carbon from the previous residue
+   */
+   if(atomset1 == ATOMS_CNCA)
+   {
+      if((keyres1_pdb = SwapCarbon(keyres1_pdb, prevres1))==NULL)
+      {
+         return(FALSE);
+      }
+   }
+   /* create linked list containing just C, N and CA atoms of residue 2 */
+   if((partnerres2_pdb = SelectAtomsResidue(res2_start, res2_stop,
+                                            3, sel2, &natoms)) == NULL)
+   {
+      return(FALSE);
+   }
+
+#ifdef DEBUG
+   printf("REMARK DEBUG (checkhbond): original coordinates\n");
+   WritePDB(stdout, keyres1_pdb);
+   WritePDB(stdout, partnerres2_pdb);
+#endif
+   
+   /*moving partnerres2_pdb  CA atom to the origin */
+   tempv.x = -Vector.x;
+   tempv.y = -Vector.y;
+   tempv.z = -Vector.z;
+   
+   TranslatePDB(partnerres2_pdb, tempv);
+    
+#ifdef DEBUG
+   printf("REMARK DEBUG (checkhbond): translated coordinates\n");
+   WritePDB(stdout, keyres1_pdb);
+   WritePDB(stdout, partnerres2_pdb);
+#endif
+
+   /* create coordinate arrays for res1 and res2 */
+   NumCo_ord2 = GetPDBCoor(partnerres2_pdb, &partnerres2_coor);
+   NumCo_ord1 = GetPDBCoor(keyres1_pdb, &keyres1_coor);
+
+   /* create the weight array */
+   if((weight = (REAL *)malloc(NumCo_ord1 * sizeof(REAL))) == NULL)
+   {
+      if(partnerres2_coor)
+      {
+         free(partnerres2_coor);
+         partnerres2_coor = NULL;
+      }
+      if(keyres1_coor)
+      {
+         free(keyres1_coor);
+         keyres1_coor = NULL;
+      }
+      return(FALSE);
+   }
+
+   /* Set up the weight array */
+   start = partnerres2_pdb;
+   i = 0;
+   for(q = start; q!=NULL; NEXT(q))
+   {
+      if(!strncmp(q->atnam, sel2[0], 4))
+         weight[i] = (REAL)1.0;
+      if(!strncmp(q->atnam, sel2[1], 4))
+         weight[i] = (REAL)1.0;
+      if(!strncmp(q->atnam, sel2[2], 4))
+         weight[i] = (REAL)(0.1);
+      i++;
+   }
+   
+   /* create rotation matrix. */
+   if(!matfit(partnerres2_coor, keyres1_coor, gRotation_matrix,
+              NumCo_ord2, weight, FALSE))
+   {
+      PrintError(NULL,"Fitting failed!\n");
+      return(FALSE);
+   }
+
+#ifdef DEBUG   
+   ApplyMatrixPDB(keyres1_pdb, gRotation_matrix);
+   printf("REMARK DEBUG (checkhbond) rotated coordinates\n");
+   WritePDB(stdout, keyres1_pdb);
+   WritePDB(stdout, partnerres2_pdb);
+#endif
+   
+   FREELIST(partnerres2_pdb, PDB);
+   partnerres2_pdb = NULL;
+   
+   FREELIST(keyres1_pdb, PDB);
+   keyres1_pdb = NULL;
+   
+   free(weight);
+   weight = NULL;
+   
+   free(sel1[0]);
+   sel1[0] = NULL;
+   
+   free(sel1[1]);
+   sel1[1] = NULL;
+   
+   free(sel1[2]);
+   sel1[2] = NULL;
+   
+   free(sel2[0]);
+   sel2[0] = NULL;
+   
+   free(sel2[1]);
+   sel2[1] = NULL;
+   
+   free(sel2[2]);
+   sel2[2] = NULL;
+   
+   return(TRUE);
+}
 
